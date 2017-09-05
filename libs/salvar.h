@@ -52,7 +52,39 @@ void salvarhospedebin(){
 	fclose(arquivo);
 }
 
-void salvarhotel(){
+void salvarhospedecsv(){
+	struct hospede h;
+	setlocale(LC_ALL, "Portuguese");
+	FILE *arquivo;
+	arquivo = fopen("saves/hospede.csv","a+");
+
+	if(arquivo == NULL){
+		printf("\nErro em realizar o cadastro do hóspede no arquivo texto!!\n\n");
+	}
+	else{
+		fprintf(arquivo,"%u",h.codigo);
+		fprintf(arquivo,";%s",h.nome);
+		fprintf(arquivo,";%s",h.cpf);
+		fprintf(arquivo,";%s",h.rg);
+		fprintf(arquivo,";%s",h.rua);
+		fprintf(arquivo,";%s",h.numero);
+		fprintf(arquivo,";%s",h.bairro);
+		fprintf(arquivo,";%s",h.cidadeestado.cidade);
+		fprintf(arquivo,";%s",h.cidadeestado.estado);
+		fprintf(arquivo,";%s",h.cep);
+		fprintf(arquivo,";%s",h.complemento);
+		fprintf(arquivo,";%s",h.datanascimento);
+		fprintf(arquivo,";%s",h.telefone);
+		fprintf(arquivo,";%s",h.celular);
+		fprintf(arquivo,";%s",h.estadocivil);
+		fprintf(arquivo,";%s",h.email);
+		fprintf(arquivo,";%s\n",h.status);
+		printf("\nDados foram salvos com sucesso!\n\n");
+	}
+	fclose(arquivo);
+}
+
+void salvarhoteltxt(){
 	//realizo a chamada da struct hotel, para ter acesso as variaveis relacionadas a essa struct
 	struct hotel ht;
 	//coloca o local padrão como portugues, assim pegará todos os acentos.
@@ -88,6 +120,22 @@ void salvarhotel(){
 	//ao final do salvamento, finalizo o ponteiro e encerro o salvamento de arquivos
 	fclose(arquivo);
 
+}
+
+void salvarhotelbin(){
+	struct hospede ht;
+	FILE *arquivo;
+	setlocale(LC_ALL,"Portuguese");
+	arquivo = fopen("saves/hotel.bin","ab");
+
+	if(arquivo == NULL){
+		printf("Erro em realizar o cadastro do hotel no arquivo binário!!\n\n");
+	}
+	else{
+		fwrite(&ht,sizeof(struct hotel),1,arquivo);
+		printf("\nDados foram salvos com sucesso!\n\n");
+	}
+	fclose(arquivo);
 }
 
 void salvarcategorias(){

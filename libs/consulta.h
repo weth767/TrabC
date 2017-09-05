@@ -52,8 +52,37 @@ void consultahospedetxt(){
 	}	
 }
 
+void consultahospedebin(){
+	struct hospede h;
+	FILE *arquivo;
+	arquivo = fopen("saves/hospede.bin","rb");
+	if(arquivo == NULL){
+		printf("\nErro em realizar a consulta ou Não Foram encontrados hospedes cadastrados\n\n");
+	}
+	else{
+		fread(&h,sizeof(struct hospede),1,arquivo);
+		printf("Código: %u",h.codigo);
+		printf("\nNome: %s",h.nome);
+		printf("\nCPF: %s",h.cpf);
+		printf("\nRG: %s",h.rg);
+		printf("\nRua: %s",h.rua);
+		printf("\nNumero: %s",h.numero);
+		printf("\nBairro: %s",h.bairro);
+		printf("\nCidade: %s",h.cidadeestado.cidade);
+		printf("\nEstado: %s",h.cidadeestado.estado);
+		printf("\nCEP: %s",h.cep);
+		printf("\nComplemento: %s",h.complemento);
+		printf("\nData de Nascimento: %s",h.datanascimento);
+		printf("\nTelefone: %s",h.telefone);
+		printf("\nCelular: %s",h.celular);
+		printf("\nEstado Cívil: %s",h.estadocivil);
+		printf("\nE-Mail: %s",h.email);
+		printf("\nStatus: %s\n\n",h.status);
+	}
+	fclose(arquivo);
+}
 
-void consultahotel(){
+void consultahoteltxt(){
 	struct hotel ht;
 	FILE *arquivo;
 	arquivo = fopen(urlhotel,"r");
@@ -82,10 +111,39 @@ void consultahotel(){
 			printf("\nNome do Responsável: %s",ht.nomeresponsavel);
 			printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
 			printf("\nStatus: %s\n\n",ht.status);
-
 		}
 		fclose(arquivo);
 	}	
+}
+
+void consultahotelbin(){
+	struct hotel ht;
+	FILE *arquivo;
+	arquivo = fopen("saves/hotel.bin","rb");
+	if(arquivo == NULL){
+		printf("\nErro em realizar a consulta ou Não Foram encontrados hoteis cadastrados\n\n");
+	}
+	else{
+		fread(&ht,sizeof(struct hotel),1,arquivo);
+		printf("Código: %u",ht.codigo);
+		printf("\nRazão Social: %s",ht.razaosocial);
+		printf("\nNome Fantasia: %s",ht.nomefantasia);
+		printf("\nCNPJ: %s",ht.cnpj);
+		printf("\nInscrição Estadual: %s",ht.insc);
+		printf("\nRua: %s",ht.rua);
+		printf("\nNumero: %s",ht.numero);
+		printf("\nBairro: %s",ht.bairro);
+		printf("\nCidade: %s",ht.cidadeestado.cidade);
+		printf("\nEstado: %s",ht.cidadeestado.estado);
+		printf("\nCEP: %s",ht.cep);
+		printf("\nComplemento: %s",ht.complemento);
+		printf("\nTelefone: %s",ht.telefone);
+		printf("\nE-Mail: %s",ht.email);
+		printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+		printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+		printf("\nStatus: %s\n\n",ht.status);
+	}
+	fclose(arquivo);
 }
 
 void consultaproduto(){

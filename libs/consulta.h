@@ -184,6 +184,7 @@ int codigohospede(){
 		
 	}
 	fclose(arquivo);
+	
 	return codigo;
 }
 

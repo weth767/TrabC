@@ -10,6 +10,7 @@
 #include "libs/cadastros.h"
 #include "libs/salvar.h"
 #include "libs/consulta.h"
+#include <sys/dir.h>
 
 int main(int argc, char** argv) {
 	system("clear");
@@ -148,11 +149,13 @@ int main(int argc, char** argv) {
 			/*help para as funcoes do hospede**/
 			printf("\n------------------Hospedes------------------\n\n");
 			/*comandos*/
+			printf("Cadastros\n");
 			printf("cadhp -m: Cadastro de Hóspedes na Memória (Salvamento na Memória acarreta em perca dos dados anteriormente salvos na mesma)\n");
 			printf("cadhp -t: Cadastro de Hóspedes no Arquivo Texto\n");
 			printf("cadhp -b: Cadastro de Hóspedes no Arquivo Binário\n");
-			printf("cadhp -c: Cadastro de Hóspedes no CSV\n");
-			printf("cshp -t: Consulta de Hóspedes no Arquivo Texto\n\n");
+			printf("cadhp -c: Cadastro de Hóspedes no CSV\n\n");
+			printf("Consultas\n");
+			printf("cshp -t: Consulta de Hóspedes no Arquivo Texto\n");
 			printf("cshp -b: Consulta de Hóspedes no Arquivo Binário\n\n");
 			printf("\n------------------Hotéis------------------\n");
 			printf("cadht: Cadastro de Hotel\n\n");

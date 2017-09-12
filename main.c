@@ -10,165 +10,112 @@
 #include "libs/cadastros.h"
 #include "libs/salvar.h"
 #include "libs/consulta.h"
-#include <sys/dir.h>
+#include "libs/config.h"
+#include <unistd.h>
+
+void config(){
+	system("clear");
+	int op;
+	printf("Início do Sistema!\n\n");
+	printf("Agora será feita a configuração de salvamento do sistema.");
+	printf("\nSua escolha será imutável durante todo o uso do programa, escolha sabiamente.");
+	printf("O tipo de salvamento será:\n1 - Arquivo Texto;\n2 - Arquivo Binário;\n3 - Banco de Dados;\n4 - Nuvem;\nDigite o número de sua opção: ");
+	scanf("%i",&op);
+	configsave(op);
+	system("clear");
+}
+
+int verificaconfig(){
+	if(verificasave() == 1){
+		return 1;	
+	}
+	else if(verificasave() == 2){
+		return 2;
+	}
+	else if(verificasave() == 3){
+		printf("Opcao Ainda nao implementada!!!\n\n");
+	}
+	else if(verificasave() == 4){
+		printf("Opcao Ainda nao implementada!!!\n\n");
+	}
+	else{
+		return 0;
+	}
+}
+
+
+void menu(char com[50],int tiposave){
+	/*cadastro de hospede, tanto pra texto quanto pra binario*/
+	if((strcmp(com,"cadhp") == 0) && tiposave == 1){
+		cadastrahospede();
+		salvarhospedetxt();
+	}
+	else if(((strcmp(com,"cadhp") == 0) && tiposave == 2)){
+		cadastrahospede();
+		salvarhospedebin();
+	}
+	else if((strcmp(com,"cadhp") == 0) && tiposave == 3){
+		printf("função ainda nao implementada\n\n");
+	}
+	else if((strcmp(com,"cadhp") == 0) && tiposave == 4){
+		printf("função ainda nao implementada\n\n");
+	}
+	/*Consulta de Hospede*/
+	else if((strcmp(com,"cshp") == 0) && tiposave == 1){
+		consultahospedetxt();
+	}
+	else if(((strcmp(com,"cshp") == 0) && tiposave == 2)){
+		consultahospedebin();
+	}
+	else if(((strcmp(com,"cshp") == 0) && tiposave == 3)){
+		printf("função ainda nao implementada\n\n");
+	}
+	else if(((strcmp(com,"cshp") == 0) && tiposave == 4)){
+		printf("função ainda nao implementada\n\n");
+	}
+
+	/*Outros comandos*/
+	else if(strcmp(com,"lt") == 0){
+		system("clear");
+	}
+	else{
+		printf("Comando Inválido!\n\n");
+	}
+}
 
 int main(int argc, char** argv) {
 	system("clear");
-	char comando[50];
 	while(1){
-		printf(": ");
-		scanf("%[^\n]s",comando);
-		setbuf(stdin,NULL);
-		/*
-		depois de receber o comando digitado pelo usuário do sistema
-		vai ser verificado qual o comando digitado o que sera feito em seguida
-		*/
-		/*os comandos terão parametros para dar as opcoes de escolha para o usuario
-		os parametros serao iniciados por comando -parametro
-		*/
-		/*************************************************************************************************************************************/
-
-		/***
-		Comandos do hospede
-		**/
-
-		/*comando para cadastro de hospedes cadhp na memoria*/
-		if(strcmp(comando,"cadhp -m") == 0){
-			printf("\nSalvamento na Memória acarreta em perca dos dados anteriormente salvos na mesma!!\n\n");
-			cadastrahospede();
-			printf("\nDados salvos na memória com sucesso!");
+		//verifica a configuração inicial, caso não tenha sido feita, obrigatoriamente o usuário terá que faze-la.
+		if(verificaconfig() == 0){
+			config();
 		}
-		/*comando para cadastro de hospedes cadhp em arquivo texto*/		
-		else if(strcmp(comando,"cadhp -t") == 0){
-			cadastrahospede();
-			salvarhospedetxt();
-		}
-		/*comando para cadastro de hospedes cadhp no arquivo binario*/
-		else if(strcmp(comando,"cadhp -b") == 0){
-			cadastrahospede();
-			salvarhospedebin();	
-		}
-		/**comando para cadastro de hospedes cadhp no arquivo csv**/
-		else if(strcmp(comando,"cadhp -c") == 0){
-			cadastrahospede();
-			salvarhospedecsv();
-		}
-		/*comando para consultar os hospedes txt*/
-		else if(strcmp(comando,"cshp -t") == 0){
-			consultahospedetxt();
-		}
-		/*comando para consultar os hospedes em binario*/
-		else if(strcmp(comando,"cshp -b") == 0){
-			consultahospedebin();
-		}
-		/***
-		Fim dos comandos do hospede
-		***/
-		
-		/***Comandos do hotel***/
-
-		/*comando para cadastrar hotel cadht*/
-		else if(strcmp(comando,"cadht -m") == 0){
-			cadastrahotel();
-			printf("\nDados salvos com sucesso!");
-		}
-		else if(strcmp(comando,"cadht -t") == 0){
-				cadastrahotel();
-				salvarhoteltxt();
-		}
-		else if(strcmp(comando,"cadht -b") == 0){
-			cadastrahotel();
-			salvarhotelbin();
-		}
-		else if(strcmp(comando,"csht -t") == 0){
-			consultahoteltxt();
-		}
-		else if(strcmp(comando,"csht -b") == 0){
-			consultahotelbin();
-		}
-		/***Fim dos comandos do hotel***/
-
-		/***Comandos da acomadação***/
-
-		/*comando para cadastrar acomodacoes cadac*/
-		else if(strcmp(comando,"cadac") == 0){
-			cadastraacomodacoes();
-		}
-
-		/***Fim dos comandos da acomodação***/
-
-		/***Comandos do Produto***/
-
-		/*comando para cadastrar produtos cadp*/
-		else if(strcmp(comando,"cadp") == 0){
-			cadastraprodutos();
-			salvarprodutos();
-		}
-		/*comando para consulta de produtos*/
-		else if(strcmp(comando,"csp") == 0){
-			consultaproduto();
-		}
-
-		/***Fim dos comandos do produto***/
-
-
-		/*comando para cadastrar categorias*/
-		else if(strcmp(comando,"cadc") == 0){
-			cadastracategoria();
-			salvarcategorias();
-		}
-		
-
-		/**
-		Outros comandos do sistema
-		**/
-		/*Comando secreto*/
-		else if(strcmp(comando,"32683") == 0){
-			printf("\nComando sudo\n");
-			char texto[] = "Além do horizonte exite um bug, que não deixa o programa compilar, mesmo com comentario, me perco no código, lálálálá";
-			char nome[100];
-			sprintf(nome,"spd-say -p +20 -r -90 -l 639-3:por '%s' ",texto);
-			system(nome);
+		else{
+			/*Funcoes*/
+			/*Após a config feita, o usuário será direcionado para a tela de opções*/
+			/*Abaixo sera a parte dos comandos relacionados ao sistema*/
+			char comando[50];
+			printf(": ");
+			scanf("%[^\n]s",comando);
+			setbuf(stdin,NULL);
+			if(strcmp(comando,"sair") == 0){
+				printf("Adeus!\n\n");
+				for(int i = 5; i >= 1; i--){
+					printf("Saindo em: %i\n", i);
+					sleep(1);
+				}
+				return(0);
+			}
+			else{
+				/*serão verificados os comandos para saber o que o usuário deseja fazer*/
+				menu(comando,verificasave());
+			}
 			
 		}
-		/*comando de teste nosso para realização de alguns teste*/
-		else if(strcmp(comando,"test") == 0){
-			/*****/
-		}
-		/*comando para limpar a tela do usuário lt*/
-		else if(strcmp(comando,"lt") == 0){
-			system("clear");
-		}
-		/*comando para sair do sistema exit*/
-		else if(strcmp(comando,"sair") == 0){
-			return(0);
-		}
-		/*comando para mostrar o menu ajuda sobre os outros comandos, help*/
-		else if(strcmp(comando,"help") == 0){
-			printf("\nLista de Funções do Sistema:\n");
-			/*help para as funcoes do hospede**/
-			printf("\n------------------Hospedes------------------\n\n");
-			/*comandos*/
-			printf("Cadastros\n");
-			printf("cadhp -m: Cadastro de Hóspedes na Memória (Salvamento na Memória acarreta em perca dos dados anteriormente salvos na mesma)\n");
-			printf("cadhp -t: Cadastro de Hóspedes no Arquivo Texto\n");
-			printf("cadhp -b: Cadastro de Hóspedes no Arquivo Binário\n");
-			printf("cadhp -c: Cadastro de Hóspedes no CSV\n\n");
-			printf("Consultas\n");
-			printf("cshp -t: Consulta de Hóspedes no Arquivo Texto\n");
-			printf("cshp -b: Consulta de Hóspedes no Arquivo Binário\n\n");
-			printf("\n------------------Hotéis------------------\n");
-			printf("cadht: Cadastro de Hotel\n\n");
-			printf("\n------------------Acomodações------------------\n");
-			printf("cadac: Cadastro de Acomodações\n\n");
-			printf("\n------------------Produtos------------------\n");
-			printf("cadp: Cadastro de Produtos\n\n");
-		}
-		/*valida os comandos, caso não seja nenhum dos listados, indica o comando invalido*/
-		else{
-			printf("Comando invalido!\n");
-		}
-
+			
 	}
+		
 }
+	
+
 

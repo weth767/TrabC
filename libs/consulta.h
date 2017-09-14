@@ -241,4 +241,44 @@ int codigocategoria(){
 	}
 	return codigo;
 }
+
+int codigousuario(){
+	struct usuarios u;
+	FILE *arquivo;
+	int codigo;
+	arquivo = fopen("saves/usuarios.bin","rb");
+	if(arquivo == NULL){
+		codigo = 0;
+	}
+	else{
+		while(!feof(arquivo)){
+			fread(&u,sizeof(struct usuarios),1,arquivo);
+		}
+		fclose(arquivo);
+	}
+	codigo = u.codigo;
+	codigo++;
+	return codigo;
+
+}
+
+int verificausuario(char login[20],char senha[20]){
+	struct usuarios u;
+	FILE *arquivo;
+	int verifica = 0;
+	arquivo = fopen("saves/usuarios.bin","rb");
+	if(arquivo == NULL){
+		printf("\nErro na verificação de usuário!!\n");
+	}
+	else{
+		while(!feof(arquivo)){
+			fread(&u,sizeof(struct usuarios),1,arquivo);
+			if((strcmp(login,u.login) == 0) && (strcmp(senha,u.senha) == 0)){
+				verifica = 1;
+			}
+		}
+		return verifica;
+		fclose(arquivo);
+	}
+}
 #endif 

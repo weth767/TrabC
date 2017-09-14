@@ -107,20 +107,13 @@ struct fornecedor{
 	char status[20];
 };
 
-struct permissaoacesso{
-	unsigned codigo;
-	int administrador;
-	int operador;
-	int acessominimo;
-	char status[20];	
-};
 
 struct usuarios{
 	unsigned int codigo;
 	char nome[50];
 	char login[25];
 	char senha[25];
-	struct permissaoacesso permacesso;
+	int permissao;
 	char status[20];
 };
 

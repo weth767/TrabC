@@ -231,4 +231,26 @@ void cadastraprodutos(){
 
 }
 
+void cadastrausuario(){
+	struct usuarios u;
+	//faço a chamada da struct, para ter acesso as varíaveis desta;*/
+	/*coloco como linguagem obrigatória, o português, para evitar certos problemas de acentuação*/
+	setlocale(LC_ALL,"Portuguese");
+	/*verifico o codigo e faço o alto incremento automático*/
+	u.codigo = codigousuario();
+	/*faço o cadastro dos dados do usuário e */
+	/*limpo o buffer para evitar erros nas strings*/
+	setbuf(stdin,NULL);
+	printf("Digite o nome do usuário: ");
+	scanf("%[^\n]s",u.nome);
+	setbuf(stdin,NULL);
+	printf("Digite o login do usuário: ");
+	scanf("%s",u.login);
+	printf("Digite a senha do usuário: ");
+	scanf("%s",u.senha);
+	printf("Digite o nível de acesso do usuário\n1 - Acesso Mínimo;\n2 - Acesso Básico;\n3 - Acesso Comum;\n4 - Acesso Alto;\n5 - Acesso Máximo;\nDigite sua opção: ");
+	scanf("%i",&u.permissao);
+	strcpy(u.status , "Ativo");
+}
+
 #endif 

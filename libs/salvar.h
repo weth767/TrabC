@@ -4,6 +4,7 @@
 #include "structs.h"
 #include <string.h>
 #include <locale.h>
+/*********Comentar*******************/
 void salvarhospedetxt(){
 	struct hospede h;
 	setlocale(LC_ALL, "Portuguese");
@@ -193,7 +194,7 @@ void salvarprodutos(){
 	arquivo = fopen("saves/produto.txt","a+");
 	//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 	if(arquivo == NULL){
-		printf("Erro em realizar o cadastro de hotel!!\n");
+		printf("\nErro em realizar o cadastro de hotel!!\n");
 	}
 	//senão houver nenhum problema, salva os arquivos no txt que foi criado
 	else{
@@ -206,6 +207,26 @@ void salvarprodutos(){
 		fprintf(arquivo,"\n%s\n\n",p.status);
 		printf("\nDados foram salvos com sucesso!\n");
 	}
+	fclose(arquivo);
+}
+
+void salvarusuariosbin(){
+	struct usuarios u;
+	//faço a chamada da struct, para ter acesso as varíaveis desta;*/
+	/*coloco como linguagem obrigatória, o português, para evitar certos problemas de acentuação*/
+	setlocale(LC_ALL,"Portuguese");
+	FILE *arquivo;
+	arquivo = fopen("saves/usuarios.bin","ab");
+	//verifico a nulidade do arquivo que sera criado
+	if(arquivo == NULL){
+		printf("\nErro em realizar o cadastro de usuário!\n");
+	}
+	/*se estiver tudo ok, salva o arquivo*/
+	else{
+		fwrite(&u,sizeof(struct usuarios),1,arquivo);
+		printf("\nDados salvos com sucesso!\n");
+	}
+	//fecha o ponteiro
 	fclose(arquivo);
 }
 #endif

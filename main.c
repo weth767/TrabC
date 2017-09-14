@@ -13,6 +13,22 @@
 #include "libs/config.h"
 #include <unistd.h>
 
+
+int login(){
+	char login[20];
+	char senha[20];
+	printf("Login: ");
+	scanf("%s",login);
+	printf("Senha: ");
+	scanf("%s",senha);
+	if(verificausuario(login,senha) == 1){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+
 void config(){
 	system("clear");
 	int op;
@@ -54,12 +70,6 @@ void menu(char com[50],int tiposave){
 		cadastrahospede();
 		salvarhospedebin();
 	}
-	else if((strcmp(com,"cadhp") == 0) && tiposave == 3){
-		printf("função ainda nao implementada\n\n");
-	}
-	else if((strcmp(com,"cadhp") == 0) && tiposave == 4){
-		printf("função ainda nao implementada\n\n");
-	}
 	/*Consulta de Hospede*/
 	else if((strcmp(com,"cshp") == 0) && tiposave == 1){
 		consultahospedetxt();
@@ -67,13 +77,27 @@ void menu(char com[50],int tiposave){
 	else if(((strcmp(com,"cshp") == 0) && tiposave == 2)){
 		consultahospedebin();
 	}
-	else if(((strcmp(com,"cshp") == 0) && tiposave == 3)){
-		printf("função ainda nao implementada\n\n");
+	/*comandos para cadastro de hotel*/
+	else if((strcmp(com,"cadht") == 0) && tiposave == 1){
+		cadastrahotel();
+		salvarhoteltxt();
 	}
-	else if(((strcmp(com,"cshp") == 0) && tiposave == 4)){
-		printf("função ainda nao implementada\n\n");
+	else if(((strcmp(com,"cadhp") == 0) && tiposave == 2)){
+		cadastrahotel();
+		salvarhotelbin();
 	}
-
+	/*consulta dos dados do hotel*/
+	else if((strcmp(com,"csht") == 0) && tiposave == 1){
+		consultahoteltxt();
+	}
+	else if((strcmp(com,"csht") == 0) && tiposave == 2){
+		consultahotelbin();
+	}
+	/*comando para cadastro de hospede*/
+	else if((strcmp(com,"cadus") == 0)){
+		cadastrausuario();
+		salvarusuariosbin();
+	}
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");
@@ -84,8 +108,18 @@ void menu(char com[50],int tiposave){
 }
 
 int main(int argc, char** argv) {
+	int verifica = 0;
 	system("clear");
 	while(1){
+		while(verifica == 0){
+			if(login() == 1){
+				verifica = 1;
+				printf("\nConectado com sucesso!!\n");
+			}
+			else{
+				printf("\nLogin e/ou senha incorreto(s)!!\n");
+			}
+		}
 		//verifica a configuração inicial, caso não tenha sido feita, obrigatoriamente o usuário terá que faze-la.
 		if(verificaconfig() == 0){
 			config();

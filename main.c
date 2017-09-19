@@ -1,6 +1,6 @@
 /* 
  * File:   main.c
- * Author: alunos
+ * Author: João Paulo e Marco Túlio
  *
  * Created on 10 de Agosto de 2017, 13:32
  */ 
@@ -98,28 +98,39 @@ void menu(char com[50],int tiposave){
 		cadastrausuario();
 		salvarusuariosbin();
 	}
+	/*comandos da categoria*/
+	else if((strcmp(com,"cadc") == 0)){
+		cadastracategoria();
+		salvarcategorias	(tiposave);
+	}
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");
 	}
+	else if(strcmp(com,"32683") == 0){
+	}
 	else{
-		printf("Comando Inválido!\n\n");
+		printf("\nComando Inválido!\n\n");
 	}
 }
 
+char comando[50];
+ 
 int main(int argc, char** argv) {
 	int verifica = 0;
 	system("clear");
-	while(1){
-		while(verifica == 0){
-			if(login() == 1){
-				verifica = 1;
-				printf("\nConectado com sucesso!!\n");
-			}
-			else{
-				printf("\nLogin e/ou senha incorreto(s)!!\n");
-			}
+	while(verifica == 0){
+		if(login() == 1){
+			verifica = 1;
+			printf("\nUsuário conectado com sucesso!!\n\n");
 		}
+		else{
+			printf("\nLogin e/ou senha incorreto(s)!!\n\n");
+		}
+	}
+	sleep(1);
+	system("clear");	
+	while(1){
 		//verifica a configuração inicial, caso não tenha sido feita, obrigatoriamente o usuário terá que faze-la.
 		if(verificaconfig() == 0){
 			config();
@@ -128,8 +139,8 @@ int main(int argc, char** argv) {
 			/*Funcoes*/
 			/*Após a config feita, o usuário será direcionado para a tela de opções*/
 			/*Abaixo sera a parte dos comandos relacionados ao sistema*/
-			char comando[50];
-			printf(": ");
+			setbuf(stdin,NULL);	
+			printf("Digite um comando: ");
 			scanf("%[^\n]s",comando);
 			setbuf(stdin,NULL);
 			if(strcmp(comando,"sair") == 0){
@@ -151,5 +162,3 @@ int main(int argc, char** argv) {
 		
 }
 	
-
-

@@ -137,7 +137,7 @@ void cadastracategoria(){
 	struct categorias c;
 	printf("\nCadastro de Categorias\n");
 	
-	//c.codigo = codigocategoria();
+	c.codigo = codigocategoria();
 
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição da Categoria: ");
@@ -201,8 +201,6 @@ void cadastraacomodacoes(){
 	strcpy(acomod.status , "Ativo");
 }
 
-
-
 void cadastraprodutos(){
 	struct produtos p;
 	setlocale(LC_ALL,"Portuguese");
@@ -252,5 +250,4 @@ void cadastrausuario(){
 	scanf("%i",&u.permissao);
 	strcpy(u.status , "Ativo");
 }
-
 #endif 

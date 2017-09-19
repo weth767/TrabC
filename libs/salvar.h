@@ -4,16 +4,23 @@
 #include "structs.h"
 #include <string.h>
 #include <locale.h>
+#include "config.h"
 /*********Comentar*******************/
+/*funcao para salvar para o hospede no arquivo texto*/
 void salvarhospedetxt(){
+	/*chama a struct hospede para usar as variaveis do hospede*/
 	struct hospede h;
 	setlocale(LC_ALL, "Portuguese");
+	/*coloca um ponteiro para armazenar a localizacao do arquivo*/
 	FILE *arquivo;
+	/*abre o arquivo texto*/
 	arquivo = fopen("saves/hospede.txt","a+");
-
+	/*verifica o arquivo texto*/
 	if(arquivo == NULL){
+		/*se for nulo, ou seja nao foi encontrado, mostra uma mensagem de erro*/
 		printf("\nErro em realizar o cadastro do hóspede no arquivo texto!!\n\n");
 	}
+	/*senao faz a insersao do arquivo*/
 	else{
 		fprintf(arquivo,"%u",h.codigo);
 		fprintf(arquivo,"\n%s",h.nome);
@@ -34,6 +41,7 @@ void salvarhospedetxt(){
 		fprintf(arquivo,"\n%s\n\n",h.status);
 		printf("\nDados foram salvos com sucesso!\n\n");
 	}
+	/*e por fim fecha o arquivo*/
 	fclose(arquivo);
 }
 
@@ -53,7 +61,7 @@ void salvarhospedebin(){
 	fclose(arquivo);
 }
 
-void salvarhospedecsv(){
+/*void salvarhospedecsv(){
 	struct hospede h;
 	setlocale(LC_ALL, "Portuguese");
 	FILE *arquivo;
@@ -83,7 +91,7 @@ void salvarhospedecsv(){
 		printf("\nDados foram salvos com sucesso!\n\n");
 	}
 	fclose(arquivo);
-}
+}*/
 
 void salvarhoteltxt(){
 	//realizo a chamada da struct hotel, para ter acesso as variaveis relacionadas a essa struct
@@ -120,10 +128,10 @@ void salvarhoteltxt(){
 	}
 	//ao final do salvamento, finalizo o ponteiro e encerro o salvamento de arquivos
 	fclose(arquivo);
-
 }
 
 void salvarhotelbin(){
+	/**/
 	struct hospede ht;
 	FILE *arquivo;
 	setlocale(LC_ALL,"Portuguese");
@@ -139,34 +147,49 @@ void salvarhotelbin(){
 	fclose(arquivo);
 }
 
-void salvarcategorias(){
+void salvarcategorias(int tipo){
 	struct categorias c;
 	//chama a struct categorias para ter acesso a suas variaveis
 	setlocale(LC_ALL,"Portuguese");
 	//coloca como linguagem padrao a portuguesa
 	FILE *arquivo;
-	//crio um ponteiro que apontara para a localizacao do arquivo
-	arquivo = fopen("saves/categoria.txt","a+");
-	//abro o arquivo
-	//agora verifico se o arquivo existe, senao sera criado na hora
-	//senao for criado da mensagem de erro
-	if(arquivo == NULL){
-		printf("\nErro em realizar o cadastro de categoria!!\n\n");
+	switch(tipo){
+		case 1:
+			//crio um ponteiro que apontara para a localizacao do arquivo
+			arquivo = fopen("saves/categoria.txt","a+");
+			//abro o arquivo
+			//agora verifico se o arquivo existe, senao sera criado na hora
+			//senao for criado da mensagem de erro
+			if(arquivo == NULL){
+				printf("\nErro em realizar o cadastro de categoria!!\n\n");
+			}
+			//se for criado salva os dados no arquivo txt
+			else{
+				fprintf(arquivo,"%u",c.codigo);
+				fprintf(arquivo,"\n%s",c.descricao);
+				fprintf(arquivo,"\n%.2f",c.valor);
+				fprintf(arquivo,"\n%i",c.quantidadeadultos);
+				fprintf(arquivo,"\n%i",c.quantidadecriancas);
+				fprintf(arquivo,"\n%s\n\n",c.status);
+				printf("\nDados foram salvos com sucesso!\n\n");
+			}
+			fclose(arquivo);
+		break;
+		case 2:
+			arquivo = fopen("saves/categoria.bin","ab");
+			if(arquivo == NULL){
+				printf("\nErro em realizar o cadastro de categoria!!\n\n");
+			}
+			else{
+				fwrite(&c,sizeof(struct categorias),1,arquivo);
+				printf("\nDados foram salvos com sucesso!\n\n");
+			}
+			fclose(arquivo);
+		break;
 	}
-	//se for criado salva os dados no arquivo txt
-	else{
-		fprintf(arquivo,"%u",c.codigo);
-		fprintf(arquivo,"\n%s",c.descricao);
-		fprintf(arquivo,"\n%.2f",c.valor);
-		fprintf(arquivo,"\n%i",c.quantidadeadultos);
-		fprintf(arquivo,"\n%i",c.quantidadecriancas);
-		fprintf(arquivo,"\n%s\n\n",c.status);
-		printf("\nDados foram salvos com sucesso!\n\n");
-	}
-	fclose(arquivo);
+	
 }
 	
-
 void salvaracomodacoes(){
 	//realizo a chamada da struct acomodacoes, para ter acesso as variaveis relacionadas a essa struct
 	struct acomodacoes acomod;

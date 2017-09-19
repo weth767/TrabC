@@ -9,7 +9,6 @@
 char urlhospede[] = "saves/hospede.txt";
 char urlhotel[] = "saves/hotel.txt";
 char urlproduto[] = "saves/produto.txt";
-char urlcategoria[] = "saves/categoria.txt";
 
 /*funcao para realizar a consulta do hospede*/
 void consultahospedetxt(){
@@ -224,20 +223,34 @@ int codigoproduto(){
 	return codigo;
 }
 
-int codigocategoria(){
+int codigocategoria(int tipo){
 	struct categorias c;
 	FILE *arquivo;
-	int codigo;
-	arquivo = fopen(urlcategoria,"a+");
-	if(arquivo == NULL){
-		codigo = 0;
-	}
-	else{
-		while(fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s\n",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status)!= EOF){
-			codigo = c.codigo;
-		}
-		codigo++;
-		fclose(arquivo);		
+	int codigo = 0;
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/categoria.txt","a+");
+			if(arquivo == NULL){
+				printf("\nErro na localização do arquivo para criar o código\n");
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s\n",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status)!= EOF){
+					codigo = c.codigo;
+				}
+				codigo++;
+				fclose(arquivo);		
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/categoria.bin","ab");
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo!!\n\n");
+			}
+			else{
+				fread(&codigo,sizeof(int),1,arquivo);
+				codigo++;
+			}
+		break;	
 	}
 	return codigo;
 }

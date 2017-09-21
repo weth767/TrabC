@@ -1,10 +1,10 @@
 #ifndef FUNCOES_H
 #define FUNCOES_H
 /*a biblioteca structs foi importada para ser usado as structs dentro das funções*/
-#include "structs.h"
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#include "structs.h"
 #include "salvar.h"
 #include "consulta.h"
 #include "config.h"
@@ -53,9 +53,7 @@ void cadastrahospede(){
 	setbuf(stdin,NULL);
 	printf("Digite a Data de Nascimento do Hóspede: ");
 	scanf("%[^\n]s",h.datanascimento);
-	printf("%i",stringtointeger(h.datanascimento));
 	setbuf(stdin,NULL);
-	
 	/*Preciso validar a data de nascimento*/
 	printf("Digite o Telefone do Hóspede: ");
 	scanf("%[^\n]s",h.telefone);
@@ -166,14 +164,16 @@ void cadastraacomodacao(){
 	struct acomodacoes acomod;
 	//coloca o linguagem local para portugues, assim pegará os acentos
 	setlocale(LC_ALL,"Portuguese");
-
 	printf("\nCadastro de Acomodações:\n");
-	
+	acomod.codigo = codigoacomodacao(verificasave());
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição da Acomodações: ");
 	scanf("%[^\n]s",acomod.descricao);
 	setbuf(stdin,NULL);
-	printf("Acomodação possui Televisão Comum?(1 - Sim, 0 - Não): ");
+	consultacategoria(verificasave());
+	printf("Digite o código da categoria desejada: ");
+	scanf("%i",&acomod.categoriaselecionada);
+	printf("\nAcomodação possui Televisão Comum?(1 - Sim, 0 - Não): ");
 	scanf("%i",&acomod.extra.tv);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Televisão a Cabo?(1 - Sim, 0 - Não): ");

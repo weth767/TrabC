@@ -17,7 +17,7 @@ void salvarhospede(int tipo){
 		/*no primeiro caso, salva em arquivo texto*/
 		case 1:
 			/*abre o arquivo texto*/
-			arquivo = fopen("saves/hospede.txt","a+");
+			arquivo = fopen("saves/hospedes.txt","a+");
 			/*verifica o arquivo texto*/
 			if(arquivo == NULL){
 				/*se for nulo, ou seja nao foi encontrado, mostra uma mensagem de erro*/
@@ -50,7 +50,7 @@ void salvarhospede(int tipo){
 		/*no segundo caso, salva em binario*/
 		case 2:
 			//*abre o arquivo binario*//
-			arquivo = fopen("saves/hospede.bin","ab");
+			arquivo = fopen("saves/hospedes.bin","ab");
 			/*caso o arquivo nao exista o ponteiro retornara nulo*/
 			if(arquivo == NULL){
 				printf("Erro em realizar o cadastro do hóspede no arquivo binário!!\n\n");
@@ -108,7 +108,7 @@ void salvarhotel(int tipo){
 	FILE *arquivo;
 	switch(tipo){
 		case 1:
-			arquivo = fopen("saves/hotel.txt","a+");
+			arquivo = fopen("saves/hoteis.txt","a+");
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
 				printf("\nErro em realizar o cadastro de hotel!!\n\n");
@@ -138,7 +138,7 @@ void salvarhotel(int tipo){
 			fclose(arquivo);
 		break;
 		case 2:
-			arquivo = fopen("saves/hotel.bin","ab");
+			arquivo = fopen("saves/hoteis.bin","ab");
 
 			if(arquivo == NULL){
 				printf("Erro em realizar o cadastro do hotel no arquivo binário!!\n\n");
@@ -165,7 +165,7 @@ void salvarcategorias(int tipo){
 	switch(tipo){
 		case 1:
 			//crio um ponteiro que apontara para a localizacao do arquivo
-			arquivo = fopen("saves/categoria.txt","a+");
+			arquivo = fopen("saves/categorias.txt","a+");
 			//abro o arquivo
 			//agora verifico se o arquivo existe, senao sera criado na hora
 			//senao for criado da mensagem de erro
@@ -185,7 +185,7 @@ void salvarcategorias(int tipo){
 			fclose(arquivo);
 		break;
 		case 2:
-			arquivo = fopen("saves/categoria.bin","ab");
+			arquivo = fopen("saves/categorias.bin","ab");
 			if(arquivo == NULL){
 				printf("\nErro em realizar o cadastro de categoria!!\n\n");
 			}
@@ -202,21 +202,53 @@ void salvarcategorias(int tipo){
 	
 }
 	
-void salvaracomodacao(){
+void salvaracomodacao(int tipo){
 	//realizo a chamada da struct acomodacoes, para ter acesso as variaveis relacionadas a essa struct
-	struct acomodacoes acomod;
+	struct acomodacoes ac;
 	//coloca o local padrão como portugues, assim pegará todos os acentos.
 	setlocale(LC_ALL,"Portuguese");
 	//crio uma variavel do tipo arquivo com um ponteiro para que possa criar e salvar dados em um arquivo, nesse caso txt
-	FILE *arquivo; 
-	arquivo = fopen("saves/hotel.txt","a+");
-	//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
-	if(arquivo == NULL){
-		printf("\nErro em realizar o cadastro de acomodações!!\n\n");
-	}
-	//senão houver nenhum problema, salva os arquivos no txt que foi criado
-	else{
-		
+	FILE *arquivo;
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/acomodacoes.txt","a+");
+			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
+			if(arquivo == NULL){
+				printf("\nErro em realizar o cadastro de acomodações!!\n\n");
+			}
+			//senão houver nenhum problema, salva os arquivos no txt que foi criado
+			else{
+				fprintf(arquivo,"%u",ac.codigo);
+				fprintf(arquivo,"\n%s",ac.descricao);
+				fprintf(arquivo,"\n%i",ac.extra.tv);
+				fprintf(arquivo,"\n%i",ac.extra.tvcabo);
+				fprintf(arquivo,"\n%i",ac.extra.arcondicionado);
+				fprintf(arquivo,"\n%i",ac.extra.frigobar);
+				fprintf(arquivo,"\n%i",ac.extra.banheiro);
+				fprintf(arquivo,"\n%i",ac.extra.camacasal);
+				fprintf(arquivo,"\n%i",ac.extra.camasolteiro);
+				fprintf(arquivo,"\n%i",ac.extra.hidromassagem);
+				fprintf(arquivo,"\n%i",ac.extra.banheira);
+				fprintf(arquivo,"\n%i",ac.categoriaselecionada);
+				fprintf(arquivo,"\n%s\n\n",ac.status);
+				printf("\nDados foram salvos com sucesso!\n\n");
+			}
+			fclose(arquivo);
+		break;
+		case 2:
+			arquivo = fopen("saves/acomodacoes.bin","ab");
+			if(arquivo == NULL){
+				printf("\nErro em realizar o cadastro de acomodações!!\n\n");
+			}
+			else{
+				fwrite(&ac,sizeof(struct acomodacoes),1,arquivo);
+				printf("\nDados foram salvos com sucesso!\n\n");
+			}
+			fclose(arquivo);
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 }
 
@@ -229,7 +261,7 @@ void salvarproduto(int tipo){
 	switch(tipo){
 		/*caso 1 salvar em txt*/
 		case 1:
-			arquivo = fopen("saves/produto.txt","a+");
+			arquivo = fopen("saves/produtos.txt","a+");
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
 				printf("\nErro em realizar o cadastro de produtos!!\n");
@@ -243,14 +275,14 @@ void salvarproduto(int tipo){
 				fprintf(arquivo,"\n%.2f",p.precocusto);
 				fprintf(arquivo,"\n%.2f",p.precovenda);
 				fprintf(arquivo,"\n%s\n\n",p.status);
-				printf("\nDados foram salvos com sucesso!\n");
+				printf("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);
 		break;
 		/*caso 2 salvar em binario*/
 		case 2:
 			/*tenta abrir o arquivo*/
-			arquivo = fopen("saves/produto.bin","ab");
+			arquivo = fopen("saves/produtos.bin","ab");
 			if(arquivo == NULL){
 				printf("\nErro em realizar o cadastro de produtos!!\n");
 			}

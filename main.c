@@ -97,6 +97,11 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"csp") == 0){
 		consultaproduto(tiposave);
 	}
+	/*comandos de acomodação*/
+	else if(strcmp(com,"cadac") == 0){
+		cadastraacomodacao();
+		salvaracomodacao(tiposave);
+	}
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");

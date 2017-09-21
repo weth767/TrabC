@@ -74,6 +74,7 @@ struct extras{
 struct acomodacoes{
 	unsigned int codigo;
 	char descricao[50];
+	int categoriaselecionada;
 	struct extras extra;
 	struct categorias categoria;
 	char status[20];

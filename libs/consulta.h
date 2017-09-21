@@ -5,184 +5,317 @@
 #include <stdio.h>
 #include "structs.h"
 
-/*caminho absoluto dos arquivos txt*/
-char urlhospede[] = "saves/hospede.txt";
-char urlhotel[] = "saves/hotel.txt";
-char urlproduto[] = "saves/produto.txt";
-
 /*funcao para realizar a consulta do hospede*/
-void consultahospedetxt(){
+void consultahospede(int tipo){
 	/*faço a chamada da struct, para ter acesso as variaveis do hospede*/
 	struct hospede h;
 	//crio um ponteiro do tipo arquivo para poder guardar a posicao dos dados do arquivo na memoria
 	FILE *arquivo;
-	/*abro o arquivo em modo de somente leitura*/
-	arquivo = fopen(urlhospede,"r");
-	//verifico se ele foi aberto
-	if(arquivo == NULL){
-		printf("\nErro em realizar a consulta ou Não foram encontrados hospedes cadastrados\n\n");
+	switch(tipo){
+		case 1:
+			/*abro o arquivo*/
+			arquivo = fopen("saves/hospede.txt","a+");
+			//verifico se ele foi aberto
+			if(arquivo == NULL){
+				printf("\nErro em realizar a consulta ou Não foram encontrados hospedes cadastrados\n\n");
+			}
+			else{
+				/*padronizo os dados que serao buscados*/
+				printf("\nDados dos Usuários\n\n");
+				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
+					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
+						/*E vou listando os itens para o usuario em forma de lista*/
+						printf("\n----------------------------------------------------------------------------\n");
+						printf("Código: %u",h.codigo);
+						printf("\nNome: %s",h.nome);
+						printf("\nCPF: %s",h.cpf);
+						printf("\nRG: %s",h.rg);
+						printf("\nRua: %s",h.rua);
+						printf("\nNumero: %s",h.numero);
+						printf("\nBairro: %s",h.bairro);
+						printf("\nCidade: %s",h.cidadeestado.cidade);
+						printf("\nEstado: %s",h.cidadeestado.estado);
+						printf("\nCEP: %s",h.cep);
+						printf("\nComplemento: %s",h.complemento);
+						printf("\nData de Nascimento: %s",h.datanascimento);
+						printf("\nTelefone: %s",h.telefone);
+						printf("\nCelular: %s",h.celular);
+						printf("\nEstado Cívil: %s",h.estadocivil);
+						printf("\nE-Mail: %s",h.email);
+						printf("\nStatus: %s",h.status);
+						printf("\n----------------------------------------------------------------------------\n");
+						/*verifica se ja alcancou o final do arquivo*/
+						if(feof(arquivo)){
+							//*se ja sai do laco*/
+							break;
+						}
+				}
+				/*e no fim fecho o ponteiro do arquivo*/
+				fclose(arquivo);
+			}	
+		break;
+		/*caso 2, verifica em binario*/
+		case 2:
+			/*abre o arquivo*/
+			arquivo = fopen("saves/hospede.bin","ab");
+			/*verifica se ele pode ser aberto ou existe*/
+			if(arquivo == NULL){
+				printf("\nErro em realizar a consulta ou Não Foram encontrados hospedes cadastrados\n\n");
+			}
+			/*se foi aberto, verifica os dados no arquivo*/
+			else{
+				/*enquanto nao for o final do arquivo vai mostrando os dados*/
+				while(!feof(arquivo)){
+					fread(&h,sizeof(struct hospede),1,arquivo);
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %u",h.codigo);
+					printf("\nNome: %s",h.nome);
+					printf("\nCPF: %s",h.cpf);
+					printf("\nRG: %s",h.rg);
+					printf("\nRua: %s",h.rua);
+					printf("\nNumero: %s",h.numero);
+					printf("\nBairro: %s",h.bairro);
+					printf("\nCidade: %s",h.cidadeestado.cidade);
+					printf("\nEstado: %s",h.cidadeestado.estado);
+					printf("\nCEP: %s",h.cep);
+					printf("\nComplemento: %s",h.complemento);
+					printf("\nData de Nascimento: %s",h.datanascimento);
+					printf("\nTelefone: %s",h.telefone);
+					printf("\nCelular: %s",h.celular);
+					printf("\nEstado Cívil: %s",h.estadocivil);
+					printf("\nE-Mail: %s",h.email);
+					printf("\nStatus: %s\n\n",h.status);
+					printf("\n----------------------------------------------------------------------------\n");
+					/*verifica se ja alcancou o final do arquivo*/
+					if(feof(arquivo)){
+						/*se ja sai do laco*/
+						break;
+					}
+				}
+			}
+			/*e no final fecha o ponteiro*/
+			fclose(arquivo);
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
-	else{
-		/*padronizo os dados que serao buscados*/
-		printf("\nDados dos Usuários\n\n");
-		while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
-			h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
-				/*E vou listando os itens para o usuario em forma de lista*/
-				printf("Código: %u",h.codigo);
-				printf("\nNome: %s",h.nome);
-				printf("\nCPF: %s",h.cpf);
-				printf("\nRG: %s",h.rg);
-				printf("\nRua: %s",h.rua);
-				printf("\nNumero: %s",h.numero);
-				printf("\nBairro: %s",h.bairro);
-				printf("\nCidade: %s",h.cidadeestado.cidade);
-				printf("\nEstado: %s",h.cidadeestado.estado);
-				printf("\nCEP: %s",h.cep);
-				printf("\nComplemento: %s",h.complemento);
-				printf("\nData de Nascimento: %s",h.datanascimento);
-				printf("\nTelefone: %s",h.telefone);
-				printf("\nCelular: %s",h.celular);
-				printf("\nEstado Cívil: %s",h.estadocivil);
-				printf("\nE-Mail: %s",h.email);
-				printf("\nStatus: %s\n\n",h.status);
-		}
-		/*e no fim fecho o ponteiro do arquivo*/
-		fclose(arquivo);
-	}	
+	
 }
 
-void consultahospedebin(){
-	struct hospede h;
-	FILE *arquivo;
-	arquivo = fopen("saves/hospede.bin","rb");
-	if(arquivo == NULL){
-		printf("\nErro em realizar a consulta ou Não Foram encontrados hospedes cadastrados\n\n");
-	}
-	else{
-		fread(&h,sizeof(struct hospede),1,arquivo);
-		printf("Código: %u",h.codigo);
-		printf("\nNome: %s",h.nome);
-		printf("\nCPF: %s",h.cpf);
-		printf("\nRG: %s",h.rg);
-		printf("\nRua: %s",h.rua);
-		printf("\nNumero: %s",h.numero);
-		printf("\nBairro: %s",h.bairro);
-		printf("\nCidade: %s",h.cidadeestado.cidade);
-		printf("\nEstado: %s",h.cidadeestado.estado);
-		printf("\nCEP: %s",h.cep);
-		printf("\nComplemento: %s",h.complemento);
-		printf("\nData de Nascimento: %s",h.datanascimento);
-		printf("\nTelefone: %s",h.telefone);
-		printf("\nCelular: %s",h.celular);
-		printf("\nEstado Cívil: %s",h.estadocivil);
-		printf("\nE-Mail: %s",h.email);
-		printf("\nStatus: %s\n\n",h.status);
-	}
-	fclose(arquivo);
-}
-
-void consultahoteltxt(){
+void consultahotel(int tipo){
 	struct hotel ht;
 	FILE *arquivo;
-	arquivo = fopen(urlhotel,"r");
-	if(arquivo == NULL){
-		printf("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");	
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/hotel.txt","a+");
+			if(arquivo == NULL){
+				printf("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");	
+			}
+			else{
+				printf("\nDados do(s) Hotel(éis)\n\n");
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,ht.insc,
+					ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status) !=EOF){
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %u",ht.codigo);
+					printf("\nRazão Social: %s",ht.razaosocial);
+					printf("\nNome Fantasia: %s",ht.nomefantasia);
+					printf("\nCNPJ: %s",ht.cnpj);
+					printf("\nInscrição Estadual: %s",ht.insc);
+					printf("\nRua: %s",ht.rua);
+					printf("\nNumero: %s",ht.numero);
+					printf("\nBairro: %s",ht.bairro);
+					printf("\nCidade: %s",ht.cidadeestado.cidade);
+					printf("\nEstado: %s",ht.cidadeestado.estado);
+					printf("\nCEP: %s",ht.cep);
+					printf("\nComplemento: %s",ht.complemento);
+					printf("\nTelefone: %s",ht.telefone);
+					printf("\nE-Mail: %s",ht.email);
+					printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+					printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+					printf("\nStatus: %s\n\n",ht.status);
+					printf("\n----------------------------------------------------------------------------\n");
+					/*verifica se ja alcancou o final do arquivo*/
+					if(feof(arquivo)){
+						/*se ja sai do laco*/
+						break;
+					}
+				}
+				fclose(arquivo);
+			}	
+		break;
+		case 2:
+			arquivo = fopen("saves/hotel.bin","ab");
+			if(arquivo == NULL){
+				printf("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");
+			}
+			else{
+				fread(&ht,sizeof(struct hotel),1,arquivo);
+				printf("\n----------------------------------------------------------------------------\n");
+				printf("Código: %u",ht.codigo);
+				printf("\nRazão Social: %s",ht.razaosocial);
+				printf("\nNome Fantasia: %s",ht.nomefantasia);
+				printf("\nCNPJ: %s",ht.cnpj);
+				printf("\nInscrição Estadual: %s",ht.insc);
+				printf("\nRua: %s",ht.rua);
+				printf("\nNumero: %s",ht.numero);
+				printf("\nBairro: %s",ht.bairro);
+				printf("\nCidade: %s",ht.cidadeestado.cidade);
+				printf("\nEstado: %s",ht.cidadeestado.estado);
+				printf("\nCEP: %s",ht.cep);
+				printf("\nComplemento: %s",ht.complemento);
+				printf("\nTelefone: %s",ht.telefone);
+				printf("\nE-Mail: %s",ht.email);
+				printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+				printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+				printf("\nStatus: %s\n\n",ht.status);
+				printf("\n----------------------------------------------------------------------------\n");
+				/*verifica se ja alcancou o final do arquivo*/
+				if(feof(arquivo)){
+					/*se ja sai do laco*/
+					break;
+				}
+			}
+			fclose(arquivo);
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
-	else{
-		printf("\nDados do(s) Hotel(éis)\n\n");
-		while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,ht.insc,
-			ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status) !=EOF){
-
-			printf("Código: %u",ht.codigo);
-			printf("\nRazão Social: %s",ht.razaosocial);
-			printf("\nNome Fantasia: %s",ht.nomefantasia);
-			printf("\nCNPJ: %s",ht.cnpj);
-			printf("\nInscrição Estadual: %s",ht.insc);
-			printf("\nRua: %s",ht.rua);
-			printf("\nNumero: %s",ht.numero);
-			printf("\nBairro: %s",ht.bairro);
-			printf("\nCidade: %s",ht.cidadeestado.cidade);
-			printf("\nEstado: %s",ht.cidadeestado.estado);
-			printf("\nCEP: %s",ht.cep);
-			printf("\nComplemento: %s",ht.complemento);
-			printf("\nTelefone: %s",ht.telefone);
-			printf("\nE-Mail: %s",ht.email);
-			printf("\nNome do Responsável: %s",ht.nomeresponsavel);
-			printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
-			printf("\nStatus: %s\n\n",ht.status);
-		}
-		fclose(arquivo);
-	}	
+	
 }
-
-void consultahotelbin(){
-	struct hotel ht;
-	FILE *arquivo;
-	arquivo = fopen("saves/hotel.bin","rb");
-	if(arquivo == NULL){
-		printf("\nErro em realizar a consulta ou Não Foram encontrados hoteis cadastrados\n\n");
-	}
-	else{
-		fread(&ht,sizeof(struct hotel),1,arquivo);
-		printf("Código: %u",ht.codigo);
-		printf("\nRazão Social: %s",ht.razaosocial);
-		printf("\nNome Fantasia: %s",ht.nomefantasia);
-		printf("\nCNPJ: %s",ht.cnpj);
-		printf("\nInscrição Estadual: %s",ht.insc);
-		printf("\nRua: %s",ht.rua);
-		printf("\nNumero: %s",ht.numero);
-		printf("\nBairro: %s",ht.bairro);
-		printf("\nCidade: %s",ht.cidadeestado.cidade);
-		printf("\nEstado: %s",ht.cidadeestado.estado);
-		printf("\nCEP: %s",ht.cep);
-		printf("\nComplemento: %s",ht.complemento);
-		printf("\nTelefone: %s",ht.telefone);
-		printf("\nE-Mail: %s",ht.email);
-		printf("\nNome do Responsável: %s",ht.nomeresponsavel);
-		printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
-		printf("\nStatus: %s\n\n",ht.status);
-	}
-	fclose(arquivo);
-}
-
-void consultaproduto(){
+void consultaproduto(int tipo){
 	struct produtos p;
 	FILE *arquivo;
-	arquivo = fopen(urlproduto,"r");
-	if(arquivo == NULL){
-		printf("Erro em realizar a consulta ou Não foram encontrados produtos cadastrados");
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/produto.txt","a+");
+			if(arquivo == NULL){
+				printf("Erro em realizar a consulta ou Não foram encontrados produtos cadastrados");
+			}
+			else{
+				printf("\nDados do(s) Produto(s)\n\n");
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %u",p.codigo);
+					printf("\nDescrição: %s",p.descricao);
+					printf("\nEstoque: %i",p.estoque);
+					printf("\nEstoque Minimo: %i",p.estoqueminimo);
+					printf("\nPreço de Custo: R$%.2f",p.precocusto);
+					printf("\nPreço de Venda: R$%.2f",p.precovenda);
+					printf("\nStatus: %s\n\n",p.status);
+					printf("\n----------------------------------------------------------------------------\n");
+					/*verifica se ja alcancou o final do arquivo*/
+					if(feof(arquivo)){
+						/*se ja sai do laco*/
+						break;
+					}
+				}
+				fclose(arquivo);		
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/produto.bin","ab");
+			if(arquivo == NULL){
+				printf("Erro em realizar a consulta ou Não foram encontrados produtos cadastrados");
+			}
+			else{
+				while(!feof(arquivo)){
+					fread(&p,sizeof(struct produtos),1,arquivo);
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %u",p.codigo);
+					printf("\nDescrição: %s",p.descricao);
+					printf("\nEstoque: %i",p.estoque);
+					printf("\nEstoque Minimo: %i",p.estoqueminimo);
+					printf("\nPreço de Custo: R$%.2f",p.precocusto);
+					printf("\nPreço de Venda: R$%.2f",p.precocusto);
+					printf("\nStatus: %s\n\n",p.status);
+					printf("\n----------------------------------------------------------------------------\n");
+					if(feof(arquivo)){
+						/*se ja sai do laco*/
+						break;
+					}
+				}
+			}
+		break;
 	}
-	else{
-		printf("\nDados do(s) Produto(s)\n\n");
-		while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
-			printf("Código: %u",p.codigo);
-			printf("\nDescrição: %s",p.descricao);
-			printf("\nEstoque: %i",p.estoque);
-			printf("\nEstoque Minimo: %i",p.estoqueminimo);
-			printf("\nPreço de Custo: R$%.2f",p.precocusto);
-			printf("\nPreço de Venda: R$%.2f",p.precocusto);
-			printf("\nStatus: %s\n\n",p.status);
-		}
-		fclose(arquivo);		
+	
+}
+
+void verificacategoria(int tipo){
+	struct categorias c;
+	FILE *arquivo;
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/categoria.txt","a+");
+			if(arquivo == NULL){
+				printf("\nErro em realizar a consulta de categoria!!\n\n");
+			}
+			else{
+				printf("\nDados do(s) Produto(s)\n\n");
+				while(fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status) != EOF){
+					printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
+					printf("\nNúmero de Adultos: %i, Número de Crianças: %i\n\n",c.quantidadeadultos,c.quantidadecriancas);
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				fclose(arquivo);
+		break;
+		case 2:
+			arquivo = fopen("saves/categoria.bin","ab");
+			if(arquivo == NULL){
+				printf("\nErro em realizar a consulta de categoria!!\n\n");	
+			}
+			else{
+				while(!feof(arquivo)){
+					fread(&c,sizeof(struct categorias),arquivo);
+					if(feof(arquivo)){
+						break;
+					}
+					printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
+					printf("\nNúmero de Adultos: %i, Número de Crianças: %i\n\n",c.quantidadeadultos,c.quantidadecriancas);
+				}
+				fclose(arquivo);
+
+			}
+		break;
 	}
 }
 
-
-int codigohospede(){
+int codigohospede(int tipo){
 	int codigo = 0;
 	FILE *arquivo;
-	arquivo = fopen(urlhospede,"a+");
-	if(arquivo == NULL){
-		codigo = 0;
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/hospede.txt","a+");
+			if(arquivo == NULL){
+				codigo = 0;
+			}
+			else{
+				while(fscanf(arquivo,"%u\n",&codigo)!= EOF){
+					fgetc(arquivo);
+				}
+				codigo++;
+				
+			}
+			fclose(arquivo);
+		break;
+		case 2:
+			arquivo = fopen("saves/hospede.bin","ab");
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo!!\n\n");
+			}
+			else{
+				fread(&codigo,sizeof(int),1,arquivo);
+				codigo++;
+			}
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
-	else{
-		while(fscanf(arquivo,"%u\n",&codigo)!= EOF){
-			fgetc(arquivo);
-		}
-		codigo++;
-		
-	}
-	fclose(arquivo);
+	
 	
 	return codigo;
 }
@@ -190,7 +323,7 @@ int codigohospede(){
 int codigohotel(){
 	int codigo = 0;
 	FILE *arquivo;
-	arquivo = fopen(urlhotel,"a+");
+	arquivo = fopen("saves/hotel.txt","a+");
 	if(arquivo == NULL){
 		codigo = 0;
 	}
@@ -209,7 +342,7 @@ int codigoproduto(){
 	struct produtos p;
 	FILE *arquivo;
 	int codigo;
-	arquivo = fopen(urlproduto,"a+");
+	arquivo = fopen("saves/produto.txt","a+");
 	if(arquivo == NULL){
 		codigo = 0;
 	}
@@ -250,7 +383,10 @@ int codigocategoria(int tipo){
 				fread(&codigo,sizeof(int),1,arquivo);
 				codigo++;
 			}
-		break;	
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 	return codigo;
 }

@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 void configsave(int op){
 	FILE * arquivo;
@@ -31,5 +35,18 @@ int verificasave(){
 	}
 	fclose(arquivo);
 }
+
+/**int teste(int argc, char *argv[]){
+    
+    struct stat st = {0};
+    
+    if (stat("/home/alunos/Desktop/TrabC/", &st) == -1) {
+        if(mkdir("/home/alunos/Desktop/TrabC/saves", 0700) == 0){
+
+        }
+    }        
+    
+    return 0;
+ }*/
 
 #endif

@@ -62,46 +62,40 @@ int verificaconfig(){
 
 void menu(char com[50],int tiposave){
 	/*cadastro de hospede, tanto pra texto quanto pra binario*/
-	if((strcmp(com,"cadhp") == 0) && tiposave == 1){
+	if((strcmp(com,"cadhp") == 0)){
 		cadastrahospede();
-		salvarhospedetxt();
-	}
-	else if(((strcmp(com,"cadhp") == 0) && tiposave == 2)){
-		cadastrahospede();
-		salvarhospedebin();
+		salvarhospede(tiposave);
 	}
 	/*Consulta de Hospede*/
-	else if((strcmp(com,"cshp") == 0) && tiposave == 1){
-		consultahospedetxt();
-	}
-	else if(((strcmp(com,"cshp") == 0) && tiposave == 2)){
-		consultahospedebin();
+	else if(strcmp(com,"cshp") == 0){
+		consultahospede(tiposave);
 	}
 	/*comandos para cadastro de hotel*/
-	else if((strcmp(com,"cadht") == 0) && tiposave == 1){
+	else if(strcmp(com,"cadht") == 0){
 		cadastrahotel();
-		salvarhoteltxt();
-	}
-	else if(((strcmp(com,"cadhp") == 0) && tiposave == 2)){
-		cadastrahotel();
-		salvarhotelbin();
+		salvarhotel(tiposave);
 	}
 	/*consulta dos dados do hotel*/
-	else if((strcmp(com,"csht") == 0) && tiposave == 1){
-		consultahoteltxt();
-	}
-	else if((strcmp(com,"csht") == 0) && tiposave == 2){
-		consultahotelbin();
+	else if(strcmp(com,"csht") == 0){
+		consultahotel(tiposave);
 	}
 	/*comando para cadastro de hospede*/
-	else if((strcmp(com,"cadus") == 0)){
+	else if(strcmp(com,"cadus") == 0){
 		cadastrausuario();
 		salvarusuariosbin();
 	}
 	/*comandos da categoria*/
-	else if((strcmp(com,"cadc") == 0)){
+	else if(strcmp(com,"cadc") == 0){
 		cadastracategoria();
-		salvarcategorias	(tiposave);
+		salvarcategorias(tiposave);
+	}
+	/*comandos do produto*/
+	else if(strcmp(com,"cadp") == 0){
+		cadastraproduto();
+		salvarproduto(tiposave);
+	}
+	else if(strcmp(com,"csp") == 0){
+		consultaproduto(tiposave);
 	}
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){

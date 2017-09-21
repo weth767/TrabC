@@ -7,6 +7,8 @@
 #include <locale.h>
 #include "salvar.h"
 #include "consulta.h"
+#include "config.h"
+#include "auxiliares.h"
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 void cadastrahospede(){
 	/*chama a struct para poder passar os dados a ela*/
@@ -17,7 +19,7 @@ void cadastrahospede(){
 	/*%[^\n]s serve para pegar os espaços digitados pelo usuário*/ 
 	printf("\nCadastro de Hóspedes:\n\n");
 
-	h.codigo = codigohospede();
+	h.codigo = codigohospede(verificasave());
 	setbuf(stdin,NULL);
 	printf("Digite o Nome do Hóspede: ");
 	scanf("%[^\n]s",h.nome);
@@ -51,7 +53,9 @@ void cadastrahospede(){
 	setbuf(stdin,NULL);
 	printf("Digite a Data de Nascimento do Hóspede: ");
 	scanf("%[^\n]s",h.datanascimento);
+	printf("%i",stringtointeger(h.datanascimento));
 	setbuf(stdin,NULL);
+	
 	/*Preciso validar a data de nascimento*/
 	printf("Digite o Telefone do Hóspede: ");
 	scanf("%[^\n]s",h.telefone);
@@ -78,7 +82,7 @@ void cadastrahotel(){
 
 	printf("\nCadastro de Hotel:\n\n");
 
-	ht.codigo = codigohotel();
+	ht.codigo = codigohotel(verificasave());
 	
 	setbuf(stdin,NULL);
 	printf("Digite o Nome Fantasia do Hotel: ");
@@ -137,7 +141,7 @@ void cadastracategoria(){
 	struct categorias c;
 	printf("\nCadastro de Categorias\n");
 	
-	c.codigo = codigocategoria();
+	c.codigo = codigocategoria(verificasave());
 
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição da Categoria: ");
@@ -157,16 +161,14 @@ void cadastracategoria(){
 
 }
 
-void cadastraacomodacoes(){
+void cadastraacomodacao(){
 	//chama a struct das acomodacoes
 	struct acomodacoes acomod;
 	//coloca o linguagem local para portugues, assim pegará os acentos
 	setlocale(LC_ALL,"Portuguese");
 
 	printf("\nCadastro de Acomodações:\n");
-
-	printf("Digite o Código da Acomodação: ");
-	scanf("%i",&acomod.codigo);
+	
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição da Acomodações: ");
 	scanf("%[^\n]s",acomod.descricao);
@@ -201,13 +203,13 @@ void cadastraacomodacoes(){
 	strcpy(acomod.status , "Ativo");
 }
 
-void cadastraprodutos(){
+void cadastraproduto(){
 	struct produtos p;
 	setlocale(LC_ALL,"Portuguese");
 
 	printf("\nCadastro de Produtos\n\n");
 	
-	p.codigo = codigoproduto();
+	p.codigo = codigoproduto(verificasave());
 
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição do Produto: ");

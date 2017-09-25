@@ -8,7 +8,7 @@
 #include "salvar.h"
 #include "consulta.h"
 #include "config.h"
-#include "auxiliares.h"
+
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 void cadastrahospede(){
 	/*chama a struct para poder passar os dados a ela*/
@@ -161,46 +161,51 @@ void cadastracategoria(){
 
 void cadastraacomodacao(){
 	//chama a struct das acomodacoes
-	struct acomodacoes acomod;
+	struct acomodacoes ac;
 	//coloca o linguagem local para portugues, assim pegará os acentos
 	setlocale(LC_ALL,"Portuguese");
+	setbuf(stdin,NULL);
 	printf("\nCadastro de Acomodações:\n");
-	acomod.codigo = codigoacomodacao(verificasave());
+
+	ac.codigo = codigoacomodacao(verificasave());
+
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição da Acomodações: ");
-	scanf("%[^\n]s",acomod.descricao);
+	scanf("%[^\n]s",ac.descricao);
 	setbuf(stdin,NULL);
+
 	consultacategoria(verificasave());
+
 	printf("Digite o código da categoria desejada: ");
-	scanf("%i",&acomod.categoriaselecionada);
+	scanf("%i",&ac.categoriaselecionada);
 	printf("\nAcomodação possui Televisão Comum?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.tv);
+	scanf("%i",&ac.extra.tv);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Televisão a Cabo?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.tvcabo);
+	scanf("%i",&ac.extra.tvcabo);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Ar Condicionado?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.arcondicionado);
+	scanf("%i",&ac.extra.arcondicionado);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Frigobar?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.frigobar);
+	scanf("%i",&ac.extra.frigobar);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Banheiro?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.banheiro);
+	scanf("%i",&ac.extra.banheiro);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Cama de Casal?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.camacasal);
+	scanf("%i",&ac.extra.camacasal);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Cama de Solteiro?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.camasolteiro);
+	scanf("%i",&ac.extra.camasolteiro);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Hidromassagem?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.hidromassagem);
+	scanf("%i",&ac.extra.hidromassagem);
 	setbuf(stdin,NULL);
 	printf("Acomodação possui Banheira?(1 - Sim, 0 - Não): ");
-	scanf("%i",&acomod.extra.banheira);
+	scanf("%i",&ac.extra.banheira);
 	setbuf(stdin,NULL);
-	strcpy(acomod.status , "Ativo");
+	strcpy(ac.status , "Ativo");
 }
 
 void cadastraproduto(){

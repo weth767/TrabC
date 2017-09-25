@@ -89,6 +89,9 @@ void menu(char com[50],int tiposave){
 		cadastracategoria();
 		salvarcategorias(tiposave);
 	}
+	else if(strcmp(com,"csc") == 0){
+		consultacategoria(tiposave);	
+	}
 	/*comandos do produto*/
 	else if(strcmp(com,"cadp") == 0){
 		cadastraproduto();
@@ -101,6 +104,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"cadac") == 0){
 		cadastraacomodacao();
 		salvaracomodacao(tiposave);
+	}
+	else if(strcmp(com,"csac") == 0){
+		consultaacomodacao(tiposave);
 	}
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){

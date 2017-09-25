@@ -12,3 +12,17 @@ Quarto10
 1
 Ativo
 
+2
+aaaaa
+1
+0
+1
+1
+1
+1
+0
+0
+0
+1
+Ativo
+

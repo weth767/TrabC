@@ -249,27 +249,27 @@ void consultaacomodacao(int tipo){
 	FILE *arquivo;
 	switch(tipo){
 		case 1:
-			arquivo = fopen("saves/acomodacoes.txt");
+			arquivo = fopen("saves/acomodacoes.txt","a+");
 			if(arquivo == NULL){
-				printf("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n")
+				printf("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n");
 			}
 			else{
-				printf("Acomodações cadastradas((valores 1, igual a sim/ valores 0, igual a não)não considerando a categoria): \n\n");
-				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,&ac.extra.arcondicionado,&ac.extra.figrobar,&ac.extra.banheiro,&ac.extra
-					camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,&ac.extra.banheira,&ac.categoriaselecionada,ac.status) != EOF){
+				printf("Acomodações cadastradas((valores númericos representam quantidade)não considerando a categoria): \n\n");
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,
+					&ac.extra.arcondicionado,&ac.extra.frigobar,&ac.extra.banheiro,&ac.extra.camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,&ac.extra.banheira,&ac.categoriaselecionada,ac.status) != EOF){
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %i",ac.codigo);
 					printf("\nDescrição: %s",ac.descricao);
 					printf("\nCom TV comum: %i",ac.extra.tv);
 					printf("\nCom TV a Cabo: %i",ac.extra.tvcabo);
 					printf("\nCom Ar condicionado: %i",ac.extra.arcondicionado);
-					printf("\nCom Frigobar: %i",ac.extra.figrobar);
+					printf("\nCom Frigobar: %i",ac.extra.frigobar);
 					printf("\nCom Banheiro Próprio: %i",ac.extra.banheiro);
-					printf("\nCom Cama de Casal: %i",ac.extra.tv.camacasal);
-					printf("\nCom Cama de Solteiro: %i",ac.extra.tv.camasolteiro);
-					printf("\nCom Hidromassagem: %i",ac.extra.tv.hidromassagem);
-					printf("\nCom Banheira: %i",ac.extra.tv.banheira);
-					printf("\nCategoria da Acomodação: %i",ac.extra.tv.categoriaselecionada);
+					printf("\nCom Cama de Casal: %i",ac.extra.camacasal);
+					printf("\nCom Cama de Solteiro: %i",ac.extra.camasolteiro);
+					printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
+					printf("\nCom Banheira: %i",ac.extra.banheira);
+					printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
 					printf("\nStatus: %s\n\n",ac.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					if(feof(arquivo)){
@@ -280,9 +280,37 @@ void consultaacomodacao(int tipo){
 				fclose(arquivo);
 			}
 		break;
-
 		case 2:
-		/******************************continuar aqui                                  **/
+			/*consulta em binário*/
+			arquivo = fopen("saves/acomodacoes.bin","ab");
+			if(arquivo == NULL){
+				printf("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n");	
+			}
+			else{
+				printf("Acomodações cadastradas((valores númericos representam quantidade)não considerando a categoria): \n\n");
+				while(!feof(arquivo)){
+					fread(&ac,sizeof(struct acomodacoes),1,arquivo);
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %i",ac.codigo);
+					printf("\nDescrição: %s",ac.descricao);
+					printf("\nCom TV comum: %i",ac.extra.tv);
+					printf("\nCom TV a Cabo: %i",ac.extra.tvcabo);
+					printf("\nCom Ar condicionado: %i",ac.extra.arcondicionado);
+					printf("\nCom Frigobar: %i",ac.extra.frigobar);
+					printf("\nCom Banheiro Próprio: %i",ac.extra.banheiro);
+					printf("\nCom Cama de Casal: %i",ac.extra.camacasal);
+					printf("\nCom Cama de Solteiro: %i",ac.extra.camasolteiro);
+					printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
+					printf("\nCom Banheira: %i",ac.extra.banheira);
+					printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
+					printf("\nStatus: %s\n\n",ac.status);
+					printf("\n----------------------------------------------------------------------------\n");
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				fclose(arquivo);
+			}
 		break;
 	}
 }
@@ -302,7 +330,7 @@ void consultacategoria(int tipo){
 				printf("\n----------------------------------------------------------------------------\n");
 				printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
 				printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
-				printf("\nStatus: %s\n\n",c.status);
+				printf("\nStatus: %s\n",c.status);
 				printf("\n----------------------------------------------------------------------------\n");
 				if(feof(arquivo)){
 					break;
@@ -325,7 +353,7 @@ void consultacategoria(int tipo){
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
 					printf("\nNúmero de Adultos: %i, Número de Crianças: %i\n",c.quantidadeadultos,c.quantidadecriancas);
-					printf("\nStatus: %s\n\n",c.status);
+					printf("\nStatus: %s\n",c.status);
 					printf("\n----------------------------------------------------------------------------\n");
 				}
 				fclose(arquivo);
@@ -463,7 +491,8 @@ int codigoacomodacao(int tipo){
 				printf("\nErro em realizar a consulta!!\n\n");
 			}
 			else{
-				while(fscanf(arquivo,"%u\n %s\n",&ac.codigo,ac.descricao) != EOF){
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.categoriaselecionada,&ac.extra.tv,&ac.extra.tvcabo,
+					&ac.extra.arcondicionado,&ac.extra.frigobar,&ac.extra.banheiro,&ac.extra.camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,&ac.extra.banheira,ac.status 	) != EOF){
 					codigo = ac.codigo;
 				}
 				codigo++;

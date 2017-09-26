@@ -12,6 +12,7 @@
 #include "libs/consulta.h"
 #include "libs/config.h"
 #include <unistd.h>
+#include "libs/exclusao.h"
 
 
 int login(){
@@ -78,6 +79,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"cshp") == 0){
 		consultahospede(tiposave);
 	}
+	else if(strcmp(com,"exhp") == 0){
+		excluihospede(tiposave);
+	}
 	/*comandos para cadastro de hotel*/
 	else if(strcmp(com,"cadht") == 0){
 		cadastrahotel();
@@ -142,13 +146,15 @@ int main(int argc, char** argv) {
 				if(login() == 1){
 					verifica = 1;
 					printf("\nUsuário conectado com sucesso!!\n\n");
+					sleep(1);
+					system("clear");
 				}
 				else{
 					printf("\nLogin e/ou senha incorreto(s)!!\n\n");
+					sleep(1);
+					system("clear");
 				}
 			}
-			sleep(1);
-			system("clear");
 			/*Funcoes*/
 			/*Após a config feita, o usuário será direcionado para a tela de opções*/
 			/*Abaixo sera a parte dos comandos relacionados ao sistema*/

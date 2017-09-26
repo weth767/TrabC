@@ -7,20 +7,25 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "structs.h"
 
-
-void configsave(int op){
+void configsave(int op,char mlogin[20],char msenha[20]){
 	FILE * arquivo;
+	struct config c;
+	c.opcao = op;
+	strcpy(c.master_login,mlogin);
+	strcpy(c.master_senha,msenha);
 	arquivo = fopen("config/config.bin","ab");
 	if(arquivo == NULL){
 		printf("Erro em realizar o salvamento da configuração!\n");
 	}
 	else{
-		fwrite(&op,sizeof(int),1,arquivo);
+		fwrite(&c,sizeof(struct config),1,arquivo);
 		printf("\nConfigurações realizadas com sucesso!\n\n");
 	}
 	fclose(arquivo);
 }
+
 
 int verificasave(){
 	FILE *arquivo;

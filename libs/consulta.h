@@ -581,6 +581,7 @@ int codigousuario(){
 int verificausuario(char login[20],char senha[20]){
 	struct usuarios u;
 	FILE *arquivo;
+	struct config c;
 	int verifica = 0;
 	arquivo = fopen("saves/usuarios.bin","rb");
 	if(arquivo == NULL){
@@ -593,8 +594,22 @@ int verificausuario(char login[20],char senha[20]){
 				verifica = 1;
 			}
 		}
-		return verifica;
-		fclose(arquivo);
 	}
+	fclose(arquivo);
+	if(verifica == 0){
+	arquivo = fopen("config/config.bin","rb");
+		while(!feof(arquivo)){
+			fread(&c,sizeof(struct config),1,arquivo);
+			if(strcmp(login,c.master_login) == 0 && strcmp(senha,c.master_senha) == 0){
+				verifica = 1;
+			}
+			if(feof(arquivo)){
+				break;
+			}
+		}	
+	}
+	fclose(arquivo);
+	return verifica;
 }
+	
 #endif 

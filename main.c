@@ -32,12 +32,20 @@ int login(){
 void config(){
 	system("clear");
 	int op;
+	char mlogin[20];
+	char msenha[20];
 	printf("Início do Sistema!\n\n");
 	printf("Agora será feita a configuração de salvamento do sistema.");
 	printf("\nSua escolha será imutável durante todo o uso do programa, escolha sabiamente.");
 	printf("O tipo de salvamento será:\n1 - Arquivo Texto;\n2 - Arquivo Binário;\n3 - Banco de Dados;\n4 - Nuvem;\nDigite o número de sua opção: ");
 	scanf("%i",&op);
-	configsave(op);
+	setbuf(stdin,NULL);
+	printf("Digite o login de primeiro acesso(master): ");
+	scanf("%s",mlogin);
+	setbuf(stdin,NULL);
+	printf("Digite a senha de primeiro acesso(master): ");
+	scanf("%s",msenha);
+	configsave(op,mlogin,msenha);
 	system("clear");
 }
 
@@ -123,17 +131,6 @@ char comando[50];
  
 int main(int argc, char** argv) {
 	int verifica = 0;
-	system("clear");
-	while(verifica == 0){
-		if(login() == 1){
-			verifica = 1;
-			printf("\nUsuário conectado com sucesso!!\n\n");
-		}
-		else{
-			printf("\nLogin e/ou senha incorreto(s)!!\n\n");
-		}
-	}
-	sleep(1);
 	system("clear");	
 	while(1){
 		//verifica a configuração inicial, caso não tenha sido feita, obrigatoriamente o usuário terá que faze-la.
@@ -141,6 +138,17 @@ int main(int argc, char** argv) {
 			config();
 		}
 		else{
+			while(verifica == 0){
+				if(login() == 1){
+					verifica = 1;
+					printf("\nUsuário conectado com sucesso!!\n\n");
+				}
+				else{
+					printf("\nLogin e/ou senha incorreto(s)!!\n\n");
+				}
+			}
+			sleep(1);
+			system("clear");
 			/*Funcoes*/
 			/*Após a config feita, o usuário será direcionado para a tela de opções*/
 			/*Abaixo sera a parte dos comandos relacionados ao sistema*/

@@ -118,4 +118,10 @@ struct usuarios{
 	char status[20];
 };
 
+struct config{
+	int opcao;
+	char master_login[20];
+	char master_senha[20];
+};
+
 #endif

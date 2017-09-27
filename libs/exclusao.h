@@ -133,4 +133,129 @@ void excluihospede(int tipo){
 	}
 }
 
+void excluihotel(int tipo){
+	FILE *arquivo;
+	FILE *arquivo2;
+	int codigo;
+	int op;
+	struct hotel ht;
+	printf("Digite o código a ser excluido: ");
+	scanf("%u",&codigo);
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/hoteis.txt","a+");
+			arquivo2 = fopen("saves/temphotel.txt","a+");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo do hotel!!\n\n");
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo do hotel!!\n\n");
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,
+					ht.insc,ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,
+					ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status) !=EOF){
+					if(ht.codigo != codigo){
+						fprintf(arquivo2,"%u",ht.codigo);
+						fprintf(arquivo2,"\n%s",ht.nomefantasia);
+						fprintf(arquivo2,"\n%s",ht.razaosocial);
+						fprintf(arquivo2,"\n%s",ht.cnpj);
+						fprintf(arquivo2,"\n%s",ht.insc);
+						fprintf(arquivo2,"\n%s",ht.rua);
+						fprintf(arquivo2,"\n%s",ht.numero);
+						fprintf(arquivo2,"\n%s",ht.bairro);
+						fprintf(arquivo2,"\n%s",ht.cidadeestado.cidade);
+						fprintf(arquivo2,"\n%s",ht.cidadeestado.estado);
+						fprintf(arquivo2,"\n%s",ht.cep);
+						fprintf(arquivo2,"\n%s",ht.complemento);
+						fprintf(arquivo2,"\n%s",ht.telefone);
+						fprintf(arquivo2,"\n%s",ht.email);
+						fprintf(arquivo2,"\n%s",ht.nomeresponsavel);
+						fprintf(arquivo2,"\n%s",ht.telefoneresponsavel);
+						fprintf(arquivo2,"\n%s\n\n",ht.status);	
+					}
+					else{
+						printf("\nHotel selecionado:\n\n");
+						printf("Código: %u",ht.codigo);
+						printf("\nRazão Social: %s",ht.razaosocial);
+						printf("\nNome Fantasia: %s",ht.nomefantasia);
+						printf("\nCNPJ: %s",ht.cnpj);
+						printf("\nInscrição Estadual: %s",ht.insc);
+						printf("\nRua: %s",ht.rua);
+						printf("\nNumero: %s",ht.numero);
+						printf("\nBairro: %s",ht.bairro);
+						printf("\nCidade: %s",ht.cidadeestado.cidade);
+						printf("\nEstado: %s",ht.cidadeestado.estado);
+						printf("\nCEP: %s",ht.cep);
+						printf("\nComplemento: %s",ht.complemento);
+						printf("\nTelefone: %s",ht.telefone);
+						printf("\nE-Mail: %s",ht.email);
+						printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+						printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+						printf("\nStatus: %s\n\n",ht.status);
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/hoteis.txt");
+					rename("saves/temphotel.txt","saves/hoteis.txt");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/hoteis.bin","ab");
+			arquivo2 = fopen("saves/temphotel.bin","ab");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+			}
+			else{
+				while(!feof(arquivo)){
+					fread(&ht,sizeof(struct hotel),1,arquivo);
+					if(ht.codigo != codigo){
+						fwrite(&ht,sizeof(struct hotel),1,arquivo2);
+					}
+					else{
+						printf("\nHotel selecionado:\n\n");
+						printf("Código: %u",ht.codigo);
+						printf("\nRazão Social: %s",ht.razaosocial);
+						printf("\nNome Fantasia: %s",ht.nomefantasia);
+						printf("\nCNPJ: %s",ht.cnpj);
+						printf("\nInscrição Estadual: %s",ht.insc);
+						printf("\nRua: %s",ht.rua);
+						printf("\nNumero: %s",ht.numero);
+						printf("\nBairro: %s",ht.bairro);
+						printf("\nCidade: %s",ht.cidadeestado.cidade);
+						printf("\nEstado: %s",ht.cidadeestado.estado);
+						printf("\nCEP: %s",ht.cep);
+						printf("\nComplemento: %s",ht.complemento);
+						printf("\nTelefone: %s",ht.telefone);
+						printf("\nE-Mail: %s",ht.email);
+						printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+						printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+						printf("\nStatus: %s\n\n",ht.status);
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/hoteis.bin");
+					rename("saves/temphotel.bin","saves/hoteis.bin");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+	}
+}
+
 #endif

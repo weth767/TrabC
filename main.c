@@ -91,6 +91,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"csht") == 0){
 		consultahotel(tiposave);
 	}
+	else if(strcmp(com,"exht") == 0){
+		excluihotel(tiposave);
+	}
 	/*comando para cadastro de hospede*/
 	else if(strcmp(com,"cadus") == 0){
 		cadastrausuario();

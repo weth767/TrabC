@@ -70,7 +70,8 @@ int verificaconfig(){
 
 
 void menu(char com[50],int tiposave){
-	/*cadastro de hospede, tanto pra texto quanto pra binario*/
+	/*comandos de hospede*/
+	/*cadastro de hospede*/
 	if((strcmp(com,"cadhp") == 0)){
 		cadastrahospede();
 		salvarhospede(tiposave);
@@ -106,6 +107,9 @@ void menu(char com[50],int tiposave){
 	}
 	else if(strcmp(com,"csc") == 0){
 		consultacategoria(tiposave);	
+	}
+	else if(strcmp(com,"exc") == 0){
+		excluicategoria(tiposave);
 	}
 	/*comandos do produto*/
 	else if(strcmp(com,"cadp") == 0){

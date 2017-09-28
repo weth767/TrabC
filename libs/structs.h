@@ -108,7 +108,6 @@ struct fornecedor{
 	char status[20];
 };
 
-
 struct usuarios{
 	unsigned int codigo;
 	char nome[50];

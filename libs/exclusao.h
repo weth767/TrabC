@@ -16,7 +16,7 @@ void excluihospede(int tipo){
 	switch(tipo){
 		case 1:
 			arquivo = fopen("saves/hospedes.txt","a+");
-			arquivo2 = fopen("saves/auxiliar.txt","a+");
+			arquivo2 = fopen("saves/temphospede.txt","a+");
 			if(arquivo2 == NULL){
 				printf("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
@@ -72,7 +72,7 @@ void excluihospede(int tipo){
 				scanf("%i",&op);
 				if(op == 1){
 					remove("saves/hospedes.txt");
-					rename("saves/auxiliar.txt","saves/hospedes.txt");
+					rename("saves/temphospede.txt","saves/hospedes.txt");
 					printf("\nDado excluido com sucesso!\n\n");
 				}
 				fclose(arquivo);
@@ -81,7 +81,7 @@ void excluihospede(int tipo){
 		break;
 		case 2:
 			arquivo = fopen("saves/hospedes.bin","ab");
-			arquivo2 = fopen("saves/auxiliar.bin","ab");
+			arquivo2 = fopen("saves/temphospede.bin","ab");
 			if(arquivo2 == NULL){
 				printf("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
@@ -120,7 +120,7 @@ void excluihospede(int tipo){
 				scanf("%i",&op);
 				if(op == 1){
 					remove("saves/hospedes.bin");
-					rename("saves/auxiliar.bin","saves/hospedes.bin");
+					rename("saves/temphospede.bin","saves/hospedes.bin");
 					printf("\nDado excluido com sucesso!\n\n");
 				}
 				fclose(arquivo);
@@ -255,7 +255,167 @@ void excluihotel(int tipo){
 				fclose(arquivo2);
 			}
 		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 }
 
+void excluicategoria(int tipo){
+	FILE *arquivo;
+	FILE *arquivo2;
+	int codigo;
+	int op;
+	struct categorias c;
+	printf("Digite o código a ser excluido: ");
+	scanf("%u",&codigo);
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/categorias.txt","a+");
+			arquivo2 = fopen("saves/tempcategoria.txt","a+");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status) != EOF){
+					if(c.codigo != codigo){
+						fprintf(arquivo2,"%u",c.codigo);
+						fprintf(arquivo2,"\n%s",c.descricao);
+						fprintf(arquivo2,"\n%.2f",c.valor);
+						fprintf(arquivo2,"\n%i",c.quantidadeadultos);
+						fprintf(arquivo2,"\n%i",c.quantidadecriancas);
+						fprintf(arquivo2,"\n%s\n\n",c.status);	
+					}
+					else{
+						printf("\nCategoria Selecionada: \n\n");
+						printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
+						printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
+						printf("\nStatus: %s\n",c.status);
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/categorias.txt");
+					rename("saves/tempcategoria.txt","saves/categorias.txt");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/categorias.bin","ab");
+			arquivo2 = fopen("saves/tempcategoria.bin","ab");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo da categoria!!\n\n");	
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+			}
+			else{
+				while(!feof(arquivo)){
+					fread(&c,sizeof(struct categorias),1,arquivo);
+					if(c.codigo != codigo){
+						fwrite(&c,sizeof(struct categorias),1,arquivo2);
+					}
+					else{
+						printf("\nCategoria Selecionada: \n\n");
+						printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
+						printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
+						printf("\nStatus: %s\n",c.status);	
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/categorias.txt");
+					rename("saves/tempcategoria.txt","saves/categorias.txt");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
+	}
+}
+
+void excluiacomodacao(int tipo){
+	FILE *arquivo;
+	FILE *arquivo2;
+	int codigo;
+	int op;
+	struct acomodacoes ac;
+	printf("Digite o código a ser excluido: ");
+	scanf("%u",&codigo);
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/acomodacoes.txt","a+");
+			arquivo2 = fopen("saves/tempacomodacao.txt","a+");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,
+					&ac.extra.arcondicionado,&ac.extra.frigobar,&ac.extra.banheiro,&ac.extra.camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,&ac.extra.banheira,
+					&ac.categoriaselecionada,ac.status) != EOF){
+					if(ac.codigo != codigo){
+						fprintf(arquivo,"%u",ac.codigo);
+						fprintf(arquivo,"\n%s",ac.descricao);
+						fprintf(arquivo,"\n%i",ac.extra.tv);
+						fprintf(arquivo,"\n%i",ac.extra.tvcabo);
+						fprintf(arquivo,"\n%i",ac.extra.arcondicionado);
+						fprintf(arquivo,"\n%i",ac.extra.frigobar);
+						fprintf(arquivo,"\n%i",ac.extra.banheiro);
+						fprintf(arquivo,"\n%i",ac.extra.camacasal);
+						fprintf(arquivo,"\n%i",ac.extra.camasolteiro);
+						fprintf(arquivo,"\n%i",ac.extra.hidromassagem);
+						fprintf(arquivo,"\n%i",ac.extra.banheira);
+						fprintf(arquivo,"\n%i",ac.categoriaselecionada);
+						fprintf(arquivo,"\n%s\n\n",ac.status);	
+					}
+					else{
+						printf("Código: %i",ac.codigo);
+						printf("\nDescrição: %s",ac.descricao);
+						printf("\nCom TV comum: %i",ac.extra.tv);
+						printf("\nCom TV a Cabo: %i",ac.extra.tvcabo);
+						printf("\nCom Ar condicionado: %i",ac.extra.arcondicionado);
+						printf("\nCom Frigobar: %i",ac.extra.frigobar);
+						printf("\nCom Banheiro Próprio: %i",ac.extra.banheiro);
+						printf("\nCom Cama de Casal: %i",ac.extra.camacasal);
+						printf("\nCom Cama de Solteiro: %i",ac.extra.camasolteiro);
+						printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
+						printf("\nCom Banheira: %i",ac.extra.banheira);
+						printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
+					}
+					
+				}
+				setbuf(stdin,NULL);	
+				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/acomodacoes.txt");
+					rename("saves/tempacomodacao.txt","saves/acomodacoes.txt");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		case 2:
+
+		break;
+	}
+} 
 #endif

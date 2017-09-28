@@ -127,6 +127,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"csac") == 0){
 		consultaacomodacao(tiposave);
 	}
+	else if(strcmp(com,"exac") == 0){
+		excluiacomodacao(tiposave);
+	}
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");

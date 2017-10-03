@@ -257,4 +257,56 @@ void cadastrausuario(){
 	scanf("%i",&u.permissao);
 	strcpy(u.status , "Ativo");
 }
+
+void cadastrafornecedor(){
+	struct fornecedores f;
+	setlocale(LC_ALL,"Portuguese");
+	f.codigo = codigofornecedor(verificasave());
+	setbuf(stdin,NULL);
+	printf("Digite o Nome Fantasia do Fornecedor: ");
+	scanf("%[^\n]s",f.nomefantasia);
+	setbuf(stdin,NULL);
+	printf("Digite o Razão Social do Fornecedor: ");
+	scanf("%[^\n]s",f.razaosocial);
+	setbuf(stdin,NULL);
+	printf("Digite o CNPJ do Fornecedor: ");
+	scanf("%[^\n]s",f.cnpj);
+	setbuf(stdin,NULL);
+	printf("Digite a Inscrição Estadual do Fornecedor: ");
+	scanf("%[^\n]s",f.insc);
+	setbuf(stdin,NULL);
+	printf("Digite a Rua onde se localiza o Fornecedor: ");
+	scanf("%[^\n]s",f.rua);
+	setbuf(stdin,NULL);
+	printf("Digite o Número do local onde está localizado o Fornecedor: ");
+	scanf("%[^\n]s",f.numero);
+	setbuf(stdin,NULL);
+	printf("Digite o Bairro do local onde está localizado o Fornecedor: ");
+	scanf("%[^\n]s",f.bairro);
+	setbuf(stdin,NULL);
+	printf("Digite o CEP do local onde está localizado o Fornecedor: ");
+	scanf("%[^\n]s",f.cep);
+	setbuf(stdin,NULL);
+	printf("Digite o Complemento do local onde está localizado o Fornecedor: ");
+	scanf("%[^\n]s",f.complemento);
+	setbuf(stdin,NULL);
+	printf("Digite a Cidade onde se localiza a matriz do Fornecedor: ");
+	scanf("%[^\n]s",f.cidadeestado.cidade);
+	setbuf(stdin,NULL);
+	printf("Digite o Estado onde se localiza a matriz do Forneceodr: ");
+	scanf("%[^\n]s",f.cidadeestado.estado);
+	setbuf(stdin,NULL);
+	printf("Digite o Telefone do Fornecedor: ");
+	scanf("%[^\n]s",f.telefone);
+	setbuf(stdin,NULL);
+	printf("Digite o Celular do Fornecedor: ");
+	scanf("%[^\n]s",f.celular);
+	setbuf(stdin,NULL);
+	printf("Digite o Nome do Representante do Fornecedor: ");
+	scanf("%[^\n]s",f.nrepresentante);
+	setbuf(stdin,NULL);
+	printf("Digite o Telefone do Representante do Fornecedor: ");
+	scanf("%[^\n]s",f.trepresentante);
+	strcpy(f.status,"Ativo");
+}
 #endif 

@@ -68,37 +68,7 @@ void salvarhospede(int tipo){
 		break;
 	}
 }
-/*void salvarhospedecsv(){
-	struct hospede h;
-	setlocale(LC_ALL, "Portuguese");
-	FILE *arquivo;
-	arquivo = fopen("saves/hospede.csv","a+");
 
-	if(arquivo == NULL){
-		printf("\nErro em realizar o cadastro do hóspede no arquivo texto!!\n\n");
-	}
-	else{
-		fprintf(arquivo,"%u",h.codigo);
-		fprintf(arquivo,";%s",h.nome);
-		fprintf(arquivo,";%s",h.cpf);
-		fprintf(arquivo,";%s",h.rg);
-		fprintf(arquivo,";%s",h.rua);
-		fprintf(arquivo,";%s",h.numero);
-		fprintf(arquivo,";%s",h.bairro);
-		fprintf(arquivo,";%s",h.cidadeestado.cidade);
-		fprintf(arquivo,";%s",h.cidadeestado.estado);
-		fprintf(arquivo,";%s",h.cep);
-		fprintf(arquivo,";%s",h.complemento);
-		fprintf(arquivo,";%s",h.datanascimento);
-		fprintf(arquivo,";%s",h.telefone);
-		fprintf(arquivo,";%s",h.celular);
-		fprintf(arquivo,";%s",h.estadocivil);
-		fprintf(arquivo,";%s",h.email);
-		fprintf(arquivo,";%s\n",h.status);
-		printf("\nDados foram salvos com sucesso!\n\n");
-	}
-	fclose(arquivo);
-}*/
 void salvarhotel(int tipo){
 	//realizo a chamada da struct hotel, para ter acesso as variaveis relacionadas a essa struct
 	struct hotel ht;
@@ -299,6 +269,56 @@ void salvarproduto(int tipo){
 		break;
 	} 
 	
+}
+
+void salvarfornecedor(int tipo){
+	struct fornecedores f;
+	setlocale(LC_ALL,"Portuguese");
+	FILE *arquivo;
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/fornecedores.txt","a+");
+			if(arquivo == NULL){
+				printf("\nErro em realizar o cadastro de fornecedores!!\n");
+			}
+			else{
+				fprintf(arquivo,"%u",f.codigo);
+				fprintf(arquivo,"\n%s",f.nomefantasia);
+				fprintf(arquivo,"\n%s",f.razaosocial);
+				fprintf(arquivo,"\n%s",f.cpnj);
+				fprintf(arquivo,"\n%s",f.insc);
+				fprintf(arquivo,"\n%s",f.rua);
+				fprintf(arquivo,"\n%s",f.numero);
+				fprintf(arquivo,"\n%s",f.bairro);
+				fprintf(arquivo,"\n%s",f.cep);
+				fprintf(arquivo,"\n%s",f.complemento);
+				fprintf(arquivo,"\n%s",f.cidadeestado.cidade);
+				fprintf(arquivo,"\n%s",f.cidadeestado.estado);
+				fprintf(arquivo,"\n%s",f.telefone);
+				fprintf(arquivo,"\n%s",f.celular);
+				fprintf(arquivo,"\n%s",f.email);
+				fprintf(arquivo,"\n%s",f.nrepresentante);
+				fprintf(arquivo,"\n%s",f.trepresentante);
+				fprintf(arquivo,"\n%s",f.status);
+				printf("\nDados foram salvos com sucesso!\n\n");
+			}
+			fclose(arquivo);
+		break;
+		case 2:
+			arquivo = fopen("saves/fornecedores.bin","ab");
+			if(arquivo == NULL){
+				printf("\nErro em realizar o cadastro de fornecedores!!\n");	
+			}
+			else{
+				fwrite(&f,sizeof(struct fornecedores),1,arquivo);
+				printf("\nDados foram salvos com sucesso!\n\n");
+			}
+			fclose(arquivo);	
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
+	}
 }
 
 void salvarusuariosbin(){

@@ -90,10 +90,10 @@ struct produtos{
 	char status[20];
 };
 
-struct fornecedor{
+struct fornecedores{
 	unsigned int codigo;
-	char nomefantasia;
-	char razaosocial;
+	char nomefantasia[50];
+	char razaosocial[50];
 	char cnpj[20];
 	char insc[20];
 	char rua[40];
@@ -105,6 +105,8 @@ struct fornecedor{
 	char telefone[14];
 	char celular[15];
 	char email[50];
+	char nrepresentante[50];
+	char trepresentante[14];
 	char status[20];
 };
 

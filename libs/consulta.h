@@ -558,6 +558,38 @@ int codigocategoria(int tipo){
 	return codigo;
 }
 
+int codigofornecedor(int tipo){
+	struct fornecedores f;
+	FILE *arquivo;
+	int codigo;
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/fornecedores.txt","a+");
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo!!\n\n");	
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n"),&f.codigo,f.nomefantasia,f.razaosocial,
+					f.cpnj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
+					f.trepresentante,f.status){
+					codigo = f.codigo;
+				}
+				codigo++;
+				fclose(arquivo)
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/fornecedores.bin","ab");
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo!!\n\n");	
+			}
+			else{
+				while(!feof())
+			}
+		break;
+	}
+}
+
 int codigousuario(){
 	struct usuarios u;
 	FILE *arquivo;

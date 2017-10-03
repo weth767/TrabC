@@ -364,7 +364,7 @@ void excluiacomodacao(int tipo){
 				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
 			else{
 				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,
@@ -418,10 +418,10 @@ void excluiacomodacao(int tipo){
 			arquivo = fopen("saves/acomodacoes.bin","ab");
 			arquivo2 = fopen("saves/tempacomodacao.bin","ab");
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo da categoria!!\n\n");	
+				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
 			else{
 				while(!feof(arquivo)){
@@ -446,7 +446,7 @@ void excluiacomodacao(int tipo){
 					}
 				}
 				setbuf(stdin,NULL);	
-				printf("\n\nznDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
 				if(op == 1){
 					remove("saves/acomodacoes.bin");
@@ -461,5 +461,101 @@ void excluiacomodacao(int tipo){
 			printf("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
-} 
+}
+
+void excluiproduto(int tipo){
+	FILE *arquivo;
+	FILE *arquivo2;
+	int codigo;
+	int op;
+	struct produtos p;
+	printf("Digite o código a ser excluido: ");
+	scanf("%u",&codigo);
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/produtos.txt","a+");
+			arquivo2 = fopen("saves/tempproduto.txt","a+");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo do produto!!\n\n");	
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo do produto!!\n\n");
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+					if(p.codigo != codigo){
+						fprintf(arquivo2,"%u",p.codigo);
+						fprintf(arquivo2,"\n%s",p.descricao);
+						fprintf(arquivo2,"\n%i",p.estoque);
+						fprintf(arquivo2,"\n%i",p.estoqueminimo);
+						fprintf(arquivo2,"\n%.2f",p.precocusto);
+						fprintf(arquivo2,"\n%.2f",p.precovenda);
+						fprintf(arquivo2,"\n%s\n\n",p.status);
+					}
+					else{
+						printf("Produto Selecionado: \n\n");
+						printf("Código: %u",p.codigo);
+						printf("\nDescrição: %s",p.descricao);
+						printf("\nEstoque: %i",p.estoque);
+						printf("\nEstoque Minimo: %i",p.estoqueminimo);
+						printf("\nPreço de Custo: R$%.2f",p.precocusto);
+						printf("\nPreço de Venda: R$%.2f",p.precovenda);
+						printf("\nStatus: %s\n\n",p.status);
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/produtos.txt");
+					rename("saves/tempproduto.txt","saves/produtos.txt");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/produtos.bin","ab");
+			arquivo2 = fopen("saves/tempproduto.bin","ab");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo do produto!!\n\n");	
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo do produto!!\n\n");
+			}
+			else{
+				while(!feof(arquivo)){
+					fread(&p,sizeof(struct produtos),1,arquivo);
+					if(p.codigo != codigo){
+						fwrite(&p,sizeof(struct produtos),1,arquivo2);
+					}
+					else{
+						printf("Produto Selecionado: \n\n");
+						printf("Código: %u",p.codigo);
+						printf("\nDescrição: %s",p.descricao);
+						printf("\nEstoque: %i",p.estoque);
+						printf("\nEstoque Minimo: %i",p.estoqueminimo);
+						printf("\nPreço de Custo: R$%.2f",p.precocusto);
+						printf("\nPreço de Venda: R$%.2f",p.precovenda);
+						printf("\nStatus: %s\n\n",p.status);
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/produtos.bin");
+					rename("saves/tempproduto.bin","saves/produtos.bin");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
+	}
+}
 #endif

@@ -240,6 +240,9 @@ void consultaproduto(int tipo){
 			}
 
 		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 	
 }
@@ -312,6 +315,9 @@ void consultaacomodacao(int tipo){
 				fclose(arquivo);
 			}
 		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 }
 
@@ -359,7 +365,89 @@ void consultacategoria(int tipo){
 				fclose(arquivo);
 			}
 			break;
+			default:
+				printf("\nOpcao ainda não implementada ou não existente\n\n");
+			break;
 		}
+	}
+}
+
+void consultafornecedor(int tipo){
+	struct fornecedores f;
+	FILE *arquivo;
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/fornecedores.txt","a+");
+			if(arquivo == NULL){
+				printf("\nErro em realizar a consulta de fornecedor!!\n\n");
+			}
+			else{
+				printf("\nCategorias Cadastradas\n\n");
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
+					f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
+					f.trepresentante,f.status) != EOF){
+					printf("Codigo: %u",f.codigo);
+					printf("\nNome Fantasia: %s",f.nomefantasia);
+					printf("\nRazão Social %s",f.razaosocial);
+					printf("\nCNPJ: %s",f.cnpj);
+					printf("\nInscrição Estadual: %s",f.insc);
+					printf("\nRua: %s",f.rua);
+					printf("\nNúmero: %s",f.numero);
+					printf("\nBairro: %s",f.bairro);
+					printf("\nCEP: %s",f.cep);
+					printf("\nComplemento: %s",f.complemento);
+					printf("\nCidade: %s",f.cidadeestado.cidade);
+					printf("\nEstado: %s",f.cidadeestado.estado);
+					printf("\nTelefone: %s",f.telefone);
+					printf("\nCelular: %s",f.celular);
+					printf("\nE-mail: %s",f.email);
+					printf("\nRepresentante: %s",f.nrepresentante);
+					printf("\nTelefone do Representante: %s",f.trepresentante);
+					printf("\nStatus: %s\n\n",f.status);
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				fclose(arquivo);
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/fornecedores.txt","ab");
+			if(arquivo == NULL){
+				printf("\nErro em realizar a consulta de fornecedor!!\n\n");
+			}
+			else{
+				printf("\nCategorias Cadastradas\n\n");
+				while(!feof(arquivo)){
+					fread(&f,sizeof(struct fornecedores),1,arquivo);
+					printf("Codigo: %u",f.codigo);
+					printf("\nNome Fantasia: %s",f.nomefantasia);
+					printf("\nRazão Social %s",f.razaosocial);
+					printf("\nCNPJ: %s",f.cnpj);
+					printf("\nInscrição Estadual: %s",f.insc);
+					printf("\nRua: %s",f.rua);
+					printf("\nNúmero: %s",f.numero);
+					printf("\nBairro: %s",f.bairro);
+					printf("\nCEP: %s",f.cep);
+					printf("\nComplemento: %s",f.complemento);
+					printf("\nCidade: %s",f.cidadeestado.cidade);
+					printf("\nEstado: %s",f.cidadeestado.estado);
+					printf("\nTelefone: %s",f.telefone);
+					printf("\nCelular: %s",f.celular);
+					printf("\nE-mail: %s",f.email);
+					printf("\nRepresentante: %s",f.nrepresentante);
+					printf("\nTelefone do Representante: %s",f.trepresentante);
+					printf("\nStatus: %s\n\n",f.status);
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				fclose(arquivo);
+			}
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 }
 
@@ -437,6 +525,9 @@ int codigohotel(int tipo){
 				}
 			}
 		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 	
 	return codigo; 
@@ -474,6 +565,9 @@ int codigoproduto(int tipo){
 				}
 				codigo++;
 			}
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 	
@@ -514,6 +608,9 @@ int codigoacomodacao(int tipo){
 				codigo++;
 			}
 		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
 	}
 	return codigo;
 }
@@ -550,6 +647,7 @@ int codigocategoria(int tipo){
 				}
 				codigo++;
 			}
+			fclose(arquivo);
 		break;
 		default:
 			printf("\nOpcao ainda não implementada ou não existente\n\n");
@@ -569,13 +667,13 @@ int codigofornecedor(int tipo){
 				printf("\nErro em localizar o arquivo!!\n\n");	
 			}
 			else{
-				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n"),&f.codigo,f.nomefantasia,f.razaosocial,
-					f.cpnj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
-					f.trepresentante,f.status){
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
+					f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
+					f.trepresentante,f.status) != EOF){
 					codigo = f.codigo;
 				}
 				codigo++;
-				fclose(arquivo)
+				fclose(arquivo);
 			}
 		break;
 		case 2:
@@ -584,10 +682,21 @@ int codigofornecedor(int tipo){
 				printf("\nErro em localizar o arquivo!!\n\n");	
 			}
 			else{
-				while(!feof())
+				while(!feof(arquivo)){
+					fread(&codigo,sizeof(int),1,arquivo);
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				codigo++;
 			}
+			fclose(arquivo);
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
+	return codigo;
 }
 
 int codigousuario(){

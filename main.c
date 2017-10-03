@@ -1,3 +1,5 @@
+
+
 /* 
  * File:   main.c
  * Author: João Paulo e Marco Túlio
@@ -95,6 +97,14 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exht") == 0){
 		excluihotel(tiposave);
 	}
+	/*comando para o fornecedor*/
+	else if(strcmp(com,"cadf") == 0){
+		cadastrafornecedor();
+		salvarfornecedor(tiposave);
+	}
+	else if(strcmp(com,"csf") == 0){
+		consultafornecedor(tiposave);
+	}
 	/*comando para cadastro de hospede*/
 	else if(strcmp(com,"cadus") == 0){
 		cadastrausuario();
@@ -118,6 +128,9 @@ void menu(char com[50],int tiposave){
 	}
 	else if(strcmp(com,"csp") == 0){
 		consultaproduto(tiposave);
+	}
+	else if(strcmp(com,"exp") == 0){
+		excluiproduto(tiposave);
 	}
 	/*comandos de acomodação*/
 	else if(strcmp(com,"cadac") == 0){

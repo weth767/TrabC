@@ -285,7 +285,7 @@ void salvarfornecedor(int tipo){
 				fprintf(arquivo,"%u",f.codigo);
 				fprintf(arquivo,"\n%s",f.nomefantasia);
 				fprintf(arquivo,"\n%s",f.razaosocial);
-				fprintf(arquivo,"\n%s",f.cpnj);
+				fprintf(arquivo,"\n%s",f.cnpj);
 				fprintf(arquivo,"\n%s",f.insc);
 				fprintf(arquivo,"\n%s",f.rua);
 				fprintf(arquivo,"\n%s",f.numero);
@@ -299,7 +299,7 @@ void salvarfornecedor(int tipo){
 				fprintf(arquivo,"\n%s",f.email);
 				fprintf(arquivo,"\n%s",f.nrepresentante);
 				fprintf(arquivo,"\n%s",f.trepresentante);
-				fprintf(arquivo,"\n%s",f.status);
+				fprintf(arquivo,"\n%s\n\n",f.status);
 				printf("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);

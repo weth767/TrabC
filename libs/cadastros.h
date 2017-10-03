@@ -302,6 +302,9 @@ void cadastrafornecedor(){
 	printf("Digite o Celular do Fornecedor: ");
 	scanf("%[^\n]s",f.celular);
 	setbuf(stdin,NULL);
+	printf("Digite o E-mail do Fornecedor: ");
+	scanf("%[^\n]s",f.email);
+	setbuf(stdin,NULL);
 	printf("Digite o Nome do Representante do Fornecedor: ");
 	scanf("%[^\n]s",f.nrepresentante);
 	setbuf(stdin,NULL);

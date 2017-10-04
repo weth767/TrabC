@@ -85,6 +85,8 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exhp") == 0){
 		excluihospede(tiposave);
 	}
+
+
 	/*comandos para cadastro de hotel*/
 	else if(strcmp(com,"cadht") == 0){
 		cadastrahotel();
@@ -97,6 +99,8 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exht") == 0){
 		excluihotel(tiposave);
 	}
+
+
 	/*comando para o fornecedor*/
 	else if(strcmp(com,"cadf") == 0){
 		cadastrafornecedor();
@@ -105,12 +109,25 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"csf") == 0){
 		consultafornecedor(tiposave);
 	}
+	else if(strcmp(com,"exf") == 0){
+		excluifornecedor(tiposave);
+	}
+
+
 	/*comando para cadastro de hospede*/
 	else if(strcmp(com,"cadus") == 0){
 		cadastrausuario();
 		salvarusuariosbin();
 	}
+	else if(strcmp(com,"csus") == 0){
+		consultausuario();
+	}
+	else if(strcmp(com,"exus") == 0){
+		excluiusuario();
+	}
 	/*comandos da categoria*/
+
+
 	else if(strcmp(com,"cadc") == 0){
 		cadastracategoria();
 		salvarcategorias(tiposave);
@@ -121,6 +138,8 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exc") == 0){
 		excluicategoria(tiposave);
 	}
+
+
 	/*comandos do produto*/
 	else if(strcmp(com,"cadp") == 0){
 		cadastraproduto();
@@ -132,6 +151,8 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exp") == 0){
 		excluiproduto(tiposave);
 	}
+
+
 	/*comandos de acomodação*/
 	else if(strcmp(com,"cadac") == 0){
 		cadastraacomodacao();
@@ -143,6 +164,8 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exac") == 0){
 		excluiacomodacao(tiposave);
 	}
+
+
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");

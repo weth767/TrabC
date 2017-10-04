@@ -451,6 +451,36 @@ void consultafornecedor(int tipo){
 	}
 }
 
+void consultausuario(){
+	struct usuarios u;
+	FILE *arquivo;
+	int t;
+	arquivo = fopen("saves/usuarios.bin","ab");
+	if(arquivo == NULL){
+		printf("Erro em realizar a consulta de usuário!!\n\n");
+	}
+	else{
+		printf("Usuários cadastrados: \n\n");
+		while(!feof(arquivo)){
+			fread(&u,sizeof(struct usuarios),1,arquivo);
+			printf("Código: %u",u.codigo);
+			printf("\nNome do Usuário: %s",u.nome);
+			printf("\nLogin: %s",u.login);
+			t = strlen(u.senha);
+			printf("\nSenha: ");
+			for(int i = 0; i < t; i++){
+				printf("*");
+			}
+			printf("\nPermissão: %i",u.permissao);
+			printf("\nStatus: %s\n\n ",u.status);
+			if(feof(arquivo)){
+					break;
+			}
+		}
+		fclose(arquivo);
+	}
+}
+
 int codigohospede(int tipo){
 	int codigo = 0;
 	FILE *arquivo;

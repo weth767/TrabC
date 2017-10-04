@@ -558,4 +558,183 @@ void excluiproduto(int tipo){
 		break;
 	}
 }
+
+void excluifornecedor(int tipo){
+	struct fornecedores f;
+	FILE *arquivo;
+	FILE *arquivo2;
+	int codigo;
+	int op;
+	printf("Digite o código a ser excluido: ");
+	scanf("%u",&codigo);
+	switch(tipo){
+		case 1:
+			arquivo = fopen("saves/fornecedores.txt","a+");
+			arquivo2 = fopen("saves/tempfornecedor.txt","a+");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");	
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
+						f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
+						f.trepresentante,f.status) != EOF){
+					if(f.codigo != codigo){
+						fprintf(arquivo2,"%u",f.codigo);
+						fprintf(arquivo2,"\n%s",f.nomefantasia);
+						fprintf(arquivo2,"\n%s",f.razaosocial);
+						fprintf(arquivo2,"\n%s",f.cnpj);
+						fprintf(arquivo2,"\n%s",f.insc);
+						fprintf(arquivo2,"\n%s",f.rua);
+						fprintf(arquivo2,"\n%s",f.numero);
+						fprintf(arquivo2,"\n%s",f.bairro);
+						fprintf(arquivo2,"\n%s",f.cep);
+						fprintf(arquivo2,"\n%s",f.complemento);
+						fprintf(arquivo2,"\n%s",f.cidadeestado.cidade);
+						fprintf(arquivo2,"\n%s",f.cidadeestado.estado);
+						fprintf(arquivo2,"\n%s",f.telefone);
+						fprintf(arquivo2,"\n%s",f.celular);
+						fprintf(arquivo2,"\n%s",f.email);
+						fprintf(arquivo2,"\n%s",f.nrepresentante);
+						fprintf(arquivo2,"\n%s",f.trepresentante);
+						fprintf(arquivo2,"\n%s\n\n",f.status);
+					}
+					else{
+						printf("Fornecedor Selecionado: \n\n");
+						printf("Codigo: %u",f.codigo);
+						printf("\nNome Fantasia: %s",f.nomefantasia);
+						printf("\nRazão Social %s",f.razaosocial);
+						printf("\nCNPJ: %s",f.cnpj);
+						printf("\nInscrição Estadual: %s",f.insc);
+						printf("\nRua: %s",f.rua);
+						printf("\nNúmero: %s",f.numero);
+						printf("\nBairro: %s",f.bairro);
+						printf("\nCEP: %s",f.cep);
+						printf("\nComplemento: %s",f.complemento);
+						printf("\nCidade: %s",f.cidadeestado.cidade);
+						printf("\nEstado: %s",f.cidadeestado.estado);
+						printf("\nTelefone: %s",f.telefone);
+						printf("\nCelular: %s",f.celular);
+						printf("\nE-mail: %s",f.email);
+						printf("\nRepresentante: %s",f.nrepresentante);
+						printf("\nTelefone do Representante: %s",f.trepresentante);
+						printf("\nStatus: %s\n\n",f.status);
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/fornecedores.txt");
+					rename("saves/tempfornecedor.txt","saves/fornecedores.txt");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		case 2:
+			fopen("saves/fornecedores.bin","ab");
+			fopen("saves/tempfornecedor.bin","ab");
+			if(arquivo2 == NULL){
+				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");
+			}
+			if(arquivo == NULL){
+				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");	
+			}
+			else{
+				while(!feof(arquivo)){
+					fread(&f,sizeof(struct fornecedores),1,arquivo);
+					if(f.codigo != codigo){
+						fwrite(&f,sizeof(struct fornecedores),1,arquivo2);
+					}
+					else{
+						printf("Fornecedor Selecionado: \n\n");
+						printf("Codigo: %u",f.codigo);
+						printf("\nNome Fantasia: %s",f.nomefantasia);
+						printf("\nRazão Social %s",f.razaosocial);
+						printf("\nCNPJ: %s",f.cnpj);
+						printf("\nInscrição Estadual: %s",f.insc);
+						printf("\nRua: %s",f.rua);
+						printf("\nNúmero: %s",f.numero);
+						printf("\nBairro: %s",f.bairro);
+						printf("\nCEP: %s",f.cep);
+						printf("\nComplemento: %s",f.complemento);
+						printf("\nCidade: %s",f.cidadeestado.cidade);
+						printf("\nEstado: %s",f.cidadeestado.estado);
+						printf("\nTelefone: %s",f.telefone);
+						printf("\nCelular: %s",f.celular);
+						printf("\nE-mail: %s",f.email);
+						printf("\nRepresentante: %s",f.nrepresentante);
+						printf("\nTelefone do Representante: %s",f.trepresentante);
+						printf("\nStatus: %s\n\n",f.status);	
+					}
+				}
+				setbuf(stdin,NULL);	
+				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				scanf("%i",&op);
+				if(op == 1){
+					remove("saves/fornecedores.bin");
+					rename("saves/tempfornecedor.bin","saves/fornecedores.bin");
+					printf("\nDado excluido com sucesso!\n\n");
+				}
+				fclose(arquivo);
+				fclose(arquivo2);
+			}
+		break;
+		default:
+			printf("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
+	}
+}
+
+void excluiusuario(){
+	struct usuarios u;
+	FILE *arquivo;
+	FILE *arquivo2;
+	int codigo;
+	int op;
+	int t;
+	printf("Digite o código a ser excluido: ");
+	scanf("%u",&codigo);
+	arquivo = fopen("saves/usuarios.bin","ab");
+	arquivo2 = fopen("save/tempusuario.bin","ab");
+	if(arquivo2 == NULL){
+		printf("\nErro em localizar o arquivo do usuário!!\n\n");
+	}
+	if(arquivo == NULL){
+		printf("\nErro em localizar o arquivo do usuário!!\n\n");	
+	}
+	else{
+		while(!feof(arquivo)){
+			fread(&u,sizeof(struct usuarios),1,arquivo);
+			if(u.codigo != codigo){
+				fwrite(&u,sizeof(struct usuarios),1,arquivo2);
+			}
+			else{
+				printf("Usuário Selecionado: \n\n");
+				printf("Código: %u",u.codigo);
+				printf("Nome do Usuário: %s",u.nome);
+				printf("Login: %s",u.login);
+				t = strlen(u.senha);
+				printf("Senha: ");
+				for(int i = 0; i < t; i++){
+					printf("*");
+				}
+				printf("Permissão: %i",u.permissao);
+				printf("Status: %s",u.status);
+			}
+		}
+		if(op == 1){
+				remove("saves/usuarios.bin");
+				rename("saves/tempusuario.bin","saves/usuarios.bin");
+				printf("\nDado excluido com sucesso!\n\n");
+		}
+		fclose(arquivo);
+		fclose(arquivo2);
+	}
+
+}
 #endif

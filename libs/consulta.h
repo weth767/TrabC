@@ -57,7 +57,7 @@ void consultahospede(int tipo){
 		/*caso 2, verifica em binario*/
 		case 2:
 			/*abre o arquivo*/
-			arquivo = fopen("saves/hospedes.bin","ab");
+			arquivo = fopen("saves/hospedes.bin","ab+");
 			/*verifica se ele pode ser aberto ou existe*/
 			if(arquivo == NULL){
 				printf("\nErro em realizar a consulta ou Não Foram encontrados hospedes cadastrados\n\n");
@@ -65,8 +65,14 @@ void consultahospede(int tipo){
 			/*se foi aberto, verifica os dados no arquivo*/
 			else{
 				/*enquanto nao for o final do arquivo vai mostrando os dados*/
+				printf("\nDados dos Usuários\n\n");
 				while(!feof(arquivo)){
+					/*verifica se ja alcancou o final do arquivo*/
 					fread(&h,sizeof(struct hospede),1,arquivo);
+					if(feof(arquivo)){
+						/*se ja sai do laco*/
+						break;
+					}		
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",h.codigo);
 					printf("\nNome: %s",h.nome);
@@ -86,11 +92,7 @@ void consultahospede(int tipo){
 					printf("\nE-Mail: %s",h.email);
 					printf("\nStatus: %s\n\n",h.status);
 					printf("\n----------------------------------------------------------------------------\n");
-					/*verifica se ja alcancou o final do arquivo*/
-					if(feof(arquivo)){
-						/*se ja sai do laco*/
-						break;
-					}
+					
 				}
 			}
 			/*e no final fecha o ponteiro*/
@@ -145,36 +147,39 @@ void consultahotel(int tipo){
 			}	
 		break;
 		case 2:
-			arquivo = fopen("saves/hoteis.bin","ab");
+			arquivo = fopen("saves/hoteis.bin","ab+");
 			if(arquivo == NULL){
 				printf("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");
 			}
 			else{
-				fread(&ht,sizeof(struct hotel),1,arquivo);
-				printf("\n----------------------------------------------------------------------------\n");
-				printf("Código: %u",ht.codigo);
-				printf("\nRazão Social: %s",ht.razaosocial);
-				printf("\nNome Fantasia: %s",ht.nomefantasia);
-				printf("\nCNPJ: %s",ht.cnpj);
-				printf("\nInscrição Estadual: %s",ht.insc);
-				printf("\nRua: %s",ht.rua);
-				printf("\nNumero: %s",ht.numero);
-				printf("\nBairro: %s",ht.bairro);
-				printf("\nCidade: %s",ht.cidadeestado.cidade);
-				printf("\nEstado: %s",ht.cidadeestado.estado);
-				printf("\nCEP: %s",ht.cep);
-				printf("\nComplemento: %s",ht.complemento);
-				printf("\nTelefone: %s",ht.telefone);
-				printf("\nE-Mail: %s",ht.email);
-				printf("\nNome do Responsável: %s",ht.nomeresponsavel);
-				printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
-				printf("\nStatus: %s\n\n",ht.status);
-				printf("\n----------------------------------------------------------------------------\n");
-				/*verifica se ja alcancou o final do arquivo*/
-				if(feof(arquivo)){
-					/*se ja sai do laco*/
-					break;
-				}
+				while(!feof(arquivo)){
+					fread(&ht,sizeof(struct hotel),1,arquivo);
+					/*verifica se ja alcancou o final do arquivo*/
+					if(feof(arquivo)){
+						/*se ja sai do laco*/
+						break;
+					}
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %u",ht.codigo);
+					printf("\nRazão Social: %s",ht.razaosocial);
+					printf("\nNome Fantasia: %s",ht.nomefantasia);
+					printf("\nCNPJ: %s",ht.cnpj);
+					printf("\nInscrição Estadual: %s",ht.insc);
+					printf("\nRua: %s",ht.rua);
+					printf("\nNumero: %s",ht.numero);
+					printf("\nBairro: %s",ht.bairro);
+					printf("\nCidade: %s",ht.cidadeestado.cidade);
+					printf("\nEstado: %s",ht.cidadeestado.estado);
+					printf("\nCEP: %s",ht.cep);
+					printf("\nComplemento: %s",ht.complemento);
+					printf("\nTelefone: %s",ht.telefone);
+					printf("\nE-Mail: %s",ht.email);
+					printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+					printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+					printf("\nStatus: %s\n\n",ht.status);
+					printf("\n----------------------------------------------------------------------------\n");
+				}	
+				
 			}
 			fclose(arquivo);
 		break;
@@ -215,26 +220,27 @@ void consultaproduto(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/produtos.bin","ab");
+			arquivo = fopen("saves/produtos.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em realizar a consulta ou Não foram encontrados produtos cadastrados\n\n");
 			}
 			else{
 				while(!feof(arquivo)){
 					fread(&p,sizeof(struct produtos),1,arquivo);
+					if(feof(arquivo)){
+						/*se ja sai do laco*/
+						break;
+					}
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição: %s",p.descricao);
 					printf("\nEstoque: %i",p.estoque);
 					printf("\nEstoque Minimo: %i",p.estoqueminimo);
 					printf("\nPreço de Custo: R$%.2f",p.precocusto);
-					printf("\nPreço de Venda: R$%.2f",p.precocusto);
+					printf("\nPreço de Venda: R$%.2f",p.precovenda);
 					printf("\nStatus: %s\n\n",p.status);
 					printf("\n----------------------------------------------------------------------------\n");
-					if(feof(arquivo)){
-						/*se ja sai do laco*/
-						break;
-					}
+					
 				}
 				fclose(arquivo);
 			}
@@ -285,7 +291,7 @@ void consultaacomodacao(int tipo){
 		break;
 		case 2:
 			/*consulta em binário*/
-			arquivo = fopen("saves/acomodacoes.bin","ab");
+			arquivo = fopen("saves/acomodacoes.bin","ab+");
 			if(arquivo == NULL){
 				printf("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n");	
 			}
@@ -293,6 +299,9 @@ void consultaacomodacao(int tipo){
 				printf("Acomodações cadastradas((valores númericos representam quantidade)não considerando a categoria): \n\n");
 				while(!feof(arquivo)){
 					fread(&ac,sizeof(struct acomodacoes),1,arquivo);
+					if(feof(arquivo)){
+						break;
+					}
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %i",ac.codigo);
 					printf("\nDescrição: %s",ac.descricao);
@@ -308,9 +317,7 @@ void consultaacomodacao(int tipo){
 					printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
 					printf("\nStatus: %s\n\n",ac.status);
 					printf("\n----------------------------------------------------------------------------\n");
-					if(feof(arquivo)){
-						break;
-					}
+					
 				}
 				fclose(arquivo);
 			}
@@ -345,7 +352,7 @@ void consultacategoria(int tipo){
 			fclose(arquivo);
 			break;
 			case 2:
-			arquivo = fopen("saves/categorias.bin","ab");
+			arquivo = fopen("saves/categorias.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em realizar a consulta de categoria!!\n\n");	
 			}
@@ -382,7 +389,7 @@ void consultafornecedor(int tipo){
 				printf("\nErro em realizar a consulta de fornecedor!!\n\n");
 			}
 			else{
-				printf("\nCategorias Cadastradas\n\n");
+				printf("\nFornecedores Cadastradoss\n\n");
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
 					f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
 					f.trepresentante,f.status) != EOF){
@@ -412,14 +419,17 @@ void consultafornecedor(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/fornecedores.txt","ab");
+			arquivo = fopen("saves/fornecedores.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em realizar a consulta de fornecedor!!\n\n");
 			}
 			else{
-				printf("\nCategorias Cadastradas\n\n");
+				printf("\nFornecedores Cadastradoss\n\n");
 				while(!feof(arquivo)){
 					fread(&f,sizeof(struct fornecedores),1,arquivo);
+					if(feof(arquivo)){
+						break;
+					}
 					printf("Codigo: %u",f.codigo);
 					printf("\nNome Fantasia: %s",f.nomefantasia);
 					printf("\nRazão Social %s",f.razaosocial);
@@ -438,9 +448,6 @@ void consultafornecedor(int tipo){
 					printf("\nRepresentante: %s",f.nrepresentante);
 					printf("\nTelefone do Representante: %s",f.trepresentante);
 					printf("\nStatus: %s\n\n",f.status);
-					if(feof(arquivo)){
-						break;
-					}
 				}
 				fclose(arquivo);
 			}
@@ -501,7 +508,7 @@ int codigohospede(int tipo){
 			fclose(arquivo);
 		break;
 		case 2:
-			arquivo = fopen("saves/hospedes.bin","ab");
+			arquivo = fopen("saves/hospedes.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em localizar o arquivo!!\n\n");
 			}
@@ -527,6 +534,7 @@ int codigohospede(int tipo){
 int codigohotel(int tipo){
 	int codigo = 0;
 	FILE *arquivo;
+	struct hotel ht;
 	switch(tipo){
 		case 1:
 			arquivo = fopen("saves/hoteis.txt","a+");
@@ -543,18 +551,21 @@ int codigohotel(int tipo){
 			fclose(arquivo);
 		break;
 		case 2:
-			arquivo = fopen("saves/hoteis.bin","ab");
+			arquivo = fopen("saves/hoteis.bin","ab+");
 			if(arquivo == NULL){
 				codigo = 0;
 			}
 			else{
 				while(!feof(arquivo)){
-					fread(&codigo,sizeof(int),1,arquivo);
+					fread(&ht,sizeof(struct hotel),1,arquivo);
 					if(feof(arquivo)){
 						break;
 					}
 				}
+				codigo = ht.codigo;
 			}
+			codigo++;
+			fclose(arquivo);
 		break;
 		default:
 			printf("\nOpcao ainda não implementada ou não existente\n\n");
@@ -583,7 +594,7 @@ int codigoproduto(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/produtos.bin","ab");
+			arquivo = fopen("saves/produtos.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em realizar a consulta!!\n\n");
 			}
@@ -625,7 +636,7 @@ int codigoacomodacao(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/acomodacoes.bin","ab");
+			arquivo = fopen("saves/acomodacoes.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em realizar a consulta!!\n\n");
 			}
@@ -665,7 +676,7 @@ int codigocategoria(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/categorias.bin","ab");
+			arquivo = fopen("saves/categorias.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em localizar o arquivo!!\n\n");
 			}
@@ -708,7 +719,7 @@ int codigofornecedor(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/fornecedores.bin","ab");
+			arquivo = fopen("saves/fornecedores.bin","ab+");
 			if(arquivo == NULL){
 				printf("\nErro em localizar o arquivo!!\n\n");	
 			}
@@ -734,18 +745,22 @@ int codigousuario(){
 	struct usuarios u;
 	FILE *arquivo;
 	int codigo = 0;
-	arquivo = fopen("saves/usuarios.bin","ab+");
+	arquivo = fopen("saves/usuarios.bin","rb");
 	if(arquivo == NULL){
-		codigo = 0;
+		codigo = 1;
 	}
 	else{
 		while(!feof(arquivo)){
 			fread(&u,sizeof(struct usuarios),1,arquivo);
+			if(feof(arquivo)){
+				break;
+			}
+			codigo = u.codigo;
 		}
-		codigo = u.codigo;
+		printf("\n%i\n", u.codigo);
+		codigo++;
 		fclose(arquivo);
 	}
-	codigo++;
 	return codigo;
 }
 
@@ -756,7 +771,7 @@ int verificausuario(char login[20],char senha[20]){
 	struct config c;
 	int verifica = 0;
 	arquivo = fopen("saves/usuarios.bin","ab+");
-	arquivo2 = fopen("config.config.bin","ab");
+	arquivo2 = fopen("config/config.bin","ab+");
 	if(arquivo == NULL && arquivo2 == NULL){
 		printf("\nErro na verificação de usuário!!\n");
 	}

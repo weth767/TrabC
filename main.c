@@ -181,7 +181,10 @@ char comando[50];
  
 int main(int argc, char** argv) {
 	int verifica = 0;
-	system("clear");	
+	system("mkdir config");
+	system("mkdir saves");
+	system("mkdir libs");
+	system("clear");
 	while(1){
 		//verifica a configuração inicial, caso não tenha sido feita, obrigatoriamente o usuário terá que faze-la.
 		if(verificaconfig() == 0){

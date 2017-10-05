@@ -5,7 +5,6 @@
 #include <string.h>
 #include <locale.h>
 #include "structs.h"
-#include "salvar.h"
 #include "consulta.h"
 #include "config.h"
 
@@ -79,7 +78,7 @@ void cadastrahotel(){
 	/*%[^\n]s serve para pegar os espaços digitados pelo usuário*/
 
 	printf("\nCadastro de Hotel:\n\n");
-
+	setbuf(stdin,NULL);
 	ht.codigo = codigohotel(verificasave());
 	
 	setbuf(stdin,NULL);

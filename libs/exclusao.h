@@ -80,8 +80,8 @@ void excluihospede(int tipo){
 		}
 		break;
 		case 2:
-			arquivo = fopen("saves/hospedes.bin","ab");
-			arquivo2 = fopen("saves/temphospede.bin","ab");
+			arquivo = fopen("saves/hospedes.bin","ab+");
+			arquivo2 = fopen("saves/temphospede.bin","ab+");
 			if(arquivo2 == NULL){
 				printf("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
@@ -95,6 +95,9 @@ void excluihospede(int tipo){
 						fwrite(&h,sizeof(struct hospede),1,arquivo2);
 					}
 					else{
+						if(feof(arquivo)){
+							break;
+						}
 						printf("\nHospede selecionado: \n\n");
 						printf("Código: %u",h.codigo);
 						printf("\nNome: %s",h.nome);
@@ -208,8 +211,8 @@ void excluihotel(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/hoteis.bin","ab");
-			arquivo2 = fopen("saves/temphotel.bin","ab");
+			arquivo = fopen("saves/hoteis.bin","ab+");
+			arquivo2 = fopen("saves/temphotel.bin","ab+");
 			if(arquivo2 == NULL){
 				printf("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
@@ -223,6 +226,9 @@ void excluihotel(int tipo){
 						fwrite(&ht,sizeof(struct hotel),1,arquivo2);
 					}
 					else{
+						if(feof(arquivo)){
+							break;
+						}
 						printf("\nHotel selecionado:\n\n");
 						printf("Código: %u",ht.codigo);
 						printf("\nRazão Social: %s",ht.razaosocial);
@@ -309,8 +315,8 @@ void excluicategoria(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/categorias.bin","ab");
-			arquivo2 = fopen("saves/tempcategoria.bin","ab");
+			arquivo = fopen("saves/categorias.bin","ab+");
+			arquivo2 = fopen("saves/tempcategoria.bin","ab+");
 			if(arquivo2 == NULL){
 				printf("\nErro em localizar o arquivo da categoria!!\n\n");	
 			}
@@ -324,6 +330,9 @@ void excluicategoria(int tipo){
 						fwrite(&c,sizeof(struct categorias),1,arquivo2);
 					}
 					else{
+						if(feof(arquivo)){
+							break;
+						}
 						printf("\nCategoria Selecionada: \n\n");
 						printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
 						printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
@@ -516,8 +525,8 @@ void excluiproduto(int tipo){
 			}
 		break;
 		case 2:
-			arquivo = fopen("saves/produtos.bin","ab");
-			arquivo2 = fopen("saves/tempproduto.bin","ab");
+			arquivo = fopen("saves/produtos.bin","ab+");
+			arquivo2 = fopen("saves/tempproduto.bin","ab+");
 			if(arquivo2 == NULL){
 				printf("\nErro em localizar o arquivo do produto!!\n\n");	
 			}
@@ -531,6 +540,9 @@ void excluiproduto(int tipo){
 						fwrite(&p,sizeof(struct produtos),1,arquivo2);
 					}
 					else{
+						if(feof(arquivo)){
+							break;
+						}
 						printf("Produto Selecionado: \n\n");
 						printf("Código: %u",p.codigo);
 						printf("\nDescrição: %s",p.descricao);
@@ -636,8 +648,8 @@ void excluifornecedor(int tipo){
 			}
 		break;
 		case 2:
-			fopen("saves/fornecedores.bin","ab");
-			fopen("saves/tempfornecedor.bin","ab");
+			fopen("saves/fornecedores.bin","ab+");
+			fopen("saves/tempfornecedor.bin","ab+");
 			if(arquivo2 == NULL){
 				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");
 			}
@@ -651,6 +663,9 @@ void excluifornecedor(int tipo){
 						fwrite(&f,sizeof(struct fornecedores),1,arquivo2);
 					}
 					else{
+						if(feof(arquivo)){
+							break;
+						}
 						printf("Fornecedor Selecionado: \n\n");
 						printf("Codigo: %u",f.codigo);
 						printf("\nNome Fantasia: %s",f.nomefantasia);
@@ -690,7 +705,7 @@ void excluifornecedor(int tipo){
 	}
 }
 
-void excluiusuario(){
+void excluiusuario(0){
 	struct usuarios u;
 	FILE *arquivo;
 	FILE *arquivo2;
@@ -699,8 +714,8 @@ void excluiusuario(){
 	int t;
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
-	arquivo = fopen("saves/usuarios.bin","ab");
-	arquivo2 = fopen("save/tempusuario.bin","ab");
+	arquivo = fopen("saves/usuarios.bin","ab+");
+	arquivo2 = fopen("saves/tempusuario.bin","ab+");
 	if(arquivo2 == NULL){
 		printf("\nErro em localizar o arquivo do usuário!!\n\n");
 	}
@@ -714,19 +729,25 @@ void excluiusuario(){
 				fwrite(&u,sizeof(struct usuarios),1,arquivo2);
 			}
 			else{
+				if(feof(arquivo)){
+					break;		
+				}
 				printf("Usuário Selecionado: \n\n");
 				printf("Código: %u",u.codigo);
-				printf("Nome do Usuário: %s",u.nome);
-				printf("Login: %s",u.login);
+				printf("\nNome do Usuário: %s",u.nome);
+				printf("\nLogin: %s",u.login);
 				t = strlen(u.senha);
-				printf("Senha: ");
+				printf("\nSenha: ");
 				for(int i = 0; i < t; i++){
 					printf("*");
 				}
-				printf("Permissão: %i",u.permissao);
-				printf("Status: %s",u.status);
+				printf("\nPermissão: %i",u.permissao);
+				printf("\nStatus: %s",u.status);
 			}
 		}
+		setbuf(stdin,NULL);	
+		printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+		scanf("%i",&op);
 		if(op == 1){
 				remove("saves/usuarios.bin");
 				rename("saves/tempusuario.bin","saves/usuarios.bin");

@@ -251,10 +251,13 @@ void cadastrausuario(){
 	setbuf(stdin,NULL);
 	printf("Digite o login do usuário: ");
 	scanf("%s",u.login);
+	setbuf(stdin,NULL);
 	printf("Digite a senha do usuário: ");
 	scanf("%s",u.senha);
+	setbuf(stdin,NULL);
 	printf("Digite o nível de acesso do usuário\n1 - Acesso Mínimo;\n2 - Acesso Básico;\n3 - Acesso Comum;\n4 - Acesso Alto;\n5 - Acesso Máximo;\nDigite sua opção: ");
 	scanf("%i",&u.permissao);
+	setbuf(stdin,NULL);
 	strcpy(u.status , "Ativo");
 }
 

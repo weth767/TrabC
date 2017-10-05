@@ -321,7 +321,7 @@ void salvarfornecedor(int tipo){
 	}
 }
 
-void salvarusuariosbin(){
+void salvarusuarios(){
 	struct usuarios u;
 	//faço a chamada da struct, para ter acesso as varíaveis desta;*/
 	/*coloco como linguagem obrigatória, o português, para evitar certos problemas de acentuação*/

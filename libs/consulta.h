@@ -455,7 +455,7 @@ void consultausuario(){
 	struct usuarios u;
 	FILE *arquivo;
 	int t;
-	arquivo = fopen("saves/usuarios.bin","ab");
+	arquivo = fopen("saves/usuarios.bin","ab+");
 	if(arquivo == NULL){
 		printf("Erro em realizar a consulta de usuário!!\n\n");
 	}
@@ -463,6 +463,9 @@ void consultausuario(){
 		printf("Usuários cadastrados: \n\n");
 		while(!feof(arquivo)){
 			fread(&u,sizeof(struct usuarios),1,arquivo);
+			if(feof(arquivo)){
+					break;
+			}
 			printf("Código: %u",u.codigo);
 			printf("\nNome do Usuário: %s",u.nome);
 			printf("\nLogin: %s",u.login);
@@ -472,10 +475,8 @@ void consultausuario(){
 				printf("*");
 			}
 			printf("\nPermissão: %i",u.permissao);
-			printf("\nStatus: %s\n\n ",u.status);
-			if(feof(arquivo)){
-					break;
-			}
+			printf("\nStatus: %s\n\n",u.status);
+			
 		}
 		fclose(arquivo);
 	}
@@ -732,8 +733,8 @@ int codigofornecedor(int tipo){
 int codigousuario(){
 	struct usuarios u;
 	FILE *arquivo;
-	int codigo;
-	arquivo = fopen("saves/usuarios.bin","rb");
+	int codigo = 0;
+	arquivo = fopen("saves/usuarios.bin","ab+");
 	if(arquivo == NULL){
 		codigo = 0;
 	}
@@ -741,21 +742,22 @@ int codigousuario(){
 		while(!feof(arquivo)){
 			fread(&u,sizeof(struct usuarios),1,arquivo);
 		}
+		codigo = u.codigo;
 		fclose(arquivo);
 	}
-	codigo = u.codigo;
 	codigo++;
 	return codigo;
-
 }
 
 int verificausuario(char login[20],char senha[20]){
 	struct usuarios u;
 	FILE *arquivo;
+	FILE *arquivo2;
 	struct config c;
 	int verifica = 0;
-	arquivo = fopen("saves/usuarios.bin","rb");
-	if(arquivo == NULL){
+	arquivo = fopen("saves/usuarios.bin","ab+");
+	arquivo2 = fopen("config.config.bin","ab");
+	if(arquivo == NULL && arquivo2 == NULL){
 		printf("\nErro na verificação de usuário!!\n");
 	}
 	else{
@@ -766,7 +768,6 @@ int verificausuario(char login[20],char senha[20]){
 			}
 		}
 	}
-	fclose(arquivo);
 	if(verifica == 0){
 	arquivo = fopen("config/config.bin","rb");
 		while(!feof(arquivo)){
@@ -782,5 +783,5 @@ int verificausuario(char login[20],char senha[20]){
 	fclose(arquivo);
 	return verifica;
 }
-	
+
 #endif 

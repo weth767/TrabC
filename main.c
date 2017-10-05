@@ -117,7 +117,7 @@ void menu(char com[50],int tiposave){
 	/*comando para cadastro de hospede*/
 	else if(strcmp(com,"cadus") == 0){
 		cadastrausuario();
-		salvarusuariosbin();
+		salvarusuarios();
 	}
 	else if(strcmp(com,"csus") == 0){
 		consultausuario();

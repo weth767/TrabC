@@ -705,7 +705,7 @@ void excluifornecedor(int tipo){
 	}
 }
 
-void excluiusuario(0){
+void excluiusuario(){
 	struct usuarios u;
 	FILE *arquivo;
 	FILE *arquivo2;

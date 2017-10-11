@@ -747,7 +747,7 @@ int codigousuario(){
 	int codigo = 0;
 	arquivo = fopen("saves/usuarios.bin","rb");
 	if(arquivo == NULL){
-		codigo = 1;
+		codigo = 0;
 	}
 	else{
 		while(!feof(arquivo)){

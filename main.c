@@ -15,6 +15,7 @@
 #include "libs/config.h"
 #include <unistd.h>
 #include "libs/exclusao.h"
+#include "libs/edicao.h"
 
 
 int login(){
@@ -86,6 +87,9 @@ void menu(char com[50],int tiposave){
 		excluihospede(tiposave);
 	}
 
+	else if(strcmp(com,"edhp") == 0){
+		editahospede(tiposave);
+	}
 
 	/*comandos para cadastro de hotel*/
 	else if(strcmp(com,"cadht") == 0){
@@ -165,7 +169,6 @@ void menu(char com[50],int tiposave){
 		excluiacomodacao(tiposave);
 	}
 
-
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");
@@ -223,10 +226,7 @@ int main(int argc, char** argv) {
 				/*serão verificados os comandos para saber o que o usuário deseja fazer*/
 				menu(comando,verificasave());
 			}
-			
 		}
-			
 	}
-		
-}
+}	
 	

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 void editahospede(int tipo){
 	struct hospede h;
 	FILE *arquivo;
@@ -25,10 +26,6 @@ void editahospede(int tipo){
 			else{
 				printf("Digite o código do hospede a ser editado: ");
 				scanf("%i",&codigo);
-				printf("\nDigite o que será editado: \n");
-				printf("1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
-					"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
-				scanf("%i",&op);
 				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 					if(h.codigo != codigo){
@@ -50,69 +47,90 @@ void editahospede(int tipo){
 						fprintf(arquivo2,"\n%s",h.email);
 						fprintf(arquivo2,"\n%s\n\n",h.status);
 					}
-					else {
+					else{
+						printf("Digite o que será editado: \n1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número\n6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
+							"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
+						scanf("%i",&op);
+						printf("\n%i\n",op);
 						switch(op){
+							printf("\nEntrou no switch\n");
 							case 1:
+								setbuf(stdin,NULL);
 								printf("Digite o novo nome: ");
 								scanf("%[^\n]s",h.nome);
 							break;
 							case 2:
+								setbuf(stdin,NULL);
 								printf("Digite o novo CPF: ");
 								scanf("%[^\n]s",h.cpf);
 							break;
 							case 3:
+								setbuf(stdin,NULL);
 								printf("Digite o novo RG: ");
 								scanf("%[^\n]s",h.rg);
 							break;
 							case 4:
+								setbuf(stdin,NULL);
 								printf("Digite o nova Rua: ");
 								scanf("%[^\n]s",h.rua);
 							break;
 							case 5:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Número: ");
 								scanf("%[^\n]s",h.numero);
 							break;
 							case 6:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Bairro: ");
 								scanf("%[^\n]s",h.bairro);
 							break;
 							case 7:
+								setbuf(stdin,NULL);
 								printf("Digite o novo CEP: ");
 								scanf("%[^\n]s",h.cep);
 							break;
 							case 8:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Complemento: ");
 								scanf("%[^\n]s",h.complemento);
 							break;
 							case 9:
+								setbuf(stdin,NULL);
 								printf("Digite o nova Cidade: ");
 								scanf("%[^\n]s",h.cidadeestado.cidade);
 							break;
 							case 10:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Estado: ");
 								scanf("%[^\n]s",h.cidadeestado.estado);
 							break;
 							case 11:
+								setbuf(stdin,NULL);
 								printf("Digite o nova Data de Nascimento: ");
 								scanf("%[^\n]s",h.datanascimento);
 							break;
 							case 12:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Telefone: ");
 								scanf("%[^\n]s",h.telefone);
 							break;
 							case 13:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Celular: ");
 								scanf("%[^\n]s",h.celular);
 							break;
 							case 14:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Estado Cívil: ");
 								scanf("%[^\n]s",h.estadocivil);
 							break;
 							case 15:
+								setbuf(stdin,NULL);
 								printf("Digite o novo E-mail: ");
 								scanf("%[^\n]s",h.email);
 							break;
 							case 16:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Status: ");
 								scanf("%[^\n]s",h.status);
 							break;
@@ -154,8 +172,7 @@ void editahospede(int tipo){
 			else{
 				printf("Digite o código do hospede a ser editado: ");
 				scanf("%i",&codigo);
-				printf("\nDigite o que será editado: \n");
-				printf("1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
+				printf("Digite o que será editado:\n1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
 					"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
 				scanf("%i",&op); 	
 				while(!feof(arquivo)){
@@ -166,66 +183,82 @@ void editahospede(int tipo){
 					else{
 						switch(op){
 							case 1:
+								setbuf(stdin,NULL);
 								printf("Digite o novo nome: ");
 								scanf("%[^\n]s",h.nome);
 							break;
 							case 2:
+								setbuf(stdin,NULL);
 								printf("Digite o novo CPF: ");
 								scanf("%[^\n]s",h.cpf);
 							break;
 							case 3:
+								setbuf(stdin,NULL);
 								printf("Digite o novo RG: ");
 								scanf("%[^\n]s",h.rg);
 							break;
 							case 4:
+								setbuf(stdin,NULL);
 								printf("Digite o nova Rua: ");
 								scanf("%[^\n]s",h.rua);
 							break;
 							case 5:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Número: ");
 								scanf("%[^\n]s",h.numero);
 							break;
 							case 6:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Bairro: ");
 								scanf("%[^\n]s",h.bairro);
 							break;
 							case 7:
+								setbuf(stdin,NULL);
 								printf("Digite o novo CEP: ");
 								scanf("%[^\n]s",h.cep);
 							break;
 							case 8:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Complemento: ");
 								scanf("%[^\n]s",h.complemento);
 							break;
 							case 9:
+								setbuf(stdin,NULL);
 								printf("Digite o nova Cidade: ");
 								scanf("%[^\n]s",h.cidadeestado.cidade);
 							break;
 							case 10:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Estado: ");
 								scanf("%[^\n]s",h.cidadeestado.estado);
 							break;
 							case 11:
+								setbuf(stdin,NULL);
 								printf("Digite o nova Data de Nascimento: ");
 								scanf("%[^\n]s",h.datanascimento);
 							break;
 							case 12:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Telefone: ");
 								scanf("%[^\n]s",h.telefone);
 							break;
 							case 13:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Celular: ");
 								scanf("%[^\n]s",h.celular);
 							break;
 							case 14:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Estado Cívil: ");
 								scanf("%[^\n]s",h.estadocivil);
 							break;
 							case 15:
+								setbuf(stdin,NULL);
 								printf("Digite o novo E-mail: ");
 								scanf("%[^\n]s",h.email);
 							break;
 							case 16:
+								setbuf(stdin,NULL);
 								printf("Digite o novo Status: ");
 								scanf("%[^\n]s",h.status);
 							break;
@@ -234,11 +267,11 @@ void editahospede(int tipo){
 						printf("\nDados alterados com sucesso!\n\n");
 					}
 				}
+				remove("saves/hospedes.bin");
+				rename("saves/temphospede.bin","saves/hospedes.bin");
+				fclose(arquivo);
+				fclose(arquivo2);
 			}
-			remove("saves/hospedes.bin");
-			rename("saves/temphospede.bin","saves/hospedes.bin");
-			fclose(arquivo);
-			fclose(arquivo2);
 		break;
 	  }
 	}

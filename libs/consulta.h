@@ -492,6 +492,7 @@ void consultausuario(){
 int codigohospede(int tipo){
 	int codigo = 0;
 	FILE *arquivo;
+	struct hospede h;
 	switch(tipo){
 		case 1:
 			arquivo = fopen("saves/hospedes.txt","a+");
@@ -499,11 +500,14 @@ int codigohospede(int tipo){
 				codigo = 0;
 			}
 			else{
-				while(fscanf(arquivo,"%u\n",&codigo)!= EOF){
-					fgetc(arquivo);
+				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
+					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
+					codigo = h.codigo;
+					if(feof(arquivo)){
+						break;
+					}
 				}
 				codigo++;
-				
 			}
 			fclose(arquivo);
 		break;

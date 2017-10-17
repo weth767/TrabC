@@ -16,12 +16,13 @@
 #include <unistd.h>
 #include "libs/exclusao.h"
 #include "libs/edicao.h"
+#include "libs/cores.h"
 
 
 int login(){
 	char login[20];
 	char senha[20];
-	printf("Login: ");
+	vermelho("Login: ");
 	scanf("%s",login);
 	printf("Senha: ");
 	scanf("%s",senha);
@@ -31,6 +32,35 @@ int login(){
 	else{
 		return 0;
 	}
+	printf("Cores no texto em C\n");
+	printf(" {FONTE}33[0;30m Preto  {FONTE}33[0m             --> 0;30 \n");
+	printf(" {FONTE}33[0;31m Vermelho  {FONTE}33[0m          --> 0;31 \n");
+	printf(" {FONTE}33[0;32m Verde  {FONTE}33[0m             --> 0;32 \n");
+	printf(" {FONTE}33[0;33m Marrom  {FONTE}33[0m            --> 0;33 \n");
+	printf(" {FONTE}33[0;34m Azul  {FONTE}33[0m              --> 0;34 \n");
+	printf(" {FONTE}33[0;35m Purple  {FONTE}33[0m            --> 0;35 \n");
+	printf(" {FONTE}33[0;36m Cyan  {FONTE}33[0m              --> 0;36 \n");
+	printf(" {FONTE}33[0;37m Cinza Claro  {FONTE}33[0m       --> 0;37 \n");
+	printf(" {FONTE}33[1;30m Preto Acinzentado {FONTE}33[0m  --> 1;30 \n");
+	printf(" {FONTE}33[1;31m Vermelho Claro  {FONTE}33[0m    --> 1;31 \n");
+	printf(" {FONTE}33[1;32m Verde Claro  {FONTE}33[0m       --> 1;32 \n");
+	printf(" {FONTE}33[1;33m Amarelo {FONTE}33[0m            --> 1;33 \n");
+	printf(" {FONTE}33[1;34m Azul  Claro {FONTE}33[0m        --> 1;34 \n");
+	printf(" {FONTE}33[1;35m Purple Claro  {FONTE}33[0m      --> 1;35 \n");
+	printf(" {FONTE}33[1;36m Cyan  Claro {FONTE}33[0m        --> 1;36 \n");
+	printf(" {FONTE}33[1;37m Branco  {FONTE}33[0m            --> 1;37 \n");
+	printf(" {FONTE}33[40;1;37m Fundo Preto    {FONTE}33[0m     --> 40;?;? \n");
+	printf(" {FONTE}33[41;1;37m Fundo Vermelho {FONTE}33[0m     --> 41;?;? \n");
+	printf(" {FONTE}33[42;1;37m Fundo Verde    {FONTE}33[0m     --> 42;?;? \n");
+	printf(" {FONTE}33[43;1;37m Fundo Marrom   {FONTE}33[0m     --> 43;?;? \n");
+	printf(" {FONTE}33[44;1;37m Fundo Azul     {FONTE}33[0m     --> 44;?;? \n");
+	printf(" {FONTE}33[45;1;37m Fundo Purple   {FONTE}33[0m     --> 45;?;? \n");
+	printf(" {FONTE}33[46;1;37m Fundo Cyan     {FONTE}33[0m     --> 46;?;? \n");
+	printf(" {FONTE}33[47;1;37m Fundo Cinza    {FONTE}33[0m     --> 47;?;? \n");
+	printf(" {FONTE}33[4;30m Sublinhado  {FONTE}33[0m        --> 4;? \n");
+	printf(" {FONTE}33[5;30m Piscando    {FONTE}33[0m        --> 5;? \n");
+	printf(" {FONTE}33[7;30m Invertido   {FONTE}33[0m        --> 7;? \n");
+	printf(" {FONTE}33[8;30m Concealed   {FONTE}33[0m        --> 8;? \n");
 }
 
 void config(){
@@ -103,7 +133,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exht") == 0){
 		excluihotel(tiposave);
 	}
-
+	else if(strcmp(com,"edht") == 0){
+		editahotel(tiposave);
+	}
 
 	/*comando para o fornecedor*/
 	else if(strcmp(com,"cadf") == 0){

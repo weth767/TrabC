@@ -13,6 +13,13 @@ void editahospede(int tipo){
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	setbuf(stdin,NULL);
+	printf("Digite o código do hospede a ser editado: ");
+	scanf("%i",&codigo);
+	setbuf(stdin,NULL);
+	printf("Digite o que será editado:\n1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
+		"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
+	scanf("%i",&op);
 	switch(tipo){
 		case 1:
 			arquivo = fopen("saves/hospedes.txt","a+");
@@ -24,8 +31,6 @@ void editahospede(int tipo){
 				printf("\nErro em localizar o arquivo de hospedes!!\n\n");
 			}
 			else{
-				printf("Digite o código do hospede a ser editado: ");
-				scanf("%i",&codigo);
 				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 					if(h.codigo != codigo){
@@ -48,10 +53,6 @@ void editahospede(int tipo){
 						fprintf(arquivo2,"\n%s\n\n",h.status);
 					}
 					else{
-						printf("Digite o que será editado: \n1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número\n6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
-							"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
-						scanf("%i",&op);
-						printf("\n%i\n",op);
 						switch(op){
 							printf("\nEntrou no switch\n");
 							case 1:
@@ -169,12 +170,7 @@ void editahospede(int tipo){
 			if(arquivo == NULL){
 				printf("\nErro em localizar o arquivo de hospedes!!\n\n");
 			}
-			else{
-				printf("Digite o código do hospede a ser editado: ");
-				scanf("%i",&codigo);
-				printf("Digite o que será editado:\n1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
-					"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
-				scanf("%i",&op); 	
+			else{ 	
 				while(!feof(arquivo)){
 					fread(&h,sizeof(struct hospede),1,arquivo);
 					if(h.codigo != codigo){
@@ -263,10 +259,10 @@ void editahospede(int tipo){
 								scanf("%[^\n]s",h.status);
 							break;
 						}
-						fwrite(&h,sizeof(struct hospede),1,arquivo2);
-						printf("\nDados alterados com sucesso!\n\n");
 					}
 				}
+				fwrite(&h,sizeof(struct hospede),1,arquivo2);
+				printf("\nDados alterados com sucesso!\n\n");
 				remove("saves/hospedes.bin");
 				rename("saves/temphospede.bin","saves/hospedes.bin");
 				fclose(arquivo);
@@ -275,5 +271,16 @@ void editahospede(int tipo){
 		break;
 	  }
 	}
+}
+
+
+void editahotel(int tipo){
+	struct hotel h;
+	FILE *arquivo;
+	FILE *arquivo2;
+	int codigo;
+	int op;
+	printf("Digite o codigo a ser editado: ");
+	scanf("%i",&op);
 }
 #endif

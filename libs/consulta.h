@@ -21,8 +21,8 @@ void consultahospede(int tipo){
 			}
 			else{
 				/*padronizo os dados que serao buscados*/
-				printf("\nDados dos Usuários\n\n");
-				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
+				printf("\nDados dos Hospedes\n\n");
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 						/*E vou listando os itens para o usuario em forma de lista*/
 						printf("\n----------------------------------------------------------------------------\n");
@@ -65,7 +65,7 @@ void consultahospede(int tipo){
 			/*se foi aberto, verifica os dados no arquivo*/
 			else{
 				/*enquanto nao for o final do arquivo vai mostrando os dados*/
-				printf("\nDados dos Usuários\n\n");
+				printf("\nDados dos Hospedes\n\n");
 				while(!feof(arquivo)){
 					/*verifica se ja alcancou o final do arquivo*/
 					fread(&h,sizeof(struct hospede),1,arquivo);

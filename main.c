@@ -22,7 +22,7 @@
 int login(){
 	char login[20];
 	char senha[20];
-	vermelho("Login: ");
+	printf("Login: ");
 	scanf("%s",login);
 	printf("Senha: ");
 	scanf("%s",senha);
@@ -32,35 +32,6 @@ int login(){
 	else{
 		return 0;
 	}
-	printf("Cores no texto em C\n");
-	printf(" {FONTE}33[0;30m Preto  {FONTE}33[0m             --> 0;30 \n");
-	printf(" {FONTE}33[0;31m Vermelho  {FONTE}33[0m          --> 0;31 \n");
-	printf(" {FONTE}33[0;32m Verde  {FONTE}33[0m             --> 0;32 \n");
-	printf(" {FONTE}33[0;33m Marrom  {FONTE}33[0m            --> 0;33 \n");
-	printf(" {FONTE}33[0;34m Azul  {FONTE}33[0m              --> 0;34 \n");
-	printf(" {FONTE}33[0;35m Purple  {FONTE}33[0m            --> 0;35 \n");
-	printf(" {FONTE}33[0;36m Cyan  {FONTE}33[0m              --> 0;36 \n");
-	printf(" {FONTE}33[0;37m Cinza Claro  {FONTE}33[0m       --> 0;37 \n");
-	printf(" {FONTE}33[1;30m Preto Acinzentado {FONTE}33[0m  --> 1;30 \n");
-	printf(" {FONTE}33[1;31m Vermelho Claro  {FONTE}33[0m    --> 1;31 \n");
-	printf(" {FONTE}33[1;32m Verde Claro  {FONTE}33[0m       --> 1;32 \n");
-	printf(" {FONTE}33[1;33m Amarelo {FONTE}33[0m            --> 1;33 \n");
-	printf(" {FONTE}33[1;34m Azul  Claro {FONTE}33[0m        --> 1;34 \n");
-	printf(" {FONTE}33[1;35m Purple Claro  {FONTE}33[0m      --> 1;35 \n");
-	printf(" {FONTE}33[1;36m Cyan  Claro {FONTE}33[0m        --> 1;36 \n");
-	printf(" {FONTE}33[1;37m Branco  {FONTE}33[0m            --> 1;37 \n");
-	printf(" {FONTE}33[40;1;37m Fundo Preto    {FONTE}33[0m     --> 40;?;? \n");
-	printf(" {FONTE}33[41;1;37m Fundo Vermelho {FONTE}33[0m     --> 41;?;? \n");
-	printf(" {FONTE}33[42;1;37m Fundo Verde    {FONTE}33[0m     --> 42;?;? \n");
-	printf(" {FONTE}33[43;1;37m Fundo Marrom   {FONTE}33[0m     --> 43;?;? \n");
-	printf(" {FONTE}33[44;1;37m Fundo Azul     {FONTE}33[0m     --> 44;?;? \n");
-	printf(" {FONTE}33[45;1;37m Fundo Purple   {FONTE}33[0m     --> 45;?;? \n");
-	printf(" {FONTE}33[46;1;37m Fundo Cyan     {FONTE}33[0m     --> 46;?;? \n");
-	printf(" {FONTE}33[47;1;37m Fundo Cinza    {FONTE}33[0m     --> 47;?;? \n");
-	printf(" {FONTE}33[4;30m Sublinhado  {FONTE}33[0m        --> 4;? \n");
-	printf(" {FONTE}33[5;30m Piscando    {FONTE}33[0m        --> 5;? \n");
-	printf(" {FONTE}33[7;30m Invertido   {FONTE}33[0m        --> 7;? \n");
-	printf(" {FONTE}33[8;30m Concealed   {FONTE}33[0m        --> 8;? \n");
 }
 
 void config(){
@@ -68,16 +39,16 @@ void config(){
 	int op;
 	char mlogin[20];
 	char msenha[20];
-	printf("Início do Sistema!\n\n");
-	printf("Agora será feita a configuração de salvamento do sistema.");
-	printf("\nSua escolha será imutável durante todo o uso do programa, escolha sabiamente.");
-	printf("O tipo de salvamento será:\n1 - Arquivo Texto;\n2 - Arquivo Binário;\n3 - Banco de Dados;\n4 - Nuvem;\nDigite o número de sua opção: ");
+	branco("Início do Sistema!\n\n");
+	branco("Agora será feita a configuração de salvamento do sistema.");
+	branco("\nSua escolha será imutável durante todo o uso do programa, escolha sabiamente.");
+	branco("O tipo de salvamento será:\n1 - Arquivo Texto;\n2 - Arquivo Binário;\n3 - Banco de Dados;\n4 - Nuvem;\nDigite o número de sua opção: ");
 	scanf("%i",&op);
 	setbuf(stdin,NULL);
-	printf("Digite o login de primeiro acesso(master): ");
+	branco("Digite o login de primeiro acesso(master): ");
 	scanf("%s",mlogin);
 	setbuf(stdin,NULL);
-	printf("Digite a senha de primeiro acesso(master): ");
+	branco("Digite a senha de primeiro acesso(master): ");
 	scanf("%s",msenha);
 	configsave(op,mlogin,msenha);
 	system("clear");
@@ -174,6 +145,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exc") == 0){
 		excluicategoria(tiposave);
 	}
+	else if(strcmp(com,"edc") == 0){
+		editacategoria(tiposave);
+	}
 
 
 	/*comandos do produto*/
@@ -208,7 +182,7 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"32683") == 0){
 	}
 	else{
-		printf("\nComando Inválido!\n\n");
+		vermelho("\nComando Inválido!\n\n");
 	}
 }
 
@@ -229,12 +203,12 @@ int main(int argc, char** argv) {
 			while(verifica == 0){
 				if(login() == 1){
 					verifica = 1;
-					printf("\nUsuário conectado com sucesso!!\n\n");
+					verde("\nUsuário conectado com sucesso!!\n\n");
 					sleep(1);
 					system("clear");
 				}
 				else{
-					printf("\nLogin e/ou senha incorreto(s)!!\n\n");
+					vermelho("\nLogin e/ou senha incorreto(s)!!\n\n");
 					sleep(1);
 					system("clear");
 				}

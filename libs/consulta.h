@@ -90,7 +90,7 @@ void consultahospede(int tipo){
 					printf("\nCelular: %s",h.celular);
 					printf("\nEstado Cívil: %s",h.estadocivil);
 					printf("\nE-Mail: %s",h.email);
-					printf("\nStatus: %s\n\n",h.status);
+					printf("\nStatus: %s",h.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					
 				}
@@ -135,7 +135,7 @@ void consultahotel(int tipo){
 					printf("\nE-Mail: %s",ht.email);
 					printf("\nNome do Responsável: %s",ht.nomeresponsavel);
 					printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
-					printf("\nStatus: %s\n\n",ht.status);
+					printf("\nStatus: %s",ht.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					/*verifica se ja alcancou o final do arquivo*/
 					if(feof(arquivo)){
@@ -176,7 +176,7 @@ void consultahotel(int tipo){
 					printf("\nE-Mail: %s",ht.email);
 					printf("\nNome do Responsável: %s",ht.nomeresponsavel);
 					printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
-					printf("\nStatus: %s\n\n",ht.status);
+					printf("\nStatus: %s",ht.status);
 					printf("\n----------------------------------------------------------------------------\n");
 				}	
 				
@@ -208,7 +208,7 @@ void consultaproduto(int tipo){
 					printf("\nEstoque Minimo: %i",p.estoqueminimo);
 					printf("\nPreço de Custo: R$%.2f",p.precocusto);
 					printf("\nPreço de Venda: R$%.2f",p.precovenda);
-					printf("\nStatus: %s\n\n",p.status);
+					printf("\nStatus: %s",p.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					/*verifica se ja alcancou o final do arquivo*/
 					if(feof(arquivo)){
@@ -238,7 +238,7 @@ void consultaproduto(int tipo){
 					printf("\nEstoque Minimo: %i",p.estoqueminimo);
 					printf("\nPreço de Custo: R$%.2f",p.precocusto);
 					printf("\nPreço de Venda: R$%.2f",p.precovenda);
-					printf("\nStatus: %s\n\n",p.status);
+					printf("\nStatus: %s",p.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					
 				}
@@ -279,7 +279,7 @@ void consultaacomodacao(int tipo){
 					printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
 					printf("\nCom Banheira: %i",ac.extra.banheira);
 					printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
-					printf("\nStatus: %s\n\n",ac.status);
+					printf("\nStatus: %s",ac.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					if(feof(arquivo)){
 						/*se ja sai do laco*/
@@ -315,7 +315,7 @@ void consultaacomodacao(int tipo){
 					printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
 					printf("\nCom Banheira: %i",ac.extra.banheira);
 					printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
-					printf("\nStatus: %s\n\n",ac.status);
+					printf("\nStatus: %s",ac.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					
 				}
@@ -342,8 +342,9 @@ void consultacategoria(int tipo){
 			while(fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status) != EOF){
 				printf("\n----------------------------------------------------------------------------\n");
 				printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
+				printf("\nPreço: R$%.2f",c.valor);
 				printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
-				printf("\nStatus: %s\n",c.status);
+				printf("\nStatus: %s",c.status);
 				printf("\n----------------------------------------------------------------------------\n");
 				if(feof(arquivo)){
 					break;
@@ -365,8 +366,9 @@ void consultacategoria(int tipo){
 					}
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
-					printf("\nNúmero de Adultos: %i, Número de Crianças: %i\n",c.quantidadeadultos,c.quantidadecriancas);
-					printf("\nStatus: %s\n",c.status);
+					printf("\nPreço: R$%.2f",c.valor);
+					printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
+					printf("\nStatus: %s",c.status);
 					printf("\n----------------------------------------------------------------------------\n");
 				}
 				fclose(arquivo);
@@ -410,7 +412,7 @@ void consultafornecedor(int tipo){
 					printf("\nE-mail: %s",f.email);
 					printf("\nRepresentante: %s",f.nrepresentante);
 					printf("\nTelefone do Representante: %s",f.trepresentante);
-					printf("\nStatus: %s\n\n",f.status);
+					printf("\nStatus: %s",f.status);
 					if(feof(arquivo)){
 						break;
 					}
@@ -447,7 +449,7 @@ void consultafornecedor(int tipo){
 					printf("\nE-mail: %s",f.email);
 					printf("\nRepresentante: %s",f.nrepresentante);
 					printf("\nTelefone do Representante: %s",f.trepresentante);
-					printf("\nStatus: %s\n\n",f.status);
+					printf("\nStatus: %s",f.status);
 				}
 				fclose(arquivo);
 			}

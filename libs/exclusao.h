@@ -758,4 +758,8 @@ void excluiusuario(){
 	}
 
 }
+
+void resetaconfig(){
+	remove("config/config.bin");
+}
 #endif

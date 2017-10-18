@@ -72,6 +72,7 @@ int verificaconfig(){
 	}
 }
 
+char resposta[3];
 
 void menu(char com[50],int tiposave){
 	/*comandos de hospede*/
@@ -174,10 +175,23 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exac") == 0){
 		excluiacomodacao(tiposave);
 	}
+	else if(strcmp(com,"edac") == 0){
+		editaacomodacao(tiposave);
+	}
 
 	/*Outros comandos*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");
+	}
+	else if(strcmp(com,"rconfig") == 0){
+		amarelo("Tem certeza que deseja RESETAR a configuração do Sistema?\n: ");
+		scanf("%s",resposta);
+		if(strcmp(resposta,"Sim") || strcmp(resposta,"SIM") || strcmp(resposta,"sim")){
+			resetaconfig();
+		}
+		else{
+			branco("\nProcesso abortado!\n");
+		}
 	}
 	else if(strcmp(com,"32683") == 0){
 	}

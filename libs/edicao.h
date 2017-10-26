@@ -1070,8 +1070,350 @@ void editafornecedor(int tipo){
 	scanf("%i",&op);
 	switch(tipo){
 		case 1:
-			
+			arquivo = fopen("saves/fornecedores.txt","a+");
+			arquivo2 = fopen("saves/tempfornecedor.txt","a+");
+			if(arquivo2 == NULL){
+				vermelho("\nErro em localizar o arquivo de fornecedor!\n");
+			}
+			if(arquivo == NULL){
+				vermelho("\nErro em localizar o arquivo de fornecedor!\n");
+			}
+			else{
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
+					f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
+					f.trepresentante,f.status) != EOF){
+					if(f.codigo != codigo){
+						fprintf(arquivo2,"%u",f.codigo);
+						fprintf(arquivo2,"\n%s",f.nomefantasia);
+						fprintf(arquivo2,"\n%s",f.razaosocial);
+						fprintf(arquivo2,"\n%s",f.cnpj);
+						fprintf(arquivo2,"\n%s",f.insc);
+						fprintf(arquivo2,"\n%s",f.rua);
+						fprintf(arquivo2,"\n%s",f.numero);
+						fprintf(arquivo2,"\n%s",f.bairro);
+						fprintf(arquivo2,"\n%s",f.cep);
+						fprintf(arquivo2,"\n%s",f.complemento);
+						fprintf(arquivo2,"\n%s",f.cidadeestado.cidade);
+						fprintf(arquivo2,"\n%s",f.cidadeestado.estado);
+						fprintf(arquivo2,"\n%s",f.telefone);
+						fprintf(arquivo2,"\n%s",f.celular);
+						fprintf(arquivo2,"\n%s",f.email);
+						fprintf(arquivo2,"\n%s",f.nrepresentante);
+						fprintf(arquivo2,"\n%s",f.trepresentante);
+						fprintf(arquivo2,"\n%s\n\n",f.status);
+					}
+					else{
+						verifica = 0;
+						switch(op){
+							case 1:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Nome Fantasia: ");
+								scanf("%[^\n]s",f.nomefantasia);
+								verifica = 1;
+							break;
+							case 2:
+								setbuf(stdin,NULL);
+								printf("Digite a nova Razão Social: ");
+								scanf("%[^\n]s",f.razaosocial);
+								verifica = 1;
+							break;
+							case 3:
+								setbuf(stdin,NULL);
+								printf("Digite o novo CNPJ: ");
+								scanf("%[^\n]s",f.cnpj);
+								verifica = 1;
+							break;
+							case 4:
+								setbuf(stdin,NULL);
+								printf("Digite a nova Inscrição Estadual: ");
+								scanf("%[^\n]s",f.nomefantasia);
+								verifica = 1;
+							break;
+							case 5:
+								setbuf(stdin,NULL);
+								printf("Digite a novo Rua: ");
+								scanf("%[^\n]s",f.rua);
+								verifica = 1;
+							break;
+							case 6:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Número: ");
+								scanf("%[^\n]s",f.numero);
+								verifica = 1;
+							break;
+							case 7:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Bairro: ");
+								scanf("%[^\n]s",f.bairro);
+								verifica = 1;
+							break;
+							case 8:
+								setbuf(stdin,NULL);
+								printf("Digite o novo CEP: ");
+								scanf("%[^\n]s",f.cep);
+								verifica = 1;
+							break;
+							case 9:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Complemento: ");
+								scanf("%[^\n]s",f.complemento);
+								verifica = 1;
+							break;
+							case 10:
+								setbuf(stdin,NULL);
+								printf("Digite a novo Cidade: ");
+								scanf("%[^\n]s",f.cidadeestado.cidade);
+								verifica = 1;
+							break;
+							case 11:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Estado: ");
+								scanf("%[^\n]s",f.cidadeestado.estado);
+								verifica = 1;
+							break;
+							case 12:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Telefone: ");
+								scanf("%[^\n]s",f.telefone);
+								verifica = 1;
+							break;
+							case 13:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Celular: ");
+								scanf("%[^\n]s",f.celular);
+								verifica = 1;
+							break;
+							case 14:
+								setbuf(stdin,NULL);
+								printf("Digite o novo E-Mail: ");
+								scanf("%[^\n]s",f.email);
+								verifica = 1;
+							break;
+							case 15:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Representante: ");
+								scanf("%[^\n]s",f.nrepresentante);
+								verifica = 1;
+							break;
+							case 16:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Telefone do Representante: ");
+								scanf("%[^\n]s",f.trepresentante);
+								verifica = 1;
+							break;
+							case 17:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Status: ");
+								scanf("%[^\n]s",f.status);
+								verifica = 1;
+							break;
+							default:
+								vermelho("\nOpção inválida!!\n");
+							break;
+						}
+					}
+				}
+				if(verifica == 1){
+					fprintf(arquivo2,"%u",f.codigo);
+					fprintf(arquivo2,"\n%s",f.nomefantasia);
+					fprintf(arquivo2,"\n%s",f.razaosocial);
+					fprintf(arquivo2,"\n%s",f.cnpj);
+					fprintf(arquivo2,"\n%s",f.insc);
+					fprintf(arquivo2,"\n%s",f.rua);
+					fprintf(arquivo2,"\n%s",f.numero);
+					fprintf(arquivo2,"\n%s",f.bairro);
+					fprintf(arquivo2,"\n%s",f.cep);
+					fprintf(arquivo2,"\n%s",f.complemento);
+					fprintf(arquivo2,"\n%s",f.cidadeestado.cidade);
+					fprintf(arquivo2,"\n%s",f.cidadeestado.estado);
+					fprintf(arquivo2,"\n%s",f.telefone);
+					fprintf(arquivo2,"\n%s",f.celular);
+					fprintf(arquivo2,"\n%s",f.email);
+					fprintf(arquivo2,"\n%s",f.nrepresentante);
+					fprintf(arquivo2,"\n%s",f.trepresentante);
+					fprintf(arquivo2,"\n%s\n\n",f.status);
+					verde("\nDados alterados com sucesso!\n");
+					remove("saves/fornecedores.txt");
+					rename("saves/tempfornecedor.txt","saves/fornecedores.txt");
+				}
+			}
+		break;
+		case 2:
+			arquivo = fopen("saves/fornecedores.bin","ab+");
+			arquivo2 = fopen("saves/tempfornecedor.bin","ab+");
+			if(arquivo2 == NULL){
+				vermelho("\nErro em localizar o arquivo de fornecedor!\n");
+			}
+			if(arquivo == NULL){
+				vermelho("\nErro em localizar o arquivo de fornecedor!\n");
+			}
+			else{
+				while(!feof(arquivo)){
+					fread(&f,sizeof(struct fornecedores),1,arquivo);
+					if(feof(arquivo)){
+						break;
+					}
+					if(f.codigo != codigo){
+						fwrite(&f,sizeof(struct fornecedores),1,arquivo2);
+					}
+					else{
+						verifica = 0;
+						switch(op){
+							case 1:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Nome Fantasia: ");
+								scanf("%[^\n]s",f.nomefantasia);
+								verifica = 1;
+							break;
+							case 2:
+								setbuf(stdin,NULL);
+								printf("Digite a nova Razão Social: ");
+								scanf("%[^\n]s",f.razaosocial);
+								verifica = 1;
+							break;
+							case 3:
+								setbuf(stdin,NULL);
+								printf("Digite o novo CNPJ: ");
+								scanf("%[^\n]s",f.cnpj);
+								verifica = 1;
+							break;
+							case 4:
+								setbuf(stdin,NULL);
+								printf("Digite a nova Inscrição Estadual: ");
+								scanf("%[^\n]s",f.nomefantasia);
+								verifica = 1;
+							break;
+							case 5:
+								setbuf(stdin,NULL);
+								printf("Digite a novo Rua: ");
+								scanf("%[^\n]s",f.rua);
+								verifica = 1;
+							break;
+							case 6:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Número: ");
+								scanf("%[^\n]s",f.numero);
+								verifica = 1;
+							break;
+							case 7:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Bairro: ");
+								scanf("%[^\n]s",f.bairro);
+								verifica = 1;
+							break;
+							case 8:
+								setbuf(stdin,NULL);
+								printf("Digite o novo CEP: ");
+								scanf("%[^\n]s",f.cep);
+								verifica = 1;
+							break;
+							case 9:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Complemento: ");
+								scanf("%[^\n]s",f.complemento);
+								verifica = 1;
+							break;
+							case 10:
+								setbuf(stdin,NULL);
+								printf("Digite a novo Cidade: ");
+								scanf("%[^\n]s",f.cidadeestado.cidade);
+								verifica = 1;
+							break;
+							case 11:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Estado: ");
+								scanf("%[^\n]s",f.cidadeestado.estado);
+								verifica = 1;
+							break;
+							case 12:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Telefone: ");
+								scanf("%[^\n]s",f.telefone);
+								verifica = 1;
+							break;
+							case 13:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Celular: ");
+								scanf("%[^\n]s",f.celular);
+								verifica = 1;
+							break;
+							case 14:
+								setbuf(stdin,NULL);
+								printf("Digite o novo E-Mail: ");
+								scanf("%[^\n]s",f.email);
+								verifica = 1;
+							break;
+							case 15:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Representante: ");
+								scanf("%[^\n]s",f.nrepresentante);
+								verifica = 1;
+							break;
+							case 16:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Telefone do Representante: ");
+								scanf("%[^\n]s",f.trepresentante);
+								verifica = 1;
+							break;
+							case 17:
+								setbuf(stdin,NULL);
+								printf("Digite o novo Status: ");
+								scanf("%[^\n]s",f.status);
+								verifica = 1;
+							break;
+							default:
+								vermelho("\nOpção inválida!!\n");
+							break;
+						}
+					}
+				}
+				if(verifica == 1){
+					fwrite(&f,sizeof(struct fornecedores),1,arquivo2);
+					verde("\nDados alterados com sucesso!\n\n");
+					remove("saves/fornecedores.bin");
+					rename("saves/tempfornecedor.bin","saves/fornecedores.bin");
+					fclose(arquivo);
+					fclose(arquivo2);				
+				}
+			}
 		break;
 	}
+}
+
+void editausuario(){
+	struct usuarios u;
+	FILE *arquivo;
+	FILE *arquivo2;
+	int op,codigo,verifica;
+	ciano("\nEdição de Fornecedores!\n");
+	printf("Digite o código do Usuário que será editado: ");
+	scanf("%i",&codigo);
+	printf("Digite o que será editado: \n1 - Nome do Usuário\n2 - Login\n3 - Senha\n4 - Permissão\n5 - Status\n: ");
+	scanf("%i",&op);
+	arquivo = fopen("saves/usuarios.bin","ab+");
+	arquivo2 = fopen("saves/tempusuario.bin","ab+");
+	if(arquivo2 == NULL){
+		vermelho("\nErro em localizar o arquivo de usuários!\n");
+	}
+	if(arquivo == NULL){
+		vermelho("\nErro em localizar o arquivo de usuários!\n");
+	}
+	else{
+		while(!feof(arquivo)){
+			fread(&u,sizeof(struct usuarios),1,arquivo);
+			if(feof(arquivo)){
+				break;
+			}
+			if(u.codigo != codigo){
+				fwrite(&u,sizeof(struct usuarios),1,arquivo2);
+			}
+			else{
+				switch(op){
+					
+				}
+			}
+		}
+	}
+
 }
 #endif

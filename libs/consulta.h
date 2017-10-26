@@ -395,6 +395,7 @@ void consultafornecedor(int tipo){
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
 					f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
 					f.trepresentante,f.status) != EOF){
+					printf("\n----------------------------------------------------------------------------\n");
 					printf("Codigo: %u",f.codigo);
 					printf("\nNome Fantasia: %s",f.nomefantasia);
 					printf("\nRazão Social %s",f.razaosocial);
@@ -413,6 +414,7 @@ void consultafornecedor(int tipo){
 					printf("\nRepresentante: %s",f.nrepresentante);
 					printf("\nTelefone do Representante: %s",f.trepresentante);
 					printf("\nStatus: %s",f.status);
+					printf("\n----------------------------------------------------------------------------\n");
 					if(feof(arquivo)){
 						break;
 					}
@@ -432,6 +434,7 @@ void consultafornecedor(int tipo){
 					if(feof(arquivo)){
 						break;
 					}
+					printf("\n----------------------------------------------------------------------------\n");
 					printf("Codigo: %u",f.codigo);
 					printf("\nNome Fantasia: %s",f.nomefantasia);
 					printf("\nRazão Social %s",f.razaosocial);
@@ -450,6 +453,7 @@ void consultafornecedor(int tipo){
 					printf("\nRepresentante: %s",f.nrepresentante);
 					printf("\nTelefone do Representante: %s",f.trepresentante);
 					printf("\nStatus: %s",f.status);
+					printf("\n----------------------------------------------------------------------------\n");
 				}
 				fclose(arquivo);
 			}
@@ -475,6 +479,7 @@ void consultausuario(){
 			if(feof(arquivo)){
 					break;
 			}
+			printf("\n----------------------------------------------------------------------------\n");
 			printf("Código: %u",u.codigo);
 			printf("\nNome do Usuário: %s",u.nome);
 			printf("\nLogin: %s",u.login);
@@ -484,8 +489,8 @@ void consultausuario(){
 				printf("*");
 			}
 			printf("\nPermissão: %i",u.permissao);
-			printf("\nStatus: %s\n\n",u.status);
-			
+			printf("\nStatus: %s",u.status);
+			printf("\n----------------------------------------------------------------------------\n");
 		}
 		fclose(arquivo);
 	}

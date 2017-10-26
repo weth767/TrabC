@@ -120,6 +120,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exf") == 0){
 		excluifornecedor(tiposave);
 	}
+	else if(strcmp(com,"edf") == 0){
+		editafornecedor(tiposave);
+	}
 
 
 	/*comando para cadastro de hospede*/

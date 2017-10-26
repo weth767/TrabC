@@ -1056,4 +1056,22 @@ void editaacomodacao(int tipo){
 		break;
 	}
 }
+
+void editafornecedor(int tipo){
+	struct fornecedores f;
+	FILE *arquivo;
+	FILE *arquivo2;
+	int op,codigo,verifica;
+	ciano("\nEdição de Fornecedores!\n");
+	printf("Digite o código do Fornecedor que será editado: ");
+	scanf("%i",&codigo);
+	printf("Digite o que será editado: \n1 - Nome Fantasia\n2 - Razão Social\n3 - CNPJ\n4 - Inscrição Estadual\n5 - Rua\n6 - Número\n7 - Bairro\n8 - CEP"
+		"\n9 - Complemento\n10 - Cidade\n11 - Estado\n12 - Telefone\n13 - Celular\n14 - E-Mail\n15 - Representante\n16 - Telefone Representante\n17 - Status\n: ");
+	scanf("%i",&op);
+	switch(tipo){
+		case 1:
+			
+		break;
+	}
+}
 #endif

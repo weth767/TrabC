@@ -136,6 +136,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"exus") == 0){
 		excluiusuario();
 	}
+	else if(strcmp(com,"edus") == 0){
+		editausuario();
+	}
 	/*comandos da categoria*/
 
 
@@ -193,7 +196,7 @@ void menu(char com[50],int tiposave){
 			resetaconfig();
 		}
 		else{
-			branco("\nProcesso abortado!\n");
+			amarelo("\nProcesso abortado!\n");
 		}
 	}
 	else if(strcmp(com,"32683") == 0){

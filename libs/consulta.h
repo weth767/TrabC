@@ -758,7 +758,7 @@ int codigousuario(){
 	int codigo = 0;
 	arquivo = fopen("saves/usuarios.bin","rb");
 	if(arquivo == NULL){
-		codigo = 0;
+		codigo = 1;
 	}
 	else{
 		while(!feof(arquivo)){
@@ -768,7 +768,6 @@ int codigousuario(){
 			}
 			codigo = u.codigo;
 		}
-		printf("\n%i\n", u.codigo);
 		codigo++;
 		fclose(arquivo);
 	}

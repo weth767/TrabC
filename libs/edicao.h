@@ -15,6 +15,7 @@ void editahospede(int tipo){
 	int codigo;
 	int op;
 	int verifica;
+	ciano("\nEdição de Hospedes!\n");
 	setbuf(stdin,NULL);
 	printf("Digite o código do hospede a ser editado: ");
 	scanf("%i",&codigo);
@@ -331,6 +332,7 @@ void editahotel(int tipo){
 	int codigo;
 	int op;
 	int verifica;
+	ciano("\nEdição de Hotel(is)!\n");
 	printf("Digite o codigo a ser editado: ");
 	scanf("%i",&codigo);
 	printf("Digite o que será editado:\n1 - Nome Fantasia\n2 - Razão Social\n3 - CNPJ\n4 - Inscrição Estadual\n5 - Rua\n6 - Número\n7 - Bairro\n8 - CEP\n9 - Complemento\n10 - Cidade\n11 - Estado\n12 - Telefone\n13 - E-Mail\n"
@@ -647,6 +649,7 @@ void editacategoria(int tipo){
 	int verifica;
 	int codigo;
 	int op;
+	ciano("\nEdição de Categorias!\n");
 	printf("Digite o código da categoria que será editada: ");
 	scanf("%i",&codigo);
 	printf("Digite o que será editado: \n1 - Descrição\n2 - Valor\n3 - Quantidade de Adultos\n4 - Quantidade de Crianças\n5 - Status\n: ");
@@ -1385,7 +1388,7 @@ void editausuario(){
 	FILE *arquivo;
 	FILE *arquivo2;
 	int op,codigo,verifica;
-	ciano("\nEdição de Fornecedores!\n");
+	ciano("\nEdição de Usuários!\n");
 	printf("Digite o código do Usuário que será editado: ");
 	scanf("%i",&codigo);
 	printf("Digite o que será editado: \n1 - Nome do Usuário\n2 - Login\n3 - Senha\n4 - Permissão\n5 - Status\n: ");
@@ -1408,11 +1411,49 @@ void editausuario(){
 				fwrite(&u,sizeof(struct usuarios),1,arquivo2);
 			}
 			else{
+				verifica = 0;
 				switch(op){
-					
+					case 1:
+						verifica = 1;
+						setbuf(stdin,NULL);
+						printf("Digite o novo Nome: ");
+						scanf("%[^\n]s",u.nome);
+					break;
+					case 2:
+						verifica = 1;
+						setbuf(stdin,NULL);
+						printf("Digite o novo Login: ");
+						scanf("%[^\n]s",u.login);
+					break;
+					case 3:
+						verifica = 1;
+						setbuf(stdin,NULL);
+						printf("Digite a nova Senha: ");
+						scanf("%[^\n]s",u.senha);
+					break;
+					case 4:
+						verifica = 1;
+						setbuf(stdin,NULL);
+						printf("Digite o nível de acesso do usuário\n1 - Acesso Mínimo;\n2 - Acesso Básico;\n3 - Acesso Comum;\n4 - Acesso Alto;\n5 - Acesso Máximo;\nDigite a nova Permissão: ");
+						scanf("%i",&u.permissao);
+					break;
+					case 5:
+						verifica = 1;
+						setbuf(stdin,NULL);
+						printf("Digite o novo Status: ");
+						scanf("%[^\n]s",u.status);
+					break;
 				}
 			}
 		}
+	}
+	if(verifica == 1){
+		fwrite(&u,sizeof(struct usuarios),1,arquivo2);
+		verde("\nDados alterados com sucesso!\n\n");
+		remove("saves/usuarios.bin");
+		rename("saves/tempusuario.bin","saves/usuarios.bin");
+		fclose(arquivo);
+		fclose(arquivo2);
 	}
 
 }

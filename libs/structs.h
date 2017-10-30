@@ -4,14 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+/*structs diretamente importantes ao sistema, possuem status*/
+/*struct de cidade e estado*/
 struct cidadeestado{
 	unsigned int codigo;
 	char cidade[40];
 	char estado[30];
 	char status[20];
 };
-
+/*struct de hospedes*/
 struct hospede{
 	unsigned int codigo;
 	char nome[50];
@@ -30,7 +31,7 @@ struct hospede{
 	char email[50];
 	char status[20];
 };
-
+/*struct para os hoteis*/
 struct hotel{
 	unsigned int codigo;
 	char razaosocial[50];
@@ -49,7 +50,7 @@ struct hotel{
 	char telefoneresponsavel[14];
 	char status[20];
 };
-
+/*struct para as categorias*/
 struct categorias{
 	unsigned int codigo;
 	char descricao[50];
@@ -70,7 +71,7 @@ struct extras{
 	int hidromassagem;
 	int banheira;
 };
-
+/*struct para as acomodações*/
 struct acomodacoes{
 	unsigned int codigo;
 	char descricao[50];
@@ -79,7 +80,7 @@ struct acomodacoes{
 	struct categorias categoria;
 	char status[20];
 };
-
+/*struct para os produtos*/
 struct produtos{
 	unsigned int codigo;
 	char descricao[50];
@@ -89,7 +90,7 @@ struct produtos{
 	float precovenda;
 	char status[20];
 };
-
+/*struct para os forncedores*/
 struct fornecedores{
 	unsigned int codigo;
 	char nomefantasia[50];
@@ -109,7 +110,7 @@ struct fornecedores{
 	char trepresentante[14];
 	char status[20];
 };
-
+/*struct para os usuários*/
 struct usuarios{
 	unsigned int codigo;
 	char nome[50];
@@ -118,7 +119,7 @@ struct usuarios{
 	int permissao;
 	char status[20];
 };
-
+/*struct para as configurações iniciais*/
 struct config{
 	int opcao;
 	char master_login[20];

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <locale.h>
 #include "config.h"
+#include "cores.h"
 /*********Comentar*******************/
 /*funcao para salvar para o hospede no arquivo texto*/
 void salvarhospede(int tipo){
@@ -21,7 +22,7 @@ void salvarhospede(int tipo){
 			/*verifica o arquivo texto*/
 			if(arquivo == NULL){
 				/*se for nulo, ou seja nao foi encontrado, mostra uma mensagem de erro*/
-				printf("\nErro em realizar o cadastro do hóspede no arquivo texto!!\n\n");
+				vermelho("\nErro em realizar o cadastro do hóspede no arquivo texto!!\n\n");
 			}
 			/*senao faz a insersao do arquivo*/
 			else{
@@ -42,7 +43,7 @@ void salvarhospede(int tipo){
 				fprintf(arquivo,"\n%s",h.estadocivil);
 				fprintf(arquivo,"\n%s",h.email);
 				fprintf(arquivo,"\n%s\n\n",h.status);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			/*e por fim fecha o arquivo*/
 			fclose(arquivo);
@@ -53,18 +54,18 @@ void salvarhospede(int tipo){
 			arquivo = fopen("saves/hospedes.bin","ab");
 			/*caso o arquivo nao exista o ponteiro retornara nulo*/
 			if(arquivo == NULL){
-				printf("Erro em realizar o cadastro do hóspede no arquivo binário!!\n\n");
+				vermelho("Erro em realizar o cadastro do hóspede no arquivo binário!!\n\n");
 			}
 			/*caso exista sera inserido os dados em binario*/
 			else{
 				fwrite(&h,sizeof(struct hospede),1,arquivo);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			/*e por fim fecha o ponteiro*/
 			fclose(arquivo);
 		break;
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }
@@ -81,7 +82,7 @@ void salvarhotel(int tipo){
 			arquivo = fopen("saves/hoteis.txt","a+");
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de hotel!!\n\n");
+				vermelho("\nErro em realizar o cadastro de hotel!!\n\n");
 			}
 			//senão houver nenhum problema, salva os arquivos no txt que foi criado
 			else{
@@ -102,7 +103,7 @@ void salvarhotel(int tipo){
 				fprintf(arquivo,"\n%s",ht.nomeresponsavel);
 				fprintf(arquivo,"\n%s",ht.telefoneresponsavel);
 				fprintf(arquivo,"\n%s\n\n",ht.status);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			//ao final do salvamento, finalizo o ponteiro e encerro o salvamento de arquivos
 			fclose(arquivo);
@@ -111,16 +112,16 @@ void salvarhotel(int tipo){
 			arquivo = fopen("saves/hoteis.bin","ab");
 
 			if(arquivo == NULL){
-				printf("Erro em realizar o cadastro do hotel no arquivo binário!!\n\n");
+				vermelho("Erro em realizar o cadastro do hotel no arquivo binário!!\n\n");
 			}
 			else{
 				fwrite(&ht,sizeof(struct hotel),1,arquivo);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);
 		break;
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 	
@@ -140,7 +141,7 @@ void salvarcategorias(int tipo){
 			//agora verifico se o arquivo existe, senao sera criado na hora
 			//senao for criado da mensagem de erro
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de categoria!!\n\n");
+				vermelho("\nErro em realizar o cadastro de categoria!!\n\n");
 			}
 			//se for criado salva os dados no arquivo txt
 			else{
@@ -150,23 +151,23 @@ void salvarcategorias(int tipo){
 				fprintf(arquivo,"\n%i",c.quantidadeadultos);
 				fprintf(arquivo,"\n%i",c.quantidadecriancas);
 				fprintf(arquivo,"\n%s\n\n",c.status);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);
 		break;
 		case 2:
 			arquivo = fopen("saves/categorias.bin","ab");
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de categoria!!\n\n");
+				vermelho("\nErro em realizar o cadastro de categoria!!\n\n");
 			}
 			else{
 				fwrite(&c,sizeof(struct categorias),1,arquivo);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);
 		break;
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 	
@@ -184,7 +185,7 @@ void salvaracomodacao(int tipo){
 			arquivo = fopen("saves/acomodacoes.txt","a+");
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de acomodações!!\n\n");
+				vermelho("\nErro em realizar o cadastro de acomodações!!\n\n");
 			}
 			//senão houver nenhum problema, salva os arquivos no txt que foi criado
 			else{
@@ -201,23 +202,23 @@ void salvaracomodacao(int tipo){
 				fprintf(arquivo,"\n%i",ac.extra.banheira);
 				fprintf(arquivo,"\n%i",ac.categoriaselecionada);
 				fprintf(arquivo,"\n%s\n\n",ac.status);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);
 		break;
 		case 2:
 			arquivo = fopen("saves/acomodacoes.bin","ab");
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de acomodações!!\n\n");
+				vermelho("\nErro em realizar o cadastro de acomodações!!\n\n");
 			}
 			else{
 				fwrite(&ac,sizeof(struct acomodacoes),1,arquivo);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);
 		break;
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }
@@ -234,7 +235,7 @@ void salvarproduto(int tipo){
 			arquivo = fopen("saves/produtos.txt","a+");
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de produtos!!\n");
+				vermelho("\nErro em realizar o cadastro de produtos!!\n");
 			}
 			//senão houver nenhum problema, salva os arquivos no txt que foi criado
 			else{
@@ -245,7 +246,7 @@ void salvarproduto(int tipo){
 				fprintf(arquivo,"\n%.2f",p.precocusto);
 				fprintf(arquivo,"\n%.2f",p.precovenda);
 				fprintf(arquivo,"\n%s\n\n",p.status);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
 			fclose(arquivo);
 		break;
@@ -254,34 +255,45 @@ void salvarproduto(int tipo){
 			/*tenta abrir o arquivo*/
 			arquivo = fopen("saves/produtos.bin","ab");
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de produtos!!\n");
+				vermelho("\nErro em realizar o cadastro de produtos!!\n");
 			}
 			/*se der tudo certo*/
 			else{
 				/*salva os dados no arquivo binario*/
 				fwrite(&p,sizeof(struct produtos),1,arquivo);
-				printf("\nDados foram salvos com sucesso!\n");
+				verde("\nDados foram salvos com sucesso!\n");
 			}
 			fclose(arquivo);
 		break;
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	} 
 	
 }
 
 void salvarfornecedor(int tipo){
+	/*chama a struct do forncedor para ter acesso as suas variaveis*/
 	struct fornecedores f;
+	/*seta o linguagem local como portugues para evitar erros de leitura*/
 	setlocale(LC_ALL,"Portuguese");
+	/*cria um ponteiro de arquivo*/
 	FILE *arquivo;
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*se for tipo 1 ou txt*/
 		case 1:
+		/*abre o arquivo*/
 			arquivo = fopen("saves/fornecedores.txt","a+");
+			/*verifica se sua abertura aconteceu*/
+			/*se houver algum erro, mostra mensagem de erro*/
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de fornecedores!!\n");
+				vermelho("\nErro em realizar o cadastro de fornecedores!!\n");
 			}
+			/*senão salva os dados daquele forneceodr*/
 			else{
+				/*fprintf, comando para salvar no arquivo, no caso de arquivo do tipo texto*/
+				/*como parametro é passado o ponteiro do arquivo, a codificação do item ex: %i, e a variavel da struct*/
 				fprintf(arquivo,"%u",f.codigo);
 				fprintf(arquivo,"\n%s",f.nomefantasia);
 				fprintf(arquivo,"\n%s",f.razaosocial);
@@ -300,23 +312,34 @@ void salvarfornecedor(int tipo){
 				fprintf(arquivo,"\n%s",f.nrepresentante);
 				fprintf(arquivo,"\n%s",f.trepresentante);
 				fprintf(arquivo,"\n%s\n\n",f.status);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				/*mostra a mensagem de sucesso*/
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
+			/*fecha o arquivo*/
 			fclose(arquivo);
 		break;
+		/*se for o tipo 2, ou binario*/
 		case 2:
+		/*abre o arquivo binario*/
 			arquivo = fopen("saves/fornecedores.bin","ab");
+			/*verifica se o arquivo foi aberto*/
+			/*caso tenha acontecido algum erro mostra mensagem na tela*/
 			if(arquivo == NULL){
-				printf("\nErro em realizar o cadastro de fornecedores!!\n");	
+				vermelho("\nErro em realizar o cadastro de fornecedores!!\n");	
 			}
+			/*se deu tudo certo salva os dados no arquivo*/
 			else{
+				/*fwrite, comando para salvar dados no arquivo, &nomestruct,tamanhostruct, quantidadededadossalva,arquivo*/
 				fwrite(&f,sizeof(struct fornecedores),1,arquivo);
-				printf("\nDados foram salvos com sucesso!\n\n");
+				/*mostra mensagem de sucesso*/
+				verde("\nDados foram salvos com sucesso!\n\n");
 			}
+			/*fecha o arquivo*/
 			fclose(arquivo);	
 		break;
+		/*mostra mensagem caso seja alguma opção diferente das já implementadas*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }
@@ -330,12 +353,12 @@ void salvarusuarios(){
 	arquivo = fopen("saves/usuarios.bin","ab");
 	//verifico a nulidade do arquivo que sera criado
 	if(arquivo == NULL){
-		printf("\nErro em realizar o cadastro de usuário!\n");
+		vermelho("\nErro em realizar o cadastro de usuário!\n");
 	}
 	/*se estiver tudo ok, salva o arquivo*/
 	else{
 		fwrite(&u,sizeof(struct usuarios),1,arquivo);
-		printf("\nDados salvos com sucesso!\n");
+		verde("\nDados salvos com sucesso!\n");
 	}
 	//fecha o ponteiro
 	fclose(arquivo);

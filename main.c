@@ -6,6 +6,8 @@
  *
  * Created on 10 de Agosto de 2017, 13:32
  */ 
+
+/*bibliotecas*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,44 +19,61 @@
 #include "libs/exclusao.h"
 #include "libs/edicao.h"
 #include "libs/cores.h"
+/***/
 
-
+/*função para verificar o login*/
 int login(){
+	/*dois vetores de char's para receber o login e a senha*/
 	char login[20];
 	char senha[20];
+	/*Armazena o login e a senha*/
 	printf("Login: ");
 	scanf("%s",login);
 	printf("Senha: ");
 	scanf("%s",senha);
+	/*chama a função para verificar se o usuario com esse login e essa senha existe*/
 	if(verificausuario(login,senha) == 1){
+		/*caso existe retorna 1*/
 		return 1;
 	}
 	else{
+		/*senão retorna 0*/
 		return 0;
 	}
 }
-
+/*funcao para realizar a configuração inicial*/
 void config(){
+	/*limpa a tela*/
 	system("clear");
 	int op;
 	char mlogin[20];
 	char msenha[20];
+	/*Mostra mensagem ao usuário, indicando o que será feito*/
 	branco("Início do Sistema!\n\n");
 	branco("Agora será feita a configuração de salvamento do sistema.");
 	branco("\nSua escolha será imutável durante todo o uso do programa, escolha sabiamente.");
+	/*armazena a opção de salvamento*/
 	branco("O tipo de salvamento será:\n1 - Arquivo Texto;\n2 - Arquivo Binário;\n3 - Banco de Dados;\n4 - Nuvem;\nDigite o número de sua opção: ");
 	scanf("%i",&op);
 	setbuf(stdin,NULL);
+	/*e armazena o login e a senha master*/
 	branco("Digite o login de primeiro acesso(master): ");
 	scanf("%s",mlogin);
 	setbuf(stdin,NULL);
 	branco("Digite a senha de primeiro acesso(master): ");
 	scanf("%s",msenha);
+	/*valores armazenados que são passados como parametros para a função configsave*/
 	configsave(op,mlogin,msenha);
 	system("clear");
 }
 
+/*função para verificar o tipo de save*/
 int verificaconfig(){
+	/*caso o tipo de save for igual a um valor diferente de 0, retorna o número de acordo com esse tipo de save,
+	1 para texto
+	2 para binario 
+	3 e 4 não implementados ainda
+	0 retorna invalido*/
 	if(verificasave() == 1){
 		return 1;	
 	}
@@ -73,7 +92,7 @@ int verificaconfig(){
 }
 
 char resposta[3];
-
+/*função menu, aqui são verificados os comandos referentes ao sistema*/
 void menu(char com[50],int tiposave){
 	/*comandos de hospede*/
 	/*cadastro de hospede*/
@@ -85,10 +104,11 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"cshp") == 0){
 		consultahospede(tiposave);
 	}
+	/*excluir hospede*/
 	else if(strcmp(com,"exhp") == 0){
 		excluihospede(tiposave);
 	}
-
+	/*editar hospede*/
 	else if(strcmp(com,"edhp") == 0){
 		editahospede(tiposave);
 	}
@@ -102,9 +122,11 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"csht") == 0){
 		consultahotel(tiposave);
 	}
+	/*excluir hotel*/
 	else if(strcmp(com,"exht") == 0){
 		excluihotel(tiposave);
 	}
+	/*editar hotel*/
 	else if(strcmp(com,"edht") == 0){
 		editahotel(tiposave);
 	}
@@ -114,120 +136,154 @@ void menu(char com[50],int tiposave){
 		cadastrafornecedor();
 		salvarfornecedor(tiposave);
 	}
+	/*consulta os dados do fornecedor*/
 	else if(strcmp(com,"csf") == 0){
 		consultafornecedor(tiposave);
 	}
+	/*excluir forncedores*/
 	else if(strcmp(com,"exf") == 0){
 		excluifornecedor(tiposave);
 	}
+	/*editar fornecedores*/
 	else if(strcmp(com,"edf") == 0){
 		editafornecedor(tiposave);
 	}
 
-
-	/*comando para cadastro de hospede*/
+	/*comando para cadastro de usuario*/
 	else if(strcmp(com,"cadus") == 0){
 		cadastrausuario();
 		salvarusuarios();
 	}
+	/*consulta dados do usuario*/
 	else if(strcmp(com,"csus") == 0){
 		consultausuario();
 	}
+	/*excluir usuário*/
 	else if(strcmp(com,"exus") == 0){
 		excluiusuario();
 	}
+	/*editar usuário*/
 	else if(strcmp(com,"edus") == 0){
 		editausuario();
 	}
-	/*comandos da categoria*/
 
-
+	/*comando para cadastro de categoria*/
 	else if(strcmp(com,"cadc") == 0){
 		cadastracategoria();
 		salvarcategorias(tiposave);
 	}
+	/*comando para consultar categoria*/
 	else if(strcmp(com,"csc") == 0){
 		consultacategoria(tiposave);	
 	}
+	/*excluir categoria*/
 	else if(strcmp(com,"exc") == 0){
 		excluicategoria(tiposave);
 	}
+	/*editar categoria*/
 	else if(strcmp(com,"edc") == 0){
 		editacategoria(tiposave);
 	}
 
 
-	/*comandos do produto*/
+	/*comandos de cadastrar produto*/
 	else if(strcmp(com,"cadp") == 0){
 		cadastraproduto();
 		salvarproduto(tiposave);
 	}
+	/*consultar os produtos*/
 	else if(strcmp(com,"csp") == 0){
 		consultaproduto(tiposave);
 	}
+	/*excluir produto*/
 	else if(strcmp(com,"exp") == 0){
 		excluiproduto(tiposave);
 	}
+	/*editar produto*/
+	else if(strcmp(com,"edp") == 0){
 
+	}
 
-	/*comandos de acomodação*/
+	/*comando para cadastrar acomodação*/
 	else if(strcmp(com,"cadac") == 0){
 		cadastraacomodacao();
 		salvaracomodacao(tiposave);
 	}
+	/*consultar acomodação*/
 	else if(strcmp(com,"csac") == 0){
 		consultaacomodacao(tiposave);
 	}
+	/*excluir acomodação*/
 	else if(strcmp(com,"exac") == 0){
 		excluiacomodacao(tiposave);
 	}
+	/*editar acomodação*/
 	else if(strcmp(com,"edac") == 0){
 		editaacomodacao(tiposave);
 	}
 
 	/*Outros comandos*/
+	/*comando para limpar a tela*/
 	else if(strcmp(com,"lt") == 0){
 		system("clear");
 	}
+	/*comando para dar reset na configuração*/
 	else if(strcmp(com,"rconfig") == 0){
+		/*avisa ao usuário a operação critica que ele está realizando*/
 		amarelo("Tem certeza que deseja RESETAR a configuração do Sistema?\n: ");
 		scanf("%s",resposta);
+		/*verifica a resposta e caso for sim reseta a configuração*/
 		if(strcmp(resposta,"Sim") || strcmp(resposta,"SIM") || strcmp(resposta,"sim")){
 			resetaconfig();
 		}
 		else{
+			/*senão aborta o processo*/
 			amarelo("\nProcesso abortado!\n");
 		}
 	}
+	/*comando easter-egg*/
 	else if(strcmp(com,"32683") == 0){
 	}
+	/*comando help do sistema*/
+	else if(strcmp(com,"help") == 0){
+
+	}
+	/*comando inválido*/
 	else{
 		vermelho("\nComando Inválido!\n\n");
 	}
 }
 
 char comando[50];
- 
+
+/*função principal*/
 int main(int argc, char** argv) {
 	int verifica = 0;
+	/*caso não exista, cria as pastas necessárias ao sistema*/
 	system("mkdir config");
 	system("mkdir saves");
 	system("mkdir libs");
+	/*limpa tela*/
 	system("clear");
+	/*um while que sempre ira rodar, ou seja o sistema executa até que o usuário mande sair*/
 	while(1){
 		//verifica a configuração inicial, caso não tenha sido feita, obrigatoriamente o usuário terá que faze-la.
 		if(verificaconfig() == 0){
 			config();
 		}
 		else{
+			/*verifica o login e a senha*/
 			while(verifica == 0){
+				/*o login estiver correto com algum existente*/
 				if(login() == 1){
+					/*usuário conecta*/
 					verifica = 1;
 					verde("\nUsuário conectado com sucesso!!\n\n");
 					sleep(1);
 					system("clear");
 				}
 				else{
+					/*Senão mostra a mensagem*/
 					vermelho("\nLogin e/ou senha incorreto(s)!!\n\n");
 					sleep(1);
 					system("clear");
@@ -236,11 +292,14 @@ int main(int argc, char** argv) {
 			/*Funcoes*/
 			/*Após a config feita, o usuário será direcionado para a tela de opções*/
 			/*Abaixo sera a parte dos comandos relacionados ao sistema*/
-			setbuf(stdin,NULL);	
+			setbuf(stdin,NULL);
+			/*recebe o comando*/	
 			printf("Digite um comando: ");
 			scanf("%[^\n]s",comando);
 			setbuf(stdin,NULL);
+			/*caso o comando seja sair*/
 			if(strcmp(comando,"sair") == 0){
+				/*conta 5 segundos e sai do sistema*/
 				printf("Adeus!\n\n");
 				for(int i = 5; i >= 1; i--){
 					printf("Saindo em: %i\n", i);

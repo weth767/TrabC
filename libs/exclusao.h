@@ -4,28 +4,42 @@
 #include <stdio.h>
 #include <string.h>
 #include "structs.h"
+#include "cores.h"
 
+/*função excluir hospede*/
+/*recebe o tipo de salvamento como parametro*/
 void excluihospede(int tipo){
+	/*cria dois ponteiros, um para o arquivo e outro para um arquivo temporário*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	/*chama a struct para ter acesso a suas variaveis*/
 	struct hospede h;
+	/*armazena o codigo que será excluido*/
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*se for tipo 1, é salvamento em texto*/
 		case 1:
+		/*abre o arquivo normal e o arquivo temporario*/
 			arquivo = fopen("saves/hospedes.txt","a+");
 			arquivo2 = fopen("saves/temphospede.txt","a+");
+			/*verifica erro na abertura dos dois arquivo*/
+			/*caso tenho mostra mensagem de erro*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
+			/*se estiver tudo ok, varre o arquivo*/
 			else{
+				/*faz a leitura do arquivo até que chegue ao final dele, armazenando os dados da struct hospede*/
 				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
+					/*verifica se o codigo que o usuário digitou é diferente do codigo lido, se for salva no arquivo temporario*/
 					if(h.codigo != codigo){
 						fprintf(arquivo2,"%u",h.codigo);
 						fprintf(arquivo2,"\n%s",h.nome);
@@ -45,8 +59,9 @@ void excluihospede(int tipo){
 						fprintf(arquivo2,"\n%s",h.email);
 						fprintf(arquivo2,"\n%s\n\n",h.status);
 					}
+					/*se for igual, mostra na tela o hospede selecionado*/
 					else{
-						printf("\nHospede selecionado: \n\n");
+						azulclaro("\nHospede selecionado: \n\n");
 						printf("Código: %u",h.codigo);
 						printf("\nNome: %s",h.nome);
 						printf("\nCPF: %s",h.cpf);
@@ -67,38 +82,58 @@ void excluihospede(int tipo){
 					}
 					
 				}
+				/*pergunta ao usuário se ele realmente deseja*/
 				setbuf(stdin,NULL);	
-				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*caso a resposta seja sim*/
 				if(op == 1){
+					/*exclui o hospode*/
+					/*remove o arquivo*/
 					remove("saves/hospedes.txt");
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
 					rename("saves/temphospede.txt","saves/hospedes.txt");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 		}
 		break;
+		/*tipo 2, salvamento em binário*/
 		case 2:
+		/*abre o arquivo normal e o temporário*/
 			arquivo = fopen("saves/hospedes.bin","ab+");
 			arquivo2 = fopen("saves/temphospede.bin","ab+");
+			/*verifica erros na abertura dos dois arquivos*/
+			/*caso haja erro, mostra mensagem na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
+			/*se estiver tudo ok, passa para proxima parte*/
 			else{
+				/*le o arquivo até seu final*/
 				while(!feof(arquivo)){
+					/*fread(struct,tamanho,quantidade,ponteiro)*/
 					fread(&h,sizeof(struct hospede),1,arquivo);
+					/*verifica se o codigo lido é diferente do digitado pelo usuário*/
 					if(h.codigo != codigo){
+						/*se for salva no arquivo temporário*/
 						fwrite(&h,sizeof(struct hospede),1,arquivo2);
 					}
+					/*se for igual*/
 					else{
+						/*verifica se já está no final do arquivo, para evitar bugs*/
 						if(feof(arquivo)){
+							/*se estiver, sai do laço*/
 							break;
 						}
-						printf("\nHospede selecionado: \n\n");
+						/*mostra o hospede selecionado*/
+						azulclaro("\nHospede selecionado: \n\n");
 						printf("Código: %u",h.codigo);
 						printf("\nNome: %s",h.nome);
 						printf("\nCPF: %s",h.cpf);
@@ -118,46 +153,65 @@ void excluihospede(int tipo){
 						printf("\nStatus: %s\n",h.status);
 					}
 				}
+				/*pergunta ao usuário se ele realmente deseja excluir*/
 				setbuf(stdin,NULL);	
-				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/hospedes.bin");
+					/*renomeia o arquivo temporario*/
 					rename("saves/temphospede.bin","saves/hospedes.bin");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*e mostra mensagem de sucesso*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);		
 			}
 		break;
+		/*mostra mensagem de erro, para opções de salvamento não implementadas*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }
-
+/*função exclui hotel, recebe como parametro o tipo de salvamento*/
 void excluihotel(int tipo){
+	/*cria dois ponteiros, um para o arquivo e um para o arquivo temporário*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	/*chama a struct para ter acesso a suas variaveis*/
 	struct hotel ht;
+	/*recebe o cdigo que o usuário deseja excluir*/
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for o tipo 1, é arquivo texto*/
 		case 1:
+		/*abre o arquivo original e o arquivo temporário*/
 			arquivo = fopen("saves/hoteis.txt","a+");
 			arquivo2 = fopen("saves/temphotel.txt","a+");
+			/*verifica erro nos dois arquivos*/
+			/*se houver erros, mostra mensagem na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do hotel!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hotel!!\n\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do hotel!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hotel!!\n\n");
 			}
+			/*se estiver tudo ok, se */
 			else{
+				/*varre o arquivo, até o seu final, armazenando os valores na struct de hotel*/
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,
 					ht.insc,ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,
 					ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status) !=EOF){
+					/*verifica se o código lido é diferente do código digitado pelo usuário*/
+					/*se for salva no arquivo temporário*/
 					if(ht.codigo != codigo){
 						fprintf(arquivo2,"%u",ht.codigo);
 						fprintf(arquivo2,"\n%s",ht.nomefantasia);
@@ -177,8 +231,9 @@ void excluihotel(int tipo){
 						fprintf(arquivo2,"\n%s",ht.telefoneresponsavel);
 						fprintf(arquivo2,"\n%s\n\n",ht.status);	
 					}
+					/*se for igual, mostra para o usuário o hotel selecionado*/
 					else{
-						printf("\nHotel selecionado:\n\n");
+						azulclaro("\nHotel selecionado:\n\n");
 						printf("Código: %u",ht.codigo);
 						printf("\nRazão Social: %s",ht.razaosocial);
 						printf("\nNome Fantasia: %s",ht.nomefantasia);
@@ -198,38 +253,57 @@ void excluihotel(int tipo){
 						printf("\nStatus: %s\n\n",ht.status);
 					}
 				}
+				/*pergunta ao usuário se ele realmente deseja excluir */
 				setbuf(stdin,NULL);	
-				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/hoteis.txt");
+					/*renomeia o arquivo temporário*/
 					rename("saves/temphotel.txt","saves/hoteis.txt");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*para o tipo de salvamento 2, arquivo binário*/
 		case 2:
+			/*abre os dois arquivos*/
 			arquivo = fopen("saves/hoteis.bin","ab+");
 			arquivo2 = fopen("saves/temphotel.bin","ab+");
+			/*verifica se houve erro na abertura dos arquivos*/
+			/*se houver erro mostra mensagem na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do hospede!!\n\n");
+				vermelho("\nErro em localizar o arquivo do hospede!!\n\n");
 			}
+			/*se estiver tudo ok*/
 			else{
+				/*varre o arquivo até o final*/
 				while(!feof(arquivo)){
+					/*le os dados do arquivo, salvando na struct*/
 					fread(&ht,sizeof(struct hotel),1,arquivo);
+					/*verifica se o código lido é diferente do código */
 					if(ht.codigo != codigo){
+						/*salva os dados no arquivo temporário*/
 						fwrite(&ht,sizeof(struct hotel),1,arquivo2);
 					}
+					/*se for código igual*/
 					else{
+						/*verifica se já está no final do arquivo*/
+						/*se estiver sai do laço*/
 						if(feof(arquivo)){
 							break;
 						}
-						printf("\nHotel selecionado:\n\n");
+						/*mostra o hotel selecionado*/
+						azulclaro("\nHotel selecionado:\n\n");
 						printf("Código: %u",ht.codigo);
 						printf("\nRazão Social: %s",ht.razaosocial);
 						printf("\nNome Fantasia: %s",ht.nomefantasia);
@@ -249,18 +323,25 @@ void excluihotel(int tipo){
 						printf("\nStatus: %s\n\n",ht.status);
 					}
 				}
+				/*pergunta se o usuário realmente quer excluir o hotel*/
 				setbuf(stdin,NULL);	
-				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/hoteis.bin");
+					/*renomeia o arquivo temporario*/
 					rename("saves/temphotel.bin","saves/hoteis.bin");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*mostra mensagem de erro, para opções de salvamento não implementadas*/
 		default:
 			printf("\nOpcao ainda não implementada ou não existente\n\n");
 		break;

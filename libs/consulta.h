@@ -4,24 +4,31 @@
 #include <string.h>
 #include <stdio.h>
 #include "structs.h"
+#include "cores.h"
 
 /*funcao para realizar a consulta do hospede*/
+/*recebe o tipo de salvamento por parametro*/
 void consultahospede(int tipo){
 	/*faço a chamada da struct, para ter acesso as variaveis do hospede*/
 	struct hospede h;
-	//crio um ponteiro do tipo arquivo para poder guardar a posicao dos dados do arquivo na memoria
+	//crio um ponteiro do tipo arquivo
 	FILE *arquivo;
+	ciano("\nConsulta de Hospedes\n\n");
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for 1, salvamento arquivo texto*/
 		case 1:
 			/*abro o arquivo*/
 			arquivo = fopen("saves/hospedes.txt","a+");
 			//verifico se ele foi aberto
+			/*se houver erros na abertura mostra mensagem na tela*/
 			if(arquivo == NULL){
-				printf("\nErro em realizar a consulta ou Não foram encontrados hospedes cadastrados\n\n");
+				vermelho("\nErro em realizar a consulta ou Não foram encontrados hospedes cadastrados\n\n");
 			}
+			/*se estiver tudo ok*/
 			else{
 				/*padronizo os dados que serao buscados*/
-				printf("\nDados dos Hospedes\n\n");
+				azulclaro("\nDados dos Hospedes\n\n");
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 						/*E vou listando os itens para o usuario em forma de lista*/
@@ -50,7 +57,7 @@ void consultahospede(int tipo){
 							break;
 						}
 				}
-				/*e no fim fecho o ponteiro do arquivo*/
+				/*e no fim fecho o arquivo*/
 				fclose(arquivo);
 			}	
 		break;
@@ -58,21 +65,23 @@ void consultahospede(int tipo){
 		case 2:
 			/*abre o arquivo*/
 			arquivo = fopen("saves/hospedes.bin","ab+");
-			/*verifica se ele pode ser aberto ou existe*/
+			/*verifica se ele foi aberto normalmente*/
+			/*se houve algum erro mostra mensagem na tela*/
 			if(arquivo == NULL){
-				printf("\nErro em realizar a consulta ou Não Foram encontrados hospedes cadastrados\n\n");
+				vermelho("\nErro em realizar a consulta ou Não Foram encontrados hospedes cadastrados\n\n");
 			}
 			/*se foi aberto, verifica os dados no arquivo*/
 			else{
 				/*enquanto nao for o final do arquivo vai mostrando os dados*/
-				printf("\nDados dos Hospedes\n\n");
+				azulclaro("\nDados dos Hospedes\n\n");
 				while(!feof(arquivo)){
 					/*verifica se ja alcancou o final do arquivo*/
 					fread(&h,sizeof(struct hospede),1,arquivo);
 					if(feof(arquivo)){
 						/*se ja sai do laco*/
 						break;
-					}		
+					}
+					/*mostra os hospedes em forma de lista*/		
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",h.codigo);
 					printf("\nNome: %s",h.nome);
@@ -95,29 +104,42 @@ void consultahospede(int tipo){
 					
 				}
 			}
-			/*e no final fecha o ponteiro*/
+			/*e no final fecha o arquivo*/
 			fclose(arquivo);
 		break;
+		/*mensagem de erro para opções de salvamento ainda não implementadas*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 	
 }
-
+/*função de consulta de dados dos hoteis*/
+/*recebe por parametro o tipo de salvamento*/
 void consultahotel(int tipo){
+	/*chama a struct do hotel para ter acesso a suas variaveis*/
 	struct hotel ht;
+	/*cria um ponterio do tipo arquivo para abrir o arquivo do hotel*/
 	FILE *arquivo;
+	ciano("\nConsulta de Hotéis\n\n");
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for tipo 1, arquivo texto*/
 		case 1:
+			/*abre o arquivo*/
 			arquivo = fopen("saves/hoteis.txt","a+");
+			/*verifca se houve erros na abertura*/
+			/*se houve, mostra mensagem na tela*/
 			if(arquivo == NULL){
-				printf("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");	
+				vermelho("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");	
 			}
+			/*se estiver tudo ok*/
 			else{
-				printf("\nDados do(s) Hotel(éis)\n\n");
+				/*verifica até o final do arquivo */
+				azulclaro("\nDados do(s) Hotel(éis)\n\n");
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,ht.insc,
 					ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status) !=EOF){
+					/*mostrando os hoteis cadastrados em forma de lista*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",ht.codigo);
 					printf("\nRazão Social: %s",ht.razaosocial);
@@ -143,15 +165,20 @@ void consultahotel(int tipo){
 						break;
 					}
 				}
+				/*fecha o arquivo no final*/
 				fclose(arquivo);
 			}	
 		break;
 		case 2:
+			/*caso o tipo de salvamento for 2, arquivo binário*/
 			arquivo = fopen("saves/hoteis.bin","ab+");
+			/*verifica se há erros na abertura do arquivo*/
 			if(arquivo == NULL){
-				printf("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");
+				/*se houver, mostra mensagem de erro na tela*/
+				vermelho("Erro em realizar a consulta ou Não foram encontrados hotéis cadastrados\n\n");
 			}
 			else{
+				azulclaro("\nDados do(s) Hotel(éis)\n\n");
 				while(!feof(arquivo)){
 					fread(&ht,sizeof(struct hotel),1,arquivo);
 					/*verifica se ja alcancou o final do arquivo*/
@@ -159,6 +186,7 @@ void consultahotel(int tipo){
 						/*se ja sai do laco*/
 						break;
 					}
+					/*mostra os hoteis cadastrados em forma de lista*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",ht.codigo);
 					printf("\nRazão Social: %s",ht.razaosocial);
@@ -181,26 +209,41 @@ void consultahotel(int tipo){
 				}	
 				
 			}
+			/*fecha o arquivo*/
 			fclose(arquivo);
 		break;
+		/*mensagem de erro para opções de salvemento ainda não implementadas*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 	
 }
+/*função de consulta de produtos*/
+/*recebe o tipo de salvamento por parametro*/
 void consultaproduto(int tipo){
+	/*chama a struct para acessar as variaveis do produto*/
 	struct produtos p;
+	ciano("\nConsulta de Produtos\n\n");
+	/*cria um ponteiro do tipo arquivo para abrir o arquivo de produtos*/
 	FILE *arquivo;
+	/*verifica o tipo de salvamento */
 	switch(tipo){
+		/*se o tipo de salvamento for 1, arquivo texto*/
 		case 1:
+			/*abre o arquivo de produtos*/
 			arquivo = fopen("saves/produtos.txt","a+");
+			/*verifica se houve erros na abertura do arquivo*/
+			/*se houve algum erro mostra mensagem na tela*/
 			if(arquivo == NULL){
-				printf("\nErro em realizar a consulta ou Não foram encontrados produtos cadastrados\n\n");
+				vermelho("\nErro em realizar a consulta ou Não foram encontrados produtos cadastrados\n\n");
 			}
+			/*se estiver tudo ok*/
 			else{
-				printf("\nDados do(s) Produto(s)\n\n");
+				/*verifica o arquivo e mostra os produtos cadastrados*/
+				azulclaro("\nDados do(s) Produto(s)\n\n");
 				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+					/*mostra os produtos em forma de lista*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição: %s",p.descricao);
@@ -216,21 +259,31 @@ void consultaproduto(int tipo){
 						break;
 					}
 				}
+				/*fecha o arquivo*/
 				fclose(arquivo);		
 			}
 		break;
+		/*caso for o tipo de salvamento 2, arquivo binário*/
 		case 2:
+			/*abre o arquivo*/
 			arquivo = fopen("saves/produtos.bin","ab+");
+			/*verifica se houve algum erro na abertura do arquivo*/
+			/*se houve algum erro mostra na tela um aviso*/
 			if(arquivo == NULL){
-				printf("\nErro em realizar a consulta ou Não foram encontrados produtos cadastrados\n\n");
+				vermelho("\nErro em realizar a consulta ou Não foram encontrados produtos cadastrados\n\n");
 			}
+			/*se estiver tudo ok..*/
 			else{
+				azulclaro("\nDados do(s) Produto(s)\n\n");
+				/*verifica todo o arquivo*/
 				while(!feof(arquivo)){
+					/*armazena cada produto por vez na struct*/
 					fread(&p,sizeof(struct produtos),1,arquivo);
 					if(feof(arquivo)){
 						/*se ja sai do laco*/
 						break;
 					}
+					/*mostra em forma de lista na tela*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição: %s",p.descricao);
@@ -242,30 +295,43 @@ void consultaproduto(int tipo){
 					printf("\n----------------------------------------------------------------------------\n");
 					
 				}
+				/*fecha o arquivo*/
 				fclose(arquivo);
 			}
-
 		break;
+		/*mensagem de erro para opções de salvamento ainda não implementadas*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 	
 }
-
+/*função de consulta de acomodação*/
+/*recebe como parametro, o tipo de salvamento*/
 void consultaacomodacao(int tipo){
+	/*chama a struct de acomodações para ter acesso a suas variaveis*/
 	struct acomodacoes ac;
+	/*cria um ponteiro do tipo arquivo para abrir o arquivo de acomods*/
 	FILE *arquivo;
+	ciano("\nConsulta de Acomodações\n\n");
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for o tipo de salvamento 1, arquivo texto*/
 		case 1:
+			/*abre o arquivo de acomodacoes*/
 			arquivo = fopen("saves/acomodacoes.txt","a+");
+			/*verifica se houve erro na abertura do arquivo*/
+			/*se houver erro mostra mensagem de erro na tela*/
 			if(arquivo == NULL){
-				printf("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n");
+				vermelho("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n");
 			}
+			/*se estiver tudo ok..*/
 			else{
-				printf("Acomodações cadastradas((valores númericos representam quantidade)não considerando a categoria): \n\n");
+				/*le o arquivo*/
+				azulclaro("Acomodações cadastradas((valores númericos representam quantidade)não considerando a categoria): \n\n");
 				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,
 					&ac.extra.arcondicionado,&ac.extra.frigobar,&ac.extra.banheiro,&ac.extra.camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,&ac.extra.banheira,&ac.categoriaselecionada,ac.status) != EOF){
+					/*mostra as acomodações cadastradas em forma de lista*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %i",ac.codigo);
 					printf("\nDescrição: %s",ac.descricao);
@@ -281,27 +347,39 @@ void consultaacomodacao(int tipo){
 					printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
 					printf("\nStatus: %s",ac.status);
 					printf("\n----------------------------------------------------------------------------\n");
+					/*caso já tenho chegado no final do arquivo*/
 					if(feof(arquivo)){
 						/*se ja sai do laco*/
 						break;
 					}
 				}
+				/*fecha o arquivo*/
 				fclose(arquivo);
 			}
 		break;
 		case 2:
+			/*tipo de salvamento 2, arquivo binário*/
 			/*consulta em binário*/
+			/*abre o arquivo das acomodações*/
 			arquivo = fopen("saves/acomodacoes.bin","ab+");
+			/*verifica se houve erros na abertura*/
+			/*se houve algum erro, mostra mensagem de erro na tela*/
 			if(arquivo == NULL){
-				printf("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n");	
+				vermelho("Erro em realizar a consulta ou não foram encontrados quartos cadastradas\n\n");	
 			}
+			/*se estiver tudo ok..*/
 			else{
-				printf("Acomodações cadastradas((valores númericos representam quantidade)não considerando a categoria): \n\n");
+				/*le o arquivo*/
+				azulclaro("Acomodações cadastradas((valores númericos representam quantidade)não considerando a categoria): \n\n");
 				while(!feof(arquivo)){
+					/*e enquanto não chega no final do arquivo vai mostrando as acomodações cadastradas*/
 					fread(&ac,sizeof(struct acomodacoes),1,arquivo);
+					/*verifica se já está no final do arquivo*/
 					if(feof(arquivo)){
+						/*se estiver sai do laço*/
 						break;
 					}
+					/*mostra em forma de lista*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %i",ac.codigo);
 					printf("\nDescrição: %s",ac.descricao);
@@ -319,19 +397,26 @@ void consultaacomodacao(int tipo){
 					printf("\n----------------------------------------------------------------------------\n");
 					
 				}
+				/*fecha o arquivo*/
 				fclose(arquivo);
 			}
 		break;
+		/*mensagem de erro para tipos de salvamento diferentes do já implementados*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }
-
+/*função para consulta de categorias, recebe como parametro o tipo de salvamento*/
 void consultacategoria(int tipo){
+	/*struct de categorias, para ter acesso a suas variaveis*/
 	struct categorias c;
+	/*cria um ponterio de arquivo, para abrir os arquivos*/
 	FILE *arquivo;
+	ciano("\nConsulta de Categorias\n\n");
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*se for o tipo de salvamento 1, arquivo texto*/
 		case 1:
 		arquivo = fopen("saves/categorias.txt","a+");
 		if(arquivo == NULL){
@@ -384,6 +469,7 @@ void consultacategoria(int tipo){
 void consultafornecedor(int tipo){
 	struct fornecedores f;
 	FILE *arquivo;
+	ciano("\nConsulta de Fornecedores\n\n");
 	switch(tipo){
 		case 1:
 			arquivo = fopen("saves/fornecedores.txt","a+");
@@ -467,6 +553,7 @@ void consultafornecedor(int tipo){
 void consultausuario(){
 	struct usuarios u;
 	FILE *arquivo;
+	ciano("\nConsulta de Usuários\n\n");
 	int t;
 	arquivo = fopen("saves/usuarios.bin","ab+");
 	if(arquivo == NULL){

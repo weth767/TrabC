@@ -9,6 +9,7 @@
 #include "config.h"
 
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
+/*recebe os dados do hospede e salva na struct*/
 void cadastrahospede(){
 	/*chama a struct para poder passar os dados a ela*/
 	struct hospede h;
@@ -16,10 +17,11 @@ void cadastrahospede(){
 	setlocale(LC_ALL, "Portuguese");
 	/*Resto da funcao que basicamente pega os dados e armazena na struct hotel*/
 	/*%[^\n]s serve para pegar os espaços digitados pelo usuário*/ 
-	printf("\nCadastro de Hóspedes:\n\n");
-
+	ciano("\nCadastro de Hóspedes:\n\n");
+	/*recebe o auto incremento do código, verifica o ultimo código adicionada no arquivo e soma mais um*/
 	h.codigo = codigohospede(verificasave());
 	setbuf(stdin,NULL);
+	/*recebe os dados do hospede*/
 	printf("Digite o Nome do Hóspede: ");
 	scanf("%[^\n]s",h.nome);
 	setbuf(stdin,NULL);
@@ -53,7 +55,6 @@ void cadastrahospede(){
 	printf("Digite a Data de Nascimento do Hóspede: ");
 	scanf("%[^\n]s",h.datanascimento);
 	setbuf(stdin,NULL);
-	/*Preciso validar a data de nascimento*/
 	printf("Digite o Telefone do Hóspede: ");
 	scanf("%[^\n]s",h.telefone);
 	setbuf(stdin,NULL);
@@ -66,9 +67,10 @@ void cadastrahospede(){
 	printf("Digite o E-mail do Hóspede: ");
 	scanf("%[^\n]s",h.email);
 	setbuf(stdin,NULL);
+	/*coloca como padrão o hospede como ativo*/
 	strcpy(h.status , "Ativo");
 }
-
+/*função de cadastro de hotel, recebe os dados do hotel é passa para a struct*/
 void cadastrahotel(){
 	/*chama a struct para poder passar os dados a ela*/
 	struct hotel ht;
@@ -76,11 +78,12 @@ void cadastrahotel(){
 	setlocale(LC_ALL, "Portuguese");
 	/*Resto da funcao que basicamente pega os dados e armazena na struct hotel*/
 	/*%[^\n]s serve para pegar os espaços digitados pelo usuário*/
-
-	printf("\nCadastro de Hotel:\n\n");
+	ciano("\nCadastro de Hotel:\n\n");
 	setbuf(stdin,NULL);
+	/*o código é auto incrementado pela função, verifica o ultimo código adicionado no arquivo e
+	adiciona um */
 	ht.codigo = codigohotel(verificasave());
-	
+	/*recebe os outros dados do hotel*/
 	setbuf(stdin,NULL);
 	printf("Digite o Nome Fantasia do Hotel: ");
 	scanf("%[^\n]s",ht.nomefantasia);
@@ -115,7 +118,6 @@ void cadastrahotel(){
 	printf("Digite o Complemento do hotel: ");
 	scanf("%[^\n]s",ht.complemento);
 	setbuf(stdin,NULL);
-	/*Preciso validar a data de nascimento*/
 	printf("Digite o Telefone do Hotel: ");
 	scanf("%[^\n]s",ht.telefone);
 	setbuf(stdin,NULL);
@@ -128,18 +130,19 @@ void cadastrahotel(){
 	printf("Digite o Telefone do Responsável: ");
 	scanf("%[^\n]s",ht.telefoneresponsavel);
 	setbuf(stdin,NULL);
+	/*atribui como padrão o hotel como ativo*/
 	strcpy(ht.status , "Ativo");
 }
-
+/*função para cadastrar categoria*/
 void cadastracategoria(){
 	//coloca o linguagem local para portugues, assim pegará os acentos
 	setlocale(LC_ALL,"Portuguese");
 	/*struct categoria para fazer o acesso a struct no outro arquivo*/	
 	struct categorias c;
-	printf("\nCadastro de Categorias\n");
-	
+	ciano("\nCadastro de Categorias\n");
+	/*código autoincrementado, verifica o ultimo código adicionado no arquivo e soma mais um, */
 	c.codigo = codigocategoria(verificasave());
-
+	/*recebe o restante dos dados da categoria*/
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição da Categoria: ");
 	scanf("%[^\n]s",c.descricao);
@@ -154,27 +157,29 @@ void cadastracategoria(){
 	printf("Digite a quantidade de crianças(Permitidos na Acomodação): ");
 	scanf("%i",&c.quantidadecriancas);
 	setbuf(stdin,NULL);
+	/*coloca a categoria como padrão ativa*/
 	strcpy(c.status,"Ativa");
 
 }
-
+/*função para cadastrar os dados da acomodação*/
+/*recebe os dados para salvar na struct*/
 void cadastraacomodacao(){
 	//chama a struct das acomodacoes
 	struct acomodacoes ac;
 	//coloca o linguagem local para portugues, assim pegará os acentos
 	setlocale(LC_ALL,"Portuguese");
 	setbuf(stdin,NULL);
-	printf("\nCadastro de Acomodações:\n");
-
+	ciano("\nCadastro de Acomodações:\n");
+	/*código autoincrementado, função lẽ o ultimo código salvo e adiciona mais um*/
 	ac.codigo = codigoacomodacao(verificasave());
-
+	/*recebe os outros dados da acomodação*/
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição da Acomodações: ");
 	scanf("%[^\n]s",ac.descricao);
 	setbuf(stdin,NULL);
-
+	/*para adicionar as categorias, mostra para o usuário as categorias que ele já tem cadastrada*/
 	consultacategoria(verificasave());
-
+	/*continua recebendo normalmente os outros dados da acomodação*/
 	printf("Digite o código da categoria desejada: ");
 	scanf("%i",&ac.categoriaselecionada);
 	printf("\nAcomodação possui Televisão Comum?(1 - Sim, 0 - Não): ");
@@ -204,17 +209,20 @@ void cadastraacomodacao(){
 	printf("Acomodação possui Banheira?(1 - Sim, 0 - Não): ");
 	scanf("%i",&ac.extra.banheira);
 	setbuf(stdin,NULL);
+	/*salva como padrão ativa*/
 	strcpy(ac.status , "Ativo");
 }
-
+/*função de cadastra de produto*/
+/*recebe os dados do produto é salva na struct*/
 void cadastraproduto(){
+	/*chama a struct para ter acesso as suas variaveis*/
 	struct produtos p;
 	setlocale(LC_ALL,"Portuguese");
-
-	printf("\nCadastro de Produtos\n\n");
-	
+	/*da um setlocale, para evitar alguns erros de linguagem*/
+	ciano("\nCadastro de Produtos\n\n");
+	/*auto incremento no código, a função verifica o ultimo código salvo e soma mais um*/
 	p.codigo = codigoproduto(verificasave());
-
+	/*armazena o restante dos dados do produto*/
 	setbuf(stdin,NULL);
 	printf("Digite a Descrição do Produto: ");
 	scanf("%[^\n]s",p.descricao);
@@ -231,10 +239,12 @@ void cadastraproduto(){
 	printf("Digite o Valor de Venda do Produto: ");
 	scanf("%f",&p.precovenda);
 	setbuf(stdin,NULL);
+	/*salva o produto como padrão ativo*/
 	strcpy(p.status , "Ativo");
 
 }
-
+/*função de cadastro de usuário*/
+/*recebe os dados do usuário para armazenar na struct*/
 void cadastrausuario(){
 	struct usuarios u;
 	//faço a chamada da struct, para ter acesso as varíaveis desta;*/
@@ -257,13 +267,20 @@ void cadastrausuario(){
 	printf("Digite o nível de acesso do usuário\n1 - Acesso Mínimo;\n2 - Acesso Básico;\n3 - Acesso Comum;\n4 - Acesso Alto;\n5 - Acesso Máximo;\nDigite sua opção: ");
 	scanf("%i",&u.permissao);
 	setbuf(stdin,NULL);
+	/*salva como padrão ativo*/
 	strcpy(u.status , "Ativo");
 }
-
+/*função para cadastrar fornecedor*/
+/*recebe os dados do fornecedor*/
 void cadastrafornecedor(){
+	/*chama a struct do fornecedor para ter acesso a suas variaveis*/
 	struct fornecedores f;
+	/*da um setlocale para evitar bugs na linguagem portuguesa*/
 	setlocale(LC_ALL,"Portuguese");
+	/*código autoincrementado, recebe o código da função que pesquisa o ultimo código adicionado
+	e soma mais um*/
 	f.codigo = codigofornecedor(verificasave());
+	/*recebe o restante dos dados do fornecedor*/
 	setbuf(stdin,NULL);
 	printf("Digite o Nome Fantasia do Fornecedor: ");
 	scanf("%[^\n]s",f.nomefantasia);
@@ -312,6 +329,7 @@ void cadastrafornecedor(){
 	setbuf(stdin,NULL);
 	printf("Digite o Telefone do Representante do Fornecedor: ");
 	scanf("%[^\n]s",f.trepresentante);
+	/*salva o fornecedor com padrão ativo*/
 	strcpy(f.status,"Ativo");
 }
 #endif 

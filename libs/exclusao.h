@@ -14,6 +14,7 @@ void excluihospede(int tipo){
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	ciano("\nExclusão de Hospedes\n\n");
 	/*chama a struct para ter acesso a suas variaveis*/
 	struct hospede h;
 	/*armazena o codigo que será excluido*/
@@ -182,6 +183,7 @@ void excluihotel(int tipo){
 	/*cria dois ponteiros, um para o arquivo e um para o arquivo temporário*/
 	FILE *arquivo;
 	FILE *arquivo2;
+	ciano("\nExclusão de Hotéis\n\n");
 	int codigo;
 	int op;
 	/*chama a struct para ter acesso a suas variaveis*/
@@ -352,6 +354,7 @@ void excluicategoria(int tipo){
 	/*cria dois ponteiros para os arquivos*/
 	FILE *arquivo;
 	FILE *arquivo2;
+	ciano("\nExclusão de Categorias\n\n");
 	int codigo;
 	int op;
 	/*chama a struct para acessar as variaveis */
@@ -483,6 +486,7 @@ void excluiacomodacao(int tipo){
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	ciano("\nExclusão de Acomodações\n\n");
 	/*chama a struct, para ter acesso a suas variáveis*/
 	struct acomodacoes ac;
 	/*recebe o código que será excluído*/
@@ -632,6 +636,7 @@ void excluiproduto(int tipo){
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	ciano("\nExclusão de Produtos\n\n");
 	/*chama a struct, para ter acesso as variáveis dela*/
 	struct produtos p;
 	/*recebe o código que será excluído*/
@@ -655,7 +660,7 @@ void excluiproduto(int tipo){
 			/*se estiver tudo ok, passa para próxima parte*/
 			else{
 				/*lê o arquivo, armazenando o dado de cada produto na struct*/
-				while(fsacanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
 					/*se o código lido é diferente do código digitado pelo usuário*/
 					/*salva os dados no arquivo temporário*/
 					if(p.codigo != codigo){
@@ -762,29 +767,43 @@ void excluiproduto(int tipo){
 		break;
 	}
 }
-
+/*função para excluir fornecedor, recebe o tipo de salvamento pro parametro*/
 void excluifornecedor(int tipo){
+	/*chama struct para ter acesso as variáveis*/
 	struct fornecedores f;
+	/*cria o ponteiro, para os dois arquivos, original e temporário*/
 	FILE *arquivo;
 	FILE *arquivo2;
+	ciano("\nExclusão de Fornecedores\n\n");
 	int codigo;
 	int op;
+	/*recebe o código que será excluído*/
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for o tipo de salvamento 1, arquivo texto*/
 		case 1:
+			/*abre os dois arquivos, o temporário e o original*/
 			arquivo = fopen("saves/fornecedores.txt","a+");
 			arquivo2 = fopen("saves/tempfornecedor.txt","a+");
+			/*verifica se há erros na abertura dos arquivos*/
+			/*se houver, mostra mensagem de erro*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");
+				vermelho("\nErro em localizar o arquivo do fornecedor!!\n\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");	
+				vermelho("\nErro em localizar o arquivo do fornecedor!!\n\n");	
 			}
+			/*se estiver tudo ok*/
 			else{
+				/*verifica todos os dados até o final do arquivo*/
+				/*a cada fornecedor, os dados são armazenados na struct*/
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
 						f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
 						f.trepresentante,f.status) != EOF){
+					/*verifica se o código lido é diferente do código digitado pelo usuário*/
+					/*se for diferente, salva os dados no arquivo temporário*/
 					if(f.codigo != codigo){
 						fprintf(arquivo2,"%u",f.codigo);
 						fprintf(arquivo2,"\n%s",f.nomefantasia);
@@ -805,8 +824,10 @@ void excluifornecedor(int tipo){
 						fprintf(arquivo2,"\n%s",f.trepresentante);
 						fprintf(arquivo2,"\n%s\n\n",f.status);
 					}
+					/*se o código for igual*/
+					/*mostra o fornecedor selecionado*/
 					else{
-						printf("Fornecedor Selecionado: \n\n");
+						azulclaro("Fornecedor Selecionado: \n\n");
 						printf("Codigo: %u",f.codigo);
 						printf("\nNome Fantasia: %s",f.nomefantasia);
 						printf("\nRazão Social %s",f.razaosocial);
@@ -827,38 +848,55 @@ void excluifornecedor(int tipo){
 						printf("\nStatus: %s\n\n",f.status);
 					}
 				}
+				/*pergunta ao usuário se ele realmente deseja excluir o fornecedor*/
 				setbuf(stdin,NULL);	
-				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/fornecedores.txt");
+					/* e renomeia o arquivo temporário*/
 					rename("saves/tempfornecedor.txt","saves/fornecedores.txt");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso na tela*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*tipo de salvamento 2, arquivo binário*/
 		case 2:
+			/*abre os dois arquivos*/
 			fopen("saves/fornecedores.bin","ab+");
 			fopen("saves/tempfornecedor.bin","ab+");
+			/*verifica se há erros na abertura dos arquivos*/
+			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");
+				vermelho("\nErro em localizar o arquivo do fornecedor!!\n\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do fornecedor!!\n\n");	
+				vermelho("\nErro em localizar o arquivo do fornecedor!!\n\n");	
 			}
+			/*caso esteja tudo ok, passa para proxíma parte*/
 			else{
+				/*verifica o arquivo inteiro, armazenando cada fornecedor na struct por vez*/
 				while(!feof(arquivo)){
+					/*comando de leitura*/
 					fread(&f,sizeof(struct fornecedores),1,arquivo);
+					/*verifica se o código lido é diferente do código digitado*/
 					if(f.codigo != codigo){
+						/*se for diferente, salva os dados no arquivo temporário*/
 						fwrite(&f,sizeof(struct fornecedores),1,arquivo2);
 					}
+					/*se for igual mostra o fornecedor selecionado*/
 					else{
+						/*caso já esteja no final do arquivo, para evitar bugs sai do laço*/
 						if(feof(arquivo)){
 							break;
 						}
-						printf("Fornecedor Selecionado: \n\n");
+						azulclaro("Fornecedor Selecionado: \n\n");
 						printf("Codigo: %u",f.codigo);
 						printf("\nNome Fantasia: %s",f.nomefantasia);
 						printf("\nRazão Social %s",f.razaosocial);
@@ -879,52 +917,74 @@ void excluifornecedor(int tipo){
 						printf("\nStatus: %s\n\n",f.status);	
 					}
 				}
+				/*pergunta ao usuário se ele realmente deseja excluir o fornecedor*/
 				setbuf(stdin,NULL);	
-				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/fornecedores.bin");
+					/*e renomeia o arquivo temporário*/
 					rename("saves/tempfornecedor.bin","saves/fornecedores.bin");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso na tela*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*mostra mensagem de erro para tipos de salvamento ainda não implementados*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }
-
+/*função para excluir usuário*/
 void excluiusuario(){
+	/*chama a struct pra ter acesso as variáveis dela*/
 	struct usuarios u;
+	/*cria dois ponteiros, um para o arquivo temporário e um para o arquivo original*/
 	FILE *arquivo;
 	FILE *arquivo2;
+	ciano("\nExclusão de Usuários\n\n");
 	int codigo;
 	int op;
 	int t;
+	/*recebe o código que será excluido*/
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
+	/*abre os dois arquivos, temporário e original*/
 	arquivo = fopen("saves/usuarios.bin","ab+");
 	arquivo2 = fopen("saves/tempusuario.bin","ab+");
+	/*verifica se houve erro na abertura dos arquivos*/
+	/*se houver, mostra na tela*/
 	if(arquivo2 == NULL){
-		printf("\nErro em localizar o arquivo do usuário!!\n\n");
+		vermelho("\nErro em localizar o arquivo do usuário!!\n\n");
 	}
 	if(arquivo == NULL){
-		printf("\nErro em localizar o arquivo do usuário!!\n\n");	
+		vermelho("\nErro em localizar o arquivo do usuário!!\n\n");	
 	}
+	/*caso esteja tudo ok*/
 	else{
+		/*verifica o arquivo original, lendo cada usuário por vez e salvando na struct*/
 		while(!feof(arquivo)){
 			fread(&u,sizeof(struct usuarios),1,arquivo);
+			/*verifica se código lido é diferente do código digitado*/
+			/*se for, salva no arquivo temporário*/
 			if(u.codigo != codigo){
 				fwrite(&u,sizeof(struct usuarios),1,arquivo2);
 			}
+			/*se for igual*/
 			else{
+				/*primeiro verifica se já está no final do arquivo para evitar bugs*/
 				if(feof(arquivo)){
+					/*se estiver sai do laço*/
 					break;		
 				}
-				printf("Usuário Selecionado: \n\n");
+				/*mostra o usuário selecionado*/
+				amarelo("Usuário Selecionado: \n\n");
 				printf("Código: %u",u.codigo);
 				printf("\nNome do Usuário: %s",u.nome);
 				printf("\nLogin: %s",u.login);
@@ -937,21 +997,27 @@ void excluiusuario(){
 				printf("\nStatus: %s",u.status);
 			}
 		}
+		/*pergunta se o usuário realmente deseja excluir*/
 		setbuf(stdin,NULL);	
-		printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+		amarelo("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 		scanf("%i",&op);
 		if(op == 1){
+			/*se sim, remove o arquivo original*/
 				remove("saves/usuarios.bin");
+				/*renomeia o arquivo temporário*/
 				rename("saves/tempusuario.bin","saves/usuarios.bin");
-				printf("\nDado excluido com sucesso!\n\n");
+				/*mostra mensagem de sucesso na tela*/
+				verde("\nDado excluido com sucesso!\n\n");
 		}
+		/*fecha os arquivos*/
 		fclose(arquivo);
 		fclose(arquivo2);
 	}
 
 }
-
+/*função para resetar a configuração inicial*/
 void resetaconfig(){
+	/*exclui o arquivo de config*/
 	remove("config/config.bin");
 }
 #endif

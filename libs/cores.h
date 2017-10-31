@@ -1,6 +1,6 @@
 #ifndef CORES_H
 #define CORES_H
-
+/*bibloteca de cores, que serão usadas ao longo do sistema*/
 #define preto(texto)printf("\33[0;30m%s\33[0m",texto)
 #define vermelho(texto)printf("\33[0;31m%s\33[0m",texto)
 #define verde(texto)printf("\33[0;32m%s\33[0m",texto)

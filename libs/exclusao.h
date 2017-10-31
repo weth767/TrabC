@@ -476,29 +476,39 @@ void excluicategoria(int tipo){
 		break;
 	}
 }
-
+/*função para excluir a acomodação, recebe o tipo de salvamento como parametro*/
 void excluiacomodacao(int tipo){
+	/**/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	/*chama a struct, para ter acesso a suas variáveis*/
 	struct acomodacoes ac;
+	/*recebe o código que será excluído*/
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso, for tipo de salvamento 1, salva em arquivo txt */
 		case 1:
 			arquivo = fopen("saves/acomodacoes.txt","a+");
 			arquivo2 = fopen("saves/tempacomodacao.txt","a+");
+			/*verifica se houve erro na abertura do arquivo*/
+			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
+				vermelho("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
+				vermelho("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
+			/*caso estiver tudo ok, passa para próxima parte*/
 			else{
+				/*lê o arquivo até o final, armazenando os valores de cada acomodação cadastrada*/
 				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,
 					&ac.extra.arcondicionado,&ac.extra.frigobar,&ac.extra.banheiro,&ac.extra.camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,&ac.extra.banheira,
 					&ac.categoriaselecionada,ac.status) != EOF){
+					/*se o código lido for diferente do código digitado, salva os dados no arquivo temporário*/
 					if(ac.codigo != codigo){
 						fprintf(arquivo2,"%u",ac.codigo);
 						fprintf(arquivo2,"\n%s",ac.descricao);
@@ -514,8 +524,9 @@ void excluiacomodacao(int tipo){
 						fprintf(arquivo2,"\n%i",ac.categoriaselecionada);
 						fprintf(arquivo2,"\n%s\n\n",ac.status);	
 					}
+					/*caso o código seja igual, mostra a acomodação selecionada*/
 					else{
-						printf("\nAcomodação Selecionada: \n\n");
+						azulclaro("\nAcomodação Selecionada: \n\n");
 						printf("Código: %i",ac.codigo);
 						printf("\nDescrição: %s",ac.descricao);
 						printf("\nCom TV comum: %i",ac.extra.tv);
@@ -531,35 +542,51 @@ void excluiacomodacao(int tipo){
 					}
 					
 				}
+				/*pergunta se o usuário realmente deseja realizar a exclusão*/
 				setbuf(stdin,NULL);	
-				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/acomodacoes.txt");
+					/*renomeia o arquivo temporário com os outros dados*/
 					rename("saves/tempacomodacao.txt","saves/acomodacoes.txt");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso na tela*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*tipo de salvamento 2, arquivo binário*/
 		case 2:
+			/*abre os dois arquivos */
 			arquivo = fopen("saves/acomodacoes.bin","ab");
 			arquivo2 = fopen("saves/tempacomodacao.bin","ab");
+			/*verifica se houve erros na abertura dos arquivos*/
+			/*se houver erros mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
+				vermelho("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo da acomodação!!\n\n");	
+				vermelho("\nErro em localizar o arquivo da acomodação!!\n\n");	
 			}
+			/*se estiver tudo ok, passa para próxima parte*/
 			else{
+				/*verifica o arquivo até o final*/
 				while(!feof(arquivo)){
+					/*le cada acomodação*/
 					fread(&ac,sizeof(struct acomodacoes),1,arquivo);
+					/*verifica se o código que foi lido, é diferente do código digitado pelo usuário*/
 					if(ac.codigo != codigo){
+						/*se for, salva os dados no arquivo temporário*/
 						fwrite(&ac,sizeof(struct acomodacoes),1,arquivo2);
 					}
+					/*se o código for igual, mostra a acomodação selecionada*/
 					else{
-						printf("\nAcomodação Selecionada: \n\n");
+						azulclaro("\nAcomodação Selecionada: \n\n");
 						printf("Código: %i",ac.codigo);
 						printf("\nDescrição: %s",ac.descricao);
 						printf("\nCom TV comum: %i",ac.extra.tv);
@@ -574,44 +601,63 @@ void excluiacomodacao(int tipo){
 						printf("\nCategoria da Acomodação: %i",ac.categoriaselecionada);
 					}
 				}
+				/*pergunta ao usuário se ele realemte deseja realizar a exclusão*/
 				setbuf(stdin,NULL);	
-				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/acomodacoes.bin");
+					/*renomeia o arquivo temporário com os outros dados*/
 					rename("saves/tempacomodacao.bin","saves/acomodacoes.bin");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*caso for uma opção de save não implementada, mostra aviso na tela*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }
-
+/*função para excluir produto*/
 void excluiproduto(int tipo){
+	/*cria dois ponteiros de arquivos*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	/*chama a struct, para ter acesso as variáveis dela*/
 	struct produtos p;
+	/*recebe o código que será excluído*/
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for tipo de salvamento 1, salva em arquivo texto*/
 		case 1:
+			/*abre os dois arquivos, o temporario e o original */
 			arquivo = fopen("saves/produtos.txt","a+");
 			arquivo2 = fopen("saves/tempproduto.txt","a+");
+			/*verifica se há erros na abertura dos arquivos*/
+			/*se houver algum erro, mostra mensagem na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do produto!!\n\n");	
+				vermelho("\nErro em localizar o arquivo do produto!!\n\n");	
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do produto!!\n\n");
+				vermelho("\nErro em localizar o arquivo do produto!!\n\n");
 			}
+			/*se estiver tudo ok, passa para próxima parte*/
 			else{
-				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+				/*lê o arquivo, armazenando o dado de cada produto na struct*/
+				while(fsacanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+					/*se o código lido é diferente do código digitado pelo usuário*/
+					/*salva os dados no arquivo temporário*/
 					if(p.codigo != codigo){
 						fprintf(arquivo2,"%u",p.codigo);
 						fprintf(arquivo2,"\n%s",p.descricao);
@@ -621,8 +667,9 @@ void excluiproduto(int tipo){
 						fprintf(arquivo2,"\n%.2f",p.precovenda);
 						fprintf(arquivo2,"\n%s\n\n",p.status);
 					}
+					/*se for igual, mostra o produto selecionado*/
 					else{
-						printf("Produto Selecionado: \n\n");
+						azulclaro("Produto Selecionado: \n\n");
 						printf("Código: %u",p.codigo);
 						printf("\nDescrição: %s",p.descricao);
 						printf("\nEstoque: %i",p.estoque);
@@ -631,39 +678,57 @@ void excluiproduto(int tipo){
 						printf("\nPreço de Venda: R$%.2f",p.precovenda);
 						printf("\nStatus: %s\n\n",p.status);
 					}
-				}
+				}/*pergunta ao usuário se ele realmente deseja excluir o produto*/
 				setbuf(stdin,NULL);	
-				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/produtos.txt");
+					/*renomeia o arquivo temporário*/
 					rename("saves/tempproduto.txt","saves/produtos.txt");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*e mostra mensagem de sucesso na tela*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*caso o tipo de salvamento for o 2, arquivo binário*/
 		case 2:
+			/*abre os arquivos, original e temporário*/
 			arquivo = fopen("saves/produtos.bin","ab+");
 			arquivo2 = fopen("saves/tempproduto.bin","ab+");
+			/*verifica se houve erros na abertura dos arquivos*/
+			/*se houver erros, mostra mensagem dna tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo do produto!!\n\n");	
+				vermelho("\nErro em localizar o arquivo do produto!!\n\n");	
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo do produto!!\n\n");
+				vermelho("\nErro em localizar o arquivo do produto!!\n\n");
 			}
+			/*se estiver tudo ok*/
 			else{
+				/*lê o arquivo até o final*/
 				while(!feof(arquivo)){
+					/*lendo cada produto e manda para struct*/
 					fread(&p,sizeof(struct produtos),1,arquivo);
+					/*verifica se o código lido é diferente do código digitado pelo usuário*/
+					/*caso for diferente, salva os dados do produto no arquivo temporário*/
 					if(p.codigo != codigo){
 						fwrite(&p,sizeof(struct produtos),1,arquivo2);
 					}
+					/*se for igual */
 					else{
+						/*verifica se está no final do arquivo para evitar bugs*/
 						if(feof(arquivo)){
+							/*se estiver sai do laço*/
 							break;
 						}
-						printf("Produto Selecionado: \n\n");
+						/*mostra o produto selecionado */
+						azulclaro("Produto Selecionado: \n\n");
 						printf("Código: %u",p.codigo);
 						printf("\nDescrição: %s",p.descricao);
 						printf("\nEstoque: %i",p.estoque);
@@ -673,20 +738,27 @@ void excluiproduto(int tipo){
 						printf("\nStatus: %s\n\n",p.status);
 					}
 				}
+				/*pergunta se o usuário deseja realmente excluir o produto*/
 				setbuf(stdin,NULL);	
-				printf("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\n\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/produtos.bin");
+					/*renomeia o arquivo temporário*/
 					rename("saves/tempproduto.bin","saves/produtos.bin");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra mensagem de sucesso*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*mostra mensagem de erro para opções de salvamento ainda não implementadas*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
 }

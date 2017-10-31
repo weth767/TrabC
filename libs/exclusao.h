@@ -347,27 +347,39 @@ void excluihotel(int tipo){
 		break;
 	}
 }
-
+/*função para excluir categoria, recebe por parametro o tipo de salvamento*/
 void excluicategoria(int tipo){
+	/*cria dois ponteiros para os arquivos*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int codigo;
 	int op;
+	/*chama a struct para acessar as variaveis */
 	struct categorias c;
+	/*recebe o código que possivelmente será excluído*/
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*se for tipo 1, arquivo texto*/
 		case 1:
+			/*abre os dois arquivos*/
 			arquivo = fopen("saves/categorias.txt","a+");
 			arquivo2 = fopen("saves/tempcategoria.txt","a+");
+			/*verifica se houve erros na abertura dos arquivos*/
+			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+				vermelho("\nErro em localizar o arquivo da categoria!!\n\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+				vermelho("\nErro em localizar o arquivo da categoria!!\n\n");
 			}
+			/*se estiver tudo ok, passa para próxima parte*/
 			else{
+				/*verifica o arquivo todo, armazenando os valores de cada struct*/
 				while(fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status) != EOF){
+					/*verifica se o código ligo é diferente do código digitado pelo usuário*/
+					/*se for, salva os dados no arquivo temporário*/
 					if(c.codigo != codigo){
 						fprintf(arquivo2,"%u",c.codigo);
 						fprintf(arquivo2,"\n%s",c.descricao);
@@ -376,62 +388,89 @@ void excluicategoria(int tipo){
 						fprintf(arquivo2,"\n%i",c.quantidadecriancas);
 						fprintf(arquivo2,"\n%s\n\n",c.status);	
 					}
+					/*se for igual*/
 					else{
-						printf("\nCategoria Selecionada: \n\n");
+						/*mostra a categoria selecionada*/
+						azulclaro("\nCategoria Selecionada: \n\n");
 						printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
 						printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
 						printf("\nStatus: %s\n",c.status);
 					}
 				}
+				/*pergunta ao usuário, se ele realmente deseja excluir o dados*/
 				setbuf(stdin,NULL);	
-				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se a resposta for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/categorias.txt");
+					/*renomeia o arquivo temporário*/
 					rename("saves/tempcategoria.txt","saves/categorias.txt");
-					printf("\nDado excluido com sucesso!\n\n");
+					/*mostra a mensagem de sucesso*/
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*tipo de salvamento 2, ou seja arquivo binário*/
 		case 2:
+			/*abre os arquivos, original e temporário*/
 			arquivo = fopen("saves/categorias.bin","ab+");
 			arquivo2 = fopen("saves/tempcategoria.bin","ab+");
+			/*verifica se há erros na abertura nos arquivos*/
+			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
-				printf("\nErro em localizar o arquivo da categoria!!\n\n");	
+				vermelho("\nErro em localizar o arquivo da categoria!!\n\n");	
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo da categoria!!\n\n");
+				vermelho("\nErro em localizar o arquivo da categoria!!\n\n");
 			}
+			/*se estiver tudo ok*/
 			else{
+				/*verifica o arquivo inteiro*/
 				while(!feof(arquivo)){
+					/*le cada struct no arquivi*/
 					fread(&c,sizeof(struct categorias),1,arquivo);
+					/*verifica o código, se o código lido, é diferente do código digitado*/
 					if(c.codigo != codigo){
+						/*se for, salva no arquivo temporário*/
 						fwrite(&c,sizeof(struct categorias),1,arquivo2);
 					}
+					/*se for igual*/
 					else{
+						/*verifica se já esta no final do arquivo, */
 						if(feof(arquivo)){
+							/*se estiver, sai do laço*/
 							break;
 						}
-						printf("\nCategoria Selecionada: \n\n");
+						/*mostra a categoria selecionada*/
+						azulclaro("\nCategoria Selecionada: \n\n");
 						printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
 						printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
 						printf("\nStatus: %s\n",c.status);	
 					}
 				}
+				/*pergunta se o usuário quer realmente excluir*/
 				setbuf(stdin,NULL);	
-				printf("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
+				amarelo("\nDeseja realmente realizar a exclusão(1 para sim e 0 para não): ");		
 				scanf("%i",&op);
+				/*se for sim*/
 				if(op == 1){
+					/*remove o arquivo original*/
 					remove("saves/categorias.txt");
+					/*renomeia o arquivo temporario*/
 					rename("saves/tempcategoria.txt","saves/categorias.txt");
-					printf("\nDado excluido com sucesso!\n\n");
+					verde("\nDado excluido com sucesso!\n\n");
 				}
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*mostra mensagem de erro, para opções de salvamento não implementadas*/
 		default:
 			printf("\nOpcao ainda não implementada ou não existente\n\n");
 		break;

@@ -293,6 +293,9 @@ void excluihotel(int tipo){
 					/*le os dados do arquivo, salvando na struct*/
 					fread(&ht,sizeof(struct hotel),1,arquivo);
 					/*verifica se o código lido é diferente do código */
+					if(feof(arquivo)){
+						break;
+					}
 					if(ht.codigo != codigo){
 						/*salva os dados no arquivo temporário*/
 						fwrite(&ht,sizeof(struct hotel),1,arquivo2);
@@ -435,7 +438,12 @@ void excluicategoria(int tipo){
 			else{
 				/*verifica o arquivo inteiro*/
 				while(!feof(arquivo)){
-					/*le cada struct no arquivi*/
+					/*le cada struct no arquivo*/
+					/*pra evitar bugs, verifca o final do arquivo*/
+					if(feof(arquivo)){
+						/*sai do laço*/
+						break;
+					}
 					fread(&c,sizeof(struct categorias),1,arquivo);
 					/*verifica o código, se o código lido, é diferente do código digitado*/
 					if(c.codigo != codigo){
@@ -463,9 +471,9 @@ void excluicategoria(int tipo){
 				/*se for sim*/
 				if(op == 1){
 					/*remove o arquivo original*/
-					remove("saves/categorias.txt");
+					remove("saves/categorias.bin");
 					/*renomeia o arquivo temporario*/
-					rename("saves/tempcategoria.txt","saves/categorias.txt");
+					rename("saves/tempcategoria.bin","saves/categorias.vin");
 					verde("\nDado excluido com sucesso!\n\n");
 				}
 				/*fecha os dois arquivos*/
@@ -481,7 +489,7 @@ void excluicategoria(int tipo){
 }
 /*função para excluir a acomodação, recebe o tipo de salvamento como parametro*/
 void excluiacomodacao(int tipo){
-	/**/
+	/*cria os ponteiros para acessar os arquivos*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int codigo;
@@ -584,6 +592,9 @@ void excluiacomodacao(int tipo){
 					/*le cada acomodação*/
 					fread(&ac,sizeof(struct acomodacoes),1,arquivo);
 					/*verifica se o código que foi lido, é diferente do código digitado pelo usuário*/
+					if(feof(arquivo)){
+						break;
+					}
 					if(ac.codigo != codigo){
 						/*se for, salva os dados no arquivo temporário*/
 						fwrite(&ac,sizeof(struct acomodacoes),1,arquivo2);
@@ -722,6 +733,9 @@ void excluiproduto(int tipo){
 					fread(&p,sizeof(struct produtos),1,arquivo);
 					/*verifica se o código lido é diferente do código digitado pelo usuário*/
 					/*caso for diferente, salva os dados do produto no arquivo temporário*/
+					if(feof(arquivo)){
+						break;
+					}
 					if(p.codigo != codigo){
 						fwrite(&p,sizeof(struct produtos),1,arquivo2);
 					}
@@ -886,6 +900,9 @@ void excluifornecedor(int tipo){
 					/*comando de leitura*/
 					fread(&f,sizeof(struct fornecedores),1,arquivo);
 					/*verifica se o código lido é diferente do código digitado*/
+					if(feof(arquivo)){
+						break;
+					}
 					if(f.codigo != codigo){
 						/*se for diferente, salva os dados no arquivo temporário*/
 						fwrite(&f,sizeof(struct fornecedores),1,arquivo2);

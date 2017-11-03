@@ -975,93 +975,137 @@ int codigocategoria(int tipo){
 			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
+	/*retorna o codigo ja incrementado*/
 	return codigo;
 }
-
+/*função para auto incrementar o codigo do fornecedor*/
+/*recebe por parametro o tipo de salvamento*/
 int codigofornecedor(int tipo){
+	/*chama a struct dos fornecedores para ter acesso a suas variaveis*/
 	struct fornecedores f;
+	/*cria o ponteiro par ater acesso ao arquivo do fornecedor*/
 	FILE *arquivo;
 	int codigo;
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for o tipo de salvamento 1, arquivo texto*/
 		case 1:
 			arquivo = fopen("saves/fornecedores.txt","a+");
+			/*verifica se o arquivo foi criado recentemente ou ja existia*/
+			/*se foi criado recentemente, codigo recebe zero para receber 1 no final*/
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo!!\n\n");	
+				codigo = 0;	
 			}
+			/*se ja existia*/
 			else{
+				/*le o arquivo, e armazena o ultimo codigo cadastrado*/
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
 					f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
 					f.trepresentante,f.status) != EOF){
 					codigo = f.codigo;
 				}
+				/*incrementa o codigo*/
 				codigo++;
+				/*fecha o arquivo*/
 				fclose(arquivo);
 			}
 		break;
+		/*caso for o salvamento 2, arquivo binario*/
 		case 2:
+			/*abre o arquivo*/
 			arquivo = fopen("saves/fornecedores.bin","ab+");
+			/*verifica se o arquivo*/
+			/*se foi criado recentemente, codigo recebe 0*/
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo!!\n\n");	
+				codigo = 0;
 			}
+			/*senão le o arquivo até o final*/
 			else{
+				/*armazena o ultimo codigo cadastrado*/
 				while(!feof(arquivo)){
 					fread(&codigo,sizeof(int),1,arquivo);
+					/*verifica se ja esta no final do arquivo, para evitar bugs*/
 					if(feof(arquivo)){
+						/*sai do laço*/
 						break;
 					}
 				}
+				/*incrementa o codigo*/
 				codigo++;
 			}
+			/*fecha o arquivo*/
 			fclose(arquivo);
 		break;
+		/*mostra mensagem de erro para salvamentos nao incrementados*/
 		default:
-			printf("\nOpcao ainda não implementada ou não existente\n\n");
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
 	}
+	/*retorna o codigo*/
 	return codigo;
 }
-
+/*funcao de auto incremento de codigo para usuario*/
 int codigousuario(){
+	/*chama a struct usuarios, para ter acesso a suas variaveis*/
 	struct usuarios u;
+	/*cria um ponteiro de arquivo, para acessar o arquivo de usuarios*/
 	FILE *arquivo;
 	int codigo = 0;
-	arquivo = fopen("saves/usuarios.bin","rb");
+	/*abre o arquivo*/
+	arquivo = fopen("saves/usuarios.bin","ab+");
+	/*se o arquivo foi criado recentemente, recebe codigo 0*/ 
 	if(arquivo == NULL){
-		codigo = 1;
+		codigo = 0;
 	}
+	/*se ja existia, le o ultimo codigo cadastrado*/
 	else{
+		/*armazena esse codigo*/
 		while(!feof(arquivo)){
 			fread(&u,sizeof(struct usuarios),1,arquivo);
+			/*verifica o final do arquivo, para evitar bug*/
 			if(feof(arquivo)){
+				/*sai do laço*/
 				break;
 			}
 			codigo = u.codigo;
 		}
+		/*incrementa o codigo*/
 		codigo++;
+		/*fecha o arquivo*/
 		fclose(arquivo);
 	}
+	/*retorna o codigo ja incrementado*/
 	return codigo;
 }
-
+/*função para verificar o usuario*/
 int verificausuario(char login[20],char senha[20]){
+	/*chama a struct para ter acesso as variveis*/
 	struct usuarios u;
+	/*cria os ponteiros para acessar o arquivo de usuarios e configs*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	struct config c;
 	int verifica = 0;
+	/*abre os dois arquivos*/
 	arquivo = fopen("saves/usuarios.bin","ab+");
 	arquivo2 = fopen("config/config.bin","ab+");
+	/*verifica se os arquivos existem, */
 	if(arquivo == NULL && arquivo2 == NULL){
-		printf("\nErro na verificação de usuário!!\n");
+		/*mostra mensagem na tela caso haja erra na abertura*/
+		vermelho("\nErro na verificação de usuário!!\n");
 	}
 	else{
+		/*caso esteja tudo ok, le o arquivo todo*/
 		while(!feof(arquivo)){
+			/*armazena os usuarios cadastrados*/
 			fread(&u,sizeof(struct usuarios),1,arquivo);
+			/*verifica se a senha e o login digitados são iguais a algum dos cadastrados*/
 			if((strcmp(login,u.login) == 0) && (strcmp(senha,u.senha) == 0)){
 				verifica = 1;
 			}
 		}
 	}
+	/*se ate o final encontrar um, return 1, senão for encontrado retorna 0*/
 	if(verifica == 0){
 	arquivo = fopen("config/config.bin","rb");
 		while(!feof(arquivo)){
@@ -1069,12 +1113,16 @@ int verificausuario(char login[20],char senha[20]){
 			if(strcmp(login,c.master_login) == 0 && strcmp(senha,c.master_senha) == 0){
 				verifica = 1;
 			}
+			/*verifica o final do arquivo para evitar bugs*/
 			if(feof(arquivo)){
+				/*sai do laço*/
 				break;
 			}
 		}	
 	}
+	/*fecha o arquivo*/
 	fclose(arquivo);
+	/*retorna se encontrou ou nao*/
 	return verifica;
 }
 

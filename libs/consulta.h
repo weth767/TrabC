@@ -28,7 +28,7 @@ void consultahospede(int tipo){
 			/*se estiver tudo ok*/
 			else{
 				/*padronizo os dados que serao buscados*/
-				azulclaro("\nDados dos Hospedes\n\n");
+				azulclaro("\nDados dos Hospedes\n");
 				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 						/*E vou listando os itens para o usuario em forma de lista*/
@@ -73,7 +73,7 @@ void consultahospede(int tipo){
 			/*se foi aberto, verifica os dados no arquivo*/
 			else{
 				/*enquanto nao for o final do arquivo vai mostrando os dados*/
-				azulclaro("\nDados dos Hospedes\n\n");
+				azulclaro("\nDados dos Hospedes\n");
 				while(!feof(arquivo)){
 					/*verifica se ja alcancou o final do arquivo*/
 					fread(&h,sizeof(struct hospede),1,arquivo);
@@ -693,12 +693,13 @@ int codigohospede(int tipo){
 			else{
 				/*le até o ultimo hospede cadastrado e pega o código dele*/
 				while(!feof(arquivo)){
-					fread(&codigo,sizeof(int),1,arquivo);
+					fread(&h,sizeof(struct hospede),1,arquivo);
 					/*verifica se já está no final do arquivo para evitar bugs*/
 					if(feof(arquivo)){
 						/*se estiver sai do laço*/
 						break;
 					}
+					codigo = h.codigo;
 				}
 				/*incrementa o código*/
 				codigo++;

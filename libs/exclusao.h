@@ -7,8 +7,8 @@
 #include "cores.h"
 
 /*função excluir hospede*/
-/*recebe o tipo de salvamento como parametro*/
-void excluihospede(int tipo){
+/*recebe o tipo de salvamento ,url original e temporario e o modo de abertura como parametro*/
+void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*cria dois ponteiros, um para o arquivo e outro para um arquivo temporário*/
 	FILE *arquivo;
 	FILE *arquivo2;
@@ -25,8 +25,8 @@ void excluihospede(int tipo){
 		/*se for tipo 1, é salvamento em texto*/
 		case 1:
 		/*abre o arquivo normal e o arquivo temporario*/
-			arquivo = fopen("saves/hospedes.txt","a+");
-			arquivo2 = fopen("saves/temphospede.txt","a+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica erro na abertura dos dois arquivo*/
 			/*caso tenho mostra mensagem de erro*/
 			if(arquivo2 == NULL){
@@ -91,9 +91,9 @@ void excluihospede(int tipo){
 				if(op == 1){
 					/*exclui o hospode*/
 					/*remove o arquivo*/
-					remove("saves/hospedes.txt");
+					remove(url);
 					/*renomeia o temporario com os outros dados que não foram excluidos*/
-					rename("saves/temphospede.txt","saves/hospedes.txt");
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -105,8 +105,8 @@ void excluihospede(int tipo){
 		/*tipo 2, salvamento em binário*/
 		case 2:
 		/*abre o arquivo normal e o temporário*/
-			arquivo = fopen("saves/hospedes.bin","ab+");
-			arquivo2 = fopen("saves/temphospede.bin","ab+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica erros na abertura dos dois arquivos*/
 			/*caso haja erro, mostra mensagem na tela*/
 			if(arquivo2 == NULL){
@@ -161,9 +161,9 @@ void excluihospede(int tipo){
 				/*se a resposta for sim*/
 				if(op == 1){
 					/*remove o arquivo original*/
-					remove("saves/hospedes.bin");
+					remove(url);
 					/*renomeia o arquivo temporario*/
-					rename("saves/temphospede.bin","saves/hospedes.bin");
+					rename(urltemp,url);
 					/*e mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}

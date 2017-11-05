@@ -8,7 +8,7 @@
 #include "cores.h"
 /*********Comentar*******************/
 /*funcao para salvar para o hospede no arquivo texto*/
-void salvarhospede(int tipo){
+void salvarhospede(int tipo,char url[100],char modoabertura[5]){
 	/*chama a struct hospede para usar as variaveis do hospede*/
 	struct hospede h;
 	setlocale(LC_ALL, "Portuguese");
@@ -18,7 +18,7 @@ void salvarhospede(int tipo){
 		/*no primeiro caso, salva em arquivo texto*/
 		case 1:
 			/*abre o arquivo texto*/
-			arquivo = fopen("saves/hospedes.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica o arquivo texto*/
 			if(arquivo == NULL){
 				/*se for nulo, ou seja nao foi encontrado, mostra uma mensagem de erro*/
@@ -52,7 +52,7 @@ void salvarhospede(int tipo){
 		/*no segundo caso, salva em binario*/
 		case 2:
 			//*abre o arquivo binario*//
-			arquivo = fopen("saves/hospedes.bin","ab");
+			arquivo = fopen(url,modoabertura);
 			/*caso o arquivo nao exista o ponteiro retornara nulo*/
 			if(arquivo == NULL){
 				vermelho("Erro em realizar o cadastro do hóspede no arquivo binário!!\n\n");

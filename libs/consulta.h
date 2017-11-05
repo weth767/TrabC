@@ -7,8 +7,8 @@
 #include "cores.h"
 
 /*funcao para realizar a consulta do hospede*/
-/*recebe o tipo de salvamento por parametro*/
-void consultahospede(int tipo){
+/*recebe o tipo de salvamento, url e modo de abertura por parametro*/
+void consultahospede(int tipo,char url[50],char modoabertura[5]){
 	/*faço a chamada da struct, para ter acesso as variaveis do hospede*/
 	struct hospede h;
 	//crio um ponteiro do tipo arquivo
@@ -19,7 +19,7 @@ void consultahospede(int tipo){
 		/*caso for 1, salvamento arquivo texto*/
 		case 1:
 			/*abro o arquivo*/
-			arquivo = fopen("saves/hospedes.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			//verifico se ele foi aberto
 			/*se houver erros na abertura mostra mensagem na tela*/
 			if(arquivo == NULL){
@@ -64,7 +64,7 @@ void consultahospede(int tipo){
 		/*caso 2, verifica em binario*/
 		case 2:
 			/*abre o arquivo*/
-			arquivo = fopen("saves/hospedes.bin","ab+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se ele foi aberto normalmente*/
 			/*se houve algum erro mostra mensagem na tela*/
 			if(arquivo == NULL){

@@ -6,9 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cores.h"
+#include "consulta.h"
 /*função para editar os dados dos hospedes*/
-/*recebe por parametro o tipo de salvamento*/
-void editahospede(int tipo){
+/*recebe por parametro o tipo de salvamento,url original e temporario e o modo de abertura*/
+void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*chama a struct de hospode para acessar suas variaveis*/
 	struct hospede h;
 	/*cria dois ponteiros de arquivo, um para o arquivo original e um para o temporario*/
@@ -24,22 +25,22 @@ void editahospede(int tipo){
 	scanf("%i",&codigo);
 	setbuf(stdin,NULL);
 	/*verifica o tipo de salvamento*/
-	switch(tipo){
-		/*for o tipo de salvamento 1, arquivo texto*/
-		case 1:
-			/*abre os arquivos, original e temporario*/
-			arquivo = fopen("saves/hospedes.txt","a+");
-			arquivo2 = fopen("saves/temphospede.txt","a+");
-			/*verifica o se houve erro na abertura dos dois arquivos*/
-			/*se houver, mostra mensagem de erro */
-			if(arquivo2 == NULL){
-				vermelho("\nErro em localizar o arquivo de hospedes!!\n\n");
-			}
-			if(arquivo == NULL){
-				vermelho("\nErro em localizar o arquivo de hospedes!!\n\n");
-			}
-			/*se estiver tudo ok...*/
-			else{
+	/*abre os arquivos, original e temporario*/
+	arquivo = fopen(url,modoabertura);
+	arquivo2 = fopen(urltemp,modoabertura);
+	/*verifica o se houve erro na abertura dos dois arquivos*/
+	/*se houver, mostra mensagem de erro */
+	if(arquivo2 == NULL){
+		vermelho("\nErro em localizar o arquivo de hospedes!!\n\n");
+	}
+	if(arquivo == NULL){
+		vermelho("\nErro em localizar o arquivo de hospedes!!\n\n");
+	}
+	else{
+		/*se estiver tudo ok...*/
+		switch(tipo){
+			/*for o tipo de salvamento 1, arquivo texto*/
+			case 1:
 				/*a variavel verifica recebe 0, para controlar quando será escolhido uma opção para edição*/
 				verifica = 0;
 				/*verifica o arquivo todo, armazenando um hospede por vez */
@@ -89,11 +90,16 @@ void editahospede(int tipo){
 						printf("\nStatus: %s\n",h.status);
 						/*recebe a opção que será de qual dado será editado*/
 						branco("\nDigite o que será editado:\n1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número\n6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
-							"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
+							"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n0 - Cancelar\n: ");
 						scanf("%i",&op);
 						/*verifica a opção de edição*/
 						/*para opções de edições validas, verifica recebe o valor 1*/
 						switch(op){
+							/*caso 0, não vai haver edição*/
+							case 0:
+								remove(urltemp);
+								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+							break;
 							/*para o tipo 1, edita o nome do hospede*/
 							case 1:
 								setbuf(stdin,NULL);
@@ -209,59 +215,45 @@ void editahospede(int tipo){
 							/*e outra opção que não seja as listadas acima, mostra mensagem de erro*/
 							default:
 								vermelho("\nOpção invalida!!\n");
+								remove(urltemp);
 							break;
 						}
-						
 					}
 				}
-			/*verifica igual 1, quer dizer que algo será editado*/	
-			if(verifica == 1){
-				/*então salva o dado novo junto com os antigos nao alterados*/
-				/*salva no arquivo temporario*/
-				fprintf(arquivo2,"%u",h.codigo);
-				fprintf(arquivo2,"\n%s",h.nome);
-				fprintf(arquivo2,"\n%s",h.cpf);
-				fprintf(arquivo2,"\n%s",h.rg);
-				fprintf(arquivo2,"\n%s",h.rua);
-				fprintf(arquivo2,"\n%s",h.numero);
-				fprintf(arquivo2,"\n%s",h.bairro);
-				fprintf(arquivo2,"\n%s",h.cidadeestado.cidade);
-				fprintf(arquivo2,"\n%s",h.cidadeestado.estado);
-				fprintf(arquivo2,"\n%s",h.cep);
-				fprintf(arquivo2,"\n%s",h.complemento);
-				fprintf(arquivo2,"\n%s",h.datanascimento);
-				fprintf(arquivo2,"\n%s",h.telefone);
-				fprintf(arquivo2,"\n%s",h.celular);
-				fprintf(arquivo2,"\n%s",h.estadocivil);
-				fprintf(arquivo2,"\n%s",h.email);
-				fprintf(arquivo2,"\n%s\n\n",h.status);
-				/*mostra mensagem de sucesso*/
-				verde("\nDados alterados com sucesso!\n\n");
-				/*remove o arquivo antigo, original*/
-				remove("saves/hospedes.txt");
-				/*renomeia o arquivo temporario*/
-				rename("saves/temphospede.txt","saves/hospedes.txt");
-				/*fecha os dois arquivos*/
-				fclose(arquivo);
-				fclose(arquivo2);
-			}
-			
-		break;
-		/*tipo de salvamento 2, arquivo binario*/
-		case 2:
-			/*abre os dois arquivos, o temporario e o original*/
-			arquivo = fopen("saves/hospedes.bin","ab+");
-			arquivo2 = fopen("saves/temphospede.bin","ab+");
-			/*verifica se os dois arquivos abriram sem erros*/
-			/*se houve erros mostra mensagem na tela*/
-			if(arquivo2 == NULL){
-				vermelho("\nErro em localizar o arquivo de hospedes!!\n\n");
-			}
-			if(arquivo == NULL){
-				vermelho("\nErro em localizar o arquivo de hospedes!!\n\n");
-			}
-			/*se estiver tudo ok..*/
-			else{
+				/*verifica igual 1, quer dizer que algo será editado*/	
+				if(verifica == 1){
+					/*então salva o dado novo junto com os antigos nao alterados*/
+					/*salva no arquivo temporario*/
+					fprintf(arquivo2,"%u",h.codigo);
+					fprintf(arquivo2,"\n%s",h.nome);
+					fprintf(arquivo2,"\n%s",h.cpf);
+					fprintf(arquivo2,"\n%s",h.rg);
+					fprintf(arquivo2,"\n%s",h.rua);
+					fprintf(arquivo2,"\n%s",h.numero);
+					fprintf(arquivo2,"\n%s",h.bairro);
+					fprintf(arquivo2,"\n%s",h.cidadeestado.cidade);
+					fprintf(arquivo2,"\n%s",h.cidadeestado.estado);
+					fprintf(arquivo2,"\n%s",h.cep);
+					fprintf(arquivo2,"\n%s",h.complemento);
+					fprintf(arquivo2,"\n%s",h.datanascimento);
+					fprintf(arquivo2,"\n%s",h.telefone);
+					fprintf(arquivo2,"\n%s",h.celular);
+					fprintf(arquivo2,"\n%s",h.estadocivil);
+					fprintf(arquivo2,"\n%s",h.email);
+					fprintf(arquivo2,"\n%s\n\n",h.status);
+					/*mostra mensagem de sucesso*/
+					verde("\nDados alterados com sucesso!\n\n");
+					/*remove o arquivo antigo, original*/
+					remove(url);
+					/*renomeia o arquivo temporario*/
+					rename(urltemp,url);
+					/*fecha os dois arquivos*/
+					fclose(arquivo);
+					fclose(arquivo2);
+				}
+			break;
+			/*tipo de salvamento 2, arquivo binario*/
+			case 2:
 				/*verifica receberá 0 para depois ser verificado as opções de edição*/
 				verifica = 0;
 				/*le o arquivo todo, armazenando cada hospede por vez*/
@@ -301,10 +293,15 @@ void editahospede(int tipo){
 						printf("\nStatus: %s\n",h.status);
 						/*recebe a opção que será de qual dado será editado*/
 						branco("\nDigite o que será editado:\n1 - Nome\n2 - CPF\n3 - RG\n4 - Rua\n5 - Número\n6 - Bairro\n7 - CEP\n8 - Complemento\n9 - Cidade\n10 - Estado\n11 - Data de Nascimento\n12 - Telefone\n"
-							"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n: ");
+							"13 - Celular\n14 - Estado Cívil\n15 - E-mail\n16 - Status\n0 - Cancelar\n: ");
 						scanf("%i",&op);
 						/*verifica a opção de edição digitado*/
 						switch(op){
+							/*caso 0, não vai haver edição*/
+							case 0:
+								remove(urltemp);
+								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+							break;
 							/*para o tipo 1, edita o nome do hospede*/
 							case 1:
 								setbuf(stdin,NULL);
@@ -420,6 +417,7 @@ void editahospede(int tipo){
 							/*e outra opção que não seja as listadas acima, mostra mensagem de erro*/
 							default:
 								vermelho("\nOpção invalida!!\n");
+								remove(urltemp);
 							break;
 						}
 					}
@@ -431,21 +429,20 @@ void editahospede(int tipo){
 					/*mostra mensagem de suceso*/
 					verde("\nDados alterados com sucesso!\n\n");
 					/*remove o arquivo original*/
-					remove("saves/hospedes.bin");
+					remove(url);
 					/*renomeia o arquivo temporario*/
-					rename("saves/temphospede.bin","saves/hospedes.bin");
+					rename(urltemp,url);
 					/*fecha os dois arquivos*/
 					fclose(arquivo);
 					fclose(arquivo2);
 				}
-			}
-		break;
-		/*mostra mensagem de erro para opções de salvamento ainda não implementadas*/
-		default:
-			vermelho("\nOpcao ainda não implementada ou não existente\n\n");		
-		break;
-	  }
-	}
+			break;
+			/*mostra mensagem de erro para opções de salvamento ainda não implementadas*/
+			default:
+				vermelho("\nOpcao ainda não implementada ou não existente\n\n");		
+			break;
+		}
+	}	
 }
 /*função para editar os dados do hotel*/
 /*recebe por parametro o tipo de salvamento*/
@@ -528,11 +525,16 @@ void editahotel(int tipo){
 						printf("\nStatus: %s\n\n",ht.status);
 						/*recebe a opção de edição selecionada*/
 						branco("Digite o que será editado:\n1 - Nome Fantasia\n2 - Razão Social\n3 - CNPJ\n4 - Inscrição Estadual\n5 - Rua\n6 - Número\n7 - Bairro\n8 - CEP\n9 - Complemento\n10 - Cidade\n11 - Estado\n12 - Telefone\n13 - E-Mail\n"
-						"14 - Nome do Responsável\n15 - Telefone do Responsável\n16 - Status\n: ");
+						"14 - Nome do Responsável\n15 - Telefone do Responsável\n16 - Status\n0 - Cancelar\n: ");
 						scanf("%i",&op);
 						/*verifica essa opção*/
 						/*variavel verifica recebe 1 nos valores de edição validos*/
 						switch(op){
+							/*caso 0, não vai haver edição*/
+							case 0:
+								remove("saves/temphotel.txt");
+								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+							break;
 							/*caso seja igual a 1, edita o nome fantasia*/
 							case 1:
 								setbuf(stdin,NULL);
@@ -741,6 +743,11 @@ void editahotel(int tipo){
 						scanf("%i",&op);
 						/*verifica a opção que será editado*/
 						switch(op){
+							/*caso 0, não vai haver edição*/
+							case 0:
+								remove("saves/temphospede.bin");
+								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+							break;
 							/*caso seja igual a 1, edita o nome fantasia*/
 							case 1:
 								setbuf(stdin,NULL);
@@ -882,37 +889,50 @@ void editahotel(int tipo){
 		break;
 	}
 }
-
+/*função para editar os dados no produto*/
+/*recebe por parametro o tipo de salvamento*/
 void editaproduto(int tipo){
 
 }
-
+/*função para editar os dados de categoria*/
+/*recebe por parametro o tipo de salvamento*/
 void editacategoria(int tipo){
+	/*chama a struct de categorias para ter acesso a suas variaveis*/
 	struct categorias c;
+	/*cria os dois ponteiros*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int verifica;
 	int codigo;
 	int op;
 	ciano("\nEdição de Categorias!\n");
+	/*recebe o codigo que sera editado*/
 	printf("Digite o código da categoria que será editada: ");
 	scanf("%i",&codigo);
-	printf("Digite o que será editado: \n1 - Descrição\n2 - Valor\n3 - Quantidade de Adultos\n4 - Quantidade de Crianças\n5 - Status\n: ");
-	scanf("%i",&op);
+	/*verifica o tipo de salvamento*/
 	switch(tipo){
+		/*caso for o tipo 1, arquivo texto*/
 		case 1:
+		/*abre os arquivos, original e temporario*/
 			arquivo = fopen("saves/categorias.txt","a+");
 			arquivo2 = fopen("saves/tempcategoria.txt","a+");
+			/*verifica se houve erros na abertura dos arquivos*/
+			/*se houve erros, mostra mensagem na tela*/
 			if(arquivo2 == NULL){
 				vermelho("\nErro em localizar o arquivo de categorias!\n");
 			}
 			if(arquivo == NULL){
 				vermelho("\nErro em localizar o arquivo de categorias!\n");
 			}
+			/*se estiver tudo ok..*/
 			else{
+				/*verifica recebe o valor 0, para ser utilizado como verificador de valores de edição validos*/
 				verifica = 0;
+				/*le o arquivo todo, armazenando uma categoria por vez*/
 				while(fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status) != EOF){
+					/*verifica se o codigo que foi lido é diferente do codigo digitado pelo usuario*/
 					if(c.codigo != codigo){
+						/*se for salva os dados no arquivo temporario*/
 						fprintf(arquivo2,"%u",c.codigo);
 						fprintf(arquivo2,"\n%s",c.descricao);
 						fprintf(arquivo2,"\n%.2f",c.valor);
@@ -920,41 +940,65 @@ void editacategoria(int tipo){
 						fprintf(arquivo2,"\n%i",c.quantidadecriancas);
 						fprintf(arquivo2,"\n%s\n\n",c.status);
 					}
+					/*se for igual*/
+					/*verifica se ja esta no final do arquivo, para evitar bugs*/
 					else{
 						if(feof(arquivo)){
+							/*se estiver sai do laço*/
 							break;
 						}
+						/*mostra a categoria selecionada*/
+						azulclaro("\nCategoria Selecionada: \n\n");
+						printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
+						printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
+						printf("\nStatus: %s\n\n",c.status);
+						/*recebe a opção de edição*/
+						branco("Digite o que será editado: \n1 - Descrição\n2 - Valor\n3 - Quantidade de Adultos\n4 - Quantidade de Crianças\n5 - Status\n: ");
+						scanf("%i",&op);
+						/*verifica essa opção de edição*/
+						/*valores validos, recebem o verifica como 1*/
 						switch(op){
+							/*caso 0, não vai haver edição*/
+							case 0:
+								remove("saves/temphospede.txt");
+								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+							break;
+							/*caso for o tipo 1, edita a descrição da categoria*/
 							case 1:
 								setbuf(stdin,NULL);
 								printf("Digite a nova Descrição: ");
 								scanf("%[^\n]s",c.descricao);
 								verifica = 1;
 							break;
+							/*caso for o tipo 2, edita o valor da categoria*/
 							case 2:
 								setbuf(stdin,NULL);
 								printf("Digite o novo Valor: ");
 								scanf("%f",&c.valor);
 								verifica = 1;
 							break;
+							/*caso for o tipo 3, edita a quantidade de adultos*/
 							case 3:
 								setbuf(stdin,NULL);
 								printf("Digite a nova Quantidade de Adultos: ");
 								scanf("%i",&c.quantidadeadultos);
 								verifica = 1;
 							break;
+							/*caso for o tipo 4, edita a quantidade de crianças*/
 							case 4:
 								setbuf(stdin,NULL);
 								printf("Digite a nova Quantidade de Crianças: ");
 								scanf("%i",&c.quantidadecriancas);
 								verifica = 1;
 							break;
+							/*caso for o tipo 5, edita o status da categoria*/
 							case 5:
 								setbuf(stdin,NULL);
 								printf("Digite o novo Status: ");
 								scanf("%[^\n]s",c.status);
 								verifica = 1;
 							break;
+							/*para valores fora da lista acima, mostra mensagem de erro na tela*/
 							default:
 								vermelho("\nOpção invalida!!\n");
 							break;
@@ -962,121 +1006,171 @@ void editacategoria(int tipo){
 					}
 				}
 			}
+			/*se o verifica for igual a 1*/
 			if(verifica == 1){
+				/*salva o dado alterado mais os que continuaram o mesmo no arquivo temporario*/
 				fprintf(arquivo2,"%u",c.codigo);
 				fprintf(arquivo2,"\n%s",c.descricao);
 				fprintf(arquivo2,"\n%.2f",c.valor);
 				fprintf(arquivo2,"\n%i",c.quantidadeadultos);
 				fprintf(arquivo2,"\n%i",c.quantidadecriancas);
 				fprintf(arquivo2,"\n%s\n\n",c.status);
+				/*mostra mensagem de sucesso na tela*/
 				verde("\nDados alterados com sucesso!\n");
+				/*remove o arquivo original*/
 				remove("saves/categorias.txt");
+				/*renomeia o arquivo temporario*/
 				rename("saves/tempcategoria.txt","saves/categorias.txt");
+				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
 			}
 		break;
+		/*tipo de salvamento 2, arquivo binario*/
 		case 2:
+			/*abre os dois arquivos, o temporario e o original*/
 			arquivo = fopen("saves/categorias.bin","ab+");
 			arquivo2 = fopen("saves/tempcategoria.bin","ab+");
+			/*verifica se houve erros na abertura dos arquivos*/
+			/*se houve mostra mensagem na tela*/
 			if(arquivo2 == NULL){
 				vermelho("\nErro em localizar o arquivo de categorias!\n");
 			}
 			if(arquivo == NULL){
 				vermelho("\nErro em localizar o arquivo de categorias!\n");
 			}
+			/*se esta tudo ok..*/
 			else{
+				/*verifica recebe 0 para serem verificados valores validos de edição futuramente*/
 				verifica = 0;
+				/*le o arquivo inteiro, salvando um categoria por vez*/
 				while(!feof(arquivo)){
+					/*le cada categoira*/
 					fread(&c,sizeof(struct categorias),1,arquivo);
+					/*verifica se ja esta no final do arquivo para evitar erros*/
 					if(feof(arquivo)){
+						/*se estiver sai do laço*/
 						break;
 					}
+					/*verifica se o codigo lido é difrente do codigo digitado*/
 					if(c.codigo != codigo){
+						/*se for salva os dados no arquivo temporario*/
 						fwrite(&c,sizeof(struct categorias),1,arquivo2);
 					}
+					/*se for igual*/
 					else{
+						/*verifica o final do arquivo para evitar bugs*/
+						if(feof(arquivo)){
+							/*se estiver sai do laço*/
+							break;
+						}
+						/*mostra a categoria selecionada*/
+						azulclaro("\nCategoria Selecionada: \n\n");
+						printf("Código: %i, Descrição: %s",c.codigo,c.descricao);
+						printf("\nNúmero de Adultos: %i, Número de Crianças: %i",c.quantidadeadultos,c.quantidadecriancas);
+						printf("\nStatus: %s\n\n",c.status);
+						/*recebe as opções de edição*/
+						branco("Digite o que será editado: \n1 - Descrição\n2 - Valor\n3 - Quantidade de Adultos\n4 - Quantidade de Crianças\n5 - Status\n: ");
+						scanf("%i",&op);
+						/*verifica as opções de edição*/
 						switch(op){
+							/*caso for o tipo 1, edita a descrição da categoria*/
 							case 1:
 								setbuf(stdin,NULL);
 								printf("Digite a nova Descrição: ");
 								scanf("%[^\n]s",c.descricao);
 								verifica = 1;
 							break;
+							/*caso for o tipo 2, edita o valor da categoria*/
 							case 2:
 								setbuf(stdin,NULL);
 								printf("Digite o novo Valor: ");
 								scanf("%f",&c.valor);
 								verifica = 1;
 							break;
+							/*caso for o tipo 3, edita a quantidade de adultos*/
 							case 3:
 								setbuf(stdin,NULL);
 								printf("Digite a nova Quantidade de Adultos: ");
 								scanf("%i",&c.quantidadeadultos);
 								verifica = 1;
 							break;
+							/*caso for o tipo 4, edita a quantidade de crianças*/
 							case 4:
 								setbuf(stdin,NULL);
 								printf("Digite a nova Quantidade de Crianças: ");
 								scanf("%i",&c.quantidadecriancas);
 								verifica = 1;
 							break;
+							/*caso for o tipo 5, edita o status da categoria*/
 							case 5:
 								setbuf(stdin,NULL);
 								printf("Digite o novo Status: ");
 								scanf("%[^\n]s",c.status);
 								verifica = 1;
 							break;
+							/*para valores fora da lista acima, mostra mensagem de erro na tela*/
 							default:
-								vermelho("\nOpção inválida!!\n");
+								vermelho("\nOpção invalida!!\n");
 							break;
 						}
 					}
 				}
+				/*verifica igual a 1, opção de edição valida*/
 				if(verifica == 1){
+					/*salva o dado alterado e os dados antigos no arquivo temporario*/
 					fwrite(&c,sizeof(struct categorias),1,arquivo2);
+					/*mostra mensagem de sucesso na tela*/
 					verde("\nDados alterados com sucesso!\n\n");
+					/*remove o arquivo original*/
 					remove("saves/categorias.bin");
+					/*renomeia o arquivo temporario*/
 					rename("saves/tempcategoria.bin","saves/categorias.bin");
-					fclose(arquivo);				fwrite(&c,sizeof(struct categorias),1,arquivo2);
-					verde("\nDados alterados com sucesso!\n\n");
-					remove("saves/categorias.bin");
-					rename("saves/tempcategoria.bin","saves/categorias.bin");
-					fclose(arquivo);
-					fclose(arquivo2);
+					/*fecha os dois arquivos*/
+					fclose(arquivo);		
 					fclose(arquivo2);
 				}	
 			}
 		break;
+		/*mostra mensagem de erro para opções de salvamento ainda nao implementadas*/
+		default:
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");		
+		break;
 	}
 }
-
-
+/*função para editar os dados de acomodações*/
 void editaacomodacao(int tipo){
+	/*cria dois ponteiros do tipo arquivo para ter acesso aos dois arquivos, temporario e original*/
 	FILE *arquivo;
 	FILE *arquivo2;
 	int op,codigo,verifica;
+	/*chama a struct de acomodações para ter acesso a suas variaveis*/
 	struct acomodacoes ac;
 	ciano("\nEdição de Acomodações!\n");
+	/*cebece o codigo que sera editado*/
 	printf("Digite o código da Acomodação que será editada: ");
 	scanf("%i",&codigo);
-	printf("Digite o que será editado: \n1 - Descrição\n2 - Categoria Selecionada\n3 - TV\n4 - TV a Cabo\n5 - Ar Condicionado\n6 - Frigobar\n7 - Banheiro\n8 - Cama de Casal"
-		"\n9 - Cama de Solteiro\n10 - Hidromassagem\n11 - Banheira\n12 - Status\n: ");
-	scanf("%i",&op);
+	/*verifica o tipo de salvamento configurado*/
 	switch(tipo){
+		/*se for o tipo 1, arquivo texto*/
 		case 1:
+			/*abre os arquivos, o original e o temporario*/
 			arquivo = fopen("saves/acomodacoes.txt","a+");
 			arquivo2 = fopen("saves/tempacomodacao.txt","a+");
+			/*se houver erros na abertura dos arquivos, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
 				vermelho("\nErro em localizar o arquivo de acomodações\n");
 			}
 			if(arquivo == NULL){
-				printf("\nErro em localizar o arquivo de acomodações\n");
+				vermelho("\nErro em localizar o arquivo de acomodações\n");
 			}
+			/*se estiver tudo ok*/
 			else{
+				/*le o arquivo todo, armazenando por vez, cada acomodação*/
 				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,
 					&ac.extra.arcondicionado,&ac.extra.frigobar,&ac.extra.banheiro,&ac.extra.camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,
 				&ac.extra.banheira,&ac.categoriaselecionada,ac.status) != EOF){
+					/*verifica se o codigo da acomodação lida é diferente do codigo digitado pelo usuário*/
 					if(ac.codigo != codigo){
 						fprintf(arquivo2,"%u",ac.codigo);
 						fprintf(arquivo2,"\n%s",ac.descricao);
@@ -1093,6 +1187,25 @@ void editaacomodacao(int tipo){
 						fprintf(arquivo2,"\n%s\n\n",ac.status);
 					}
 					else{
+						if(feof(arquivo)){
+							break;
+						}
+						azulclaro("\nAcomodação Selecionada: \n\n");
+						printf("Código: %i",ac.codigo);
+						printf("\nDescrição: %s",ac.descricao);
+						printf("\nCom TV comum: %i",ac.extra.tv);
+						printf("\nCom TV a Cabo: %i",ac.extra.tvcabo);
+						printf("\nCom Ar condicionado: %i",ac.extra.arcondicionado);
+						printf("\nCom Frigobar: %i",ac.extra.frigobar);
+						printf("\nCom Banheiro Próprio: %i",ac.extra.banheiro);
+						printf("\nCom Cama de Casal: %i",ac.extra.camacasal);
+						printf("\nCom Cama de Solteiro: %i",ac.extra.camasolteiro);
+						printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
+						printf("\nCom Banheira: %i",ac.extra.banheira);
+						printf("\nCategoria da Acomodação: %i\n\n",ac.categoriaselecionada);
+						branco("Digite o que será editado: \n1 - Descrição\n2 - Categoria Selecionada\n3 - TV\n4 - TV a Cabo\n5 - Ar Condicionado\n6 - Frigobar\n7 - Banheiro\n8 - Cama de Casal"
+						"\n9 - Cama de Solteiro\n10 - Hidromassagem\n11 - Banheira\n12 - Status\n: ");
+						scanf("%i",&op);
 						verifica = 0;
 						switch(op){
 							case 1:
@@ -1102,6 +1215,7 @@ void editaacomodacao(int tipo){
 								verifica = 1;	
 							break;
 							case 2:
+								consultacategoria(tipo);
 								setbuf(stdin,NULL);
 								printf("Digite a nova Categoria Selecionada: ");
 								scanf("%i",&ac.categoriaselecionada);
@@ -1212,6 +1326,25 @@ void editaacomodacao(int tipo){
 						fwrite(&ac,sizeof(struct acomodacoes),1,arquivo2);
 					}
 					else{
+						if(feof(arquivo)){
+							break;
+						}
+						azulclaro("\nAcomodação Selecionada: \n\n");
+						printf("Código: %i",ac.codigo);
+						printf("\nDescrição: %s",ac.descricao);
+						printf("\nCom TV comum: %i",ac.extra.tv);
+						printf("\nCom TV a Cabo: %i",ac.extra.tvcabo);
+						printf("\nCom Ar condicionado: %i",ac.extra.arcondicionado);
+						printf("\nCom Frigobar: %i",ac.extra.frigobar);
+						printf("\nCom Banheiro Próprio: %i",ac.extra.banheiro);
+						printf("\nCom Cama de Casal: %i",ac.extra.camacasal);
+						printf("\nCom Cama de Solteiro: %i",ac.extra.camasolteiro);
+						printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
+						printf("\nCom Banheira: %i",ac.extra.banheira);
+						printf("\nCategoria da Acomodação: %i\n\n",ac.categoriaselecionada);
+						branco("Digite o que será editado: \n1 - Descrição\n2 - Categoria Selecionada\n3 - TV\n4 - TV a Cabo\n5 - Ar Condicionado\n6 - Frigobar\n7 - Banheiro\n8 - Cama de Casal"
+						"\n9 - Cama de Solteiro\n10 - Hidromassagem\n11 - Banheira\n12 - Status\n: ");
+						scanf("%i",&op);
 						verifica = 0;
 						switch(op){
 							case 1:
@@ -1221,6 +1354,7 @@ void editaacomodacao(int tipo){
 								verifica = 1;	
 							break;
 							case 2:
+								consultacategoria(tipo);
 								setbuf(stdin,NULL);
 								printf("Digite a nova Categoria Selecionada: ");
 								scanf("%i",&ac.categoriaselecionada);

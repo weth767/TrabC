@@ -20,6 +20,71 @@
 #include "libs/edicao.h"
 #include "libs/cores.h"
 /***/
+/*constantes*/
+char modoabertura[5];
+char urlhospede[50];
+char urlhotel[50];
+char urlproduto[50];
+char urlcategoria[50];
+char urlacomodacao[50];
+char urlfornecedor[50];
+char urlusuario[50];
+char urltemphospede[50];
+char urltemphotel[50];
+char urltempproduto[50];
+char urltempcategoria[50];
+char urltempacomodacao[50];
+char urltempfornecedor[50];
+char urltempusuario[50];
+/**/
+
+/*função para definição dos urls e modo de abertura dos arquivos*/
+void defineconstantes(){
+	/*para a variavel da url do usuario, como é somente binario vai fora do if e seu temporario tambem*/
+	strcpy(urlusuario,"saves/usuarios.bin");
+	strcpy(urltempusuario,"saves/tempusuarios.bin");
+	/*o resto vai ser comparado a configuração*/
+	if(verificasave() == 1){
+		/*caminhos originais*/
+		strcpy(modoabertura,"a+");
+		strcpy(urlhospede,"saves/hospedes.txt");
+		strcpy(urlhotel,"saves/hoteis.txt");
+		strcpy(urlproduto,"saves/produtos.txt");
+		strcpy(urlcategoria,"saves/categorias.txt");
+		strcpy(urlacomodacao,"saves/acomodacoes.txt");
+		strcpy(urlfornecedor,"saves/fornecedores.txt");
+		/*caminhos temporarios*/
+		strcpy(urltemphospede,"saves/temphospedes.txt");
+		strcpy(urltemphotel,"saves/temphoteis.txt");
+		strcpy(urltempproduto,"saves/tempprodutos.txt");
+		strcpy(urltempcategoria,"saves/tempcategorias.txt");
+		strcpy(urltempacomodacao,"saves/tempacomodacoes.txt");
+		strcpy(urltempfornecedor,"saves/tempfornecedores.txt");
+	}
+	else if(verificasave() == 2){
+		/*caminhos originais do binario*/
+		strcpy(modoabertura,"ab+");
+		strcpy(urlhospede,"saves/hospedes.bin");
+		strcpy(urlhotel,"saves/hoteis.bin");
+		strcpy(urlproduto,"saves/produtos.bin");
+		strcpy(urlcategoria,"saves/categorias.bin");
+		strcpy(urlacomodacao,"saves/acomodacoes.bin");
+		strcpy(urlfornecedor,"saves/fornecedores.bin");
+		/*caminhos temporarios do binario*/
+		strcpy(urltemphospede,"saves/temphospedes.bin");
+		strcpy(urltemphotel,"saves/temphoteis.bin");
+		strcpy(urltempproduto,"saves/tempprodutos.bin");
+		strcpy(urltempcategoria,"saves/tempcategorias.bin");
+		strcpy(urltempacomodacao,"saves/tempacomodacoes.bin");
+		strcpy(urltempfornecedor,"saves/tempfornecedores.bin");
+	}
+	/*opção de salvamento ainda nao implementada*/
+	else{
+		vermelho("\nOpções ainda não implementadas\n");
+	}
+}
+
+
 
 /*função para verificar o login*/
 int login(){
@@ -98,19 +163,19 @@ void menu(char com[50],int tiposave){
 	/*cadastro de hospede*/
 	if((strcmp(com,"cadhp") == 0)){
 		cadastrahospede();
-		salvarhospede(tiposave);
+		salvarhospede(tiposave,urlhospede,modoabertura);
 	}
 	/*Consulta de Hospede*/
 	else if(strcmp(com,"cshp") == 0){
-		consultahospede(tiposave);
+		consultahospede(tiposave,urlhospede,modoabertura);
 	}
 	/*excluir hospede*/
 	else if(strcmp(com,"exhp") == 0){
-		excluihospede(tiposave);
+		excluihospede(tiposave,urlhospede,modoabertura,urltemphospede);
 	}
 	/*editar hospede*/
 	else if(strcmp(com,"edhp") == 0){
-		editahospede(tiposave);
+		editahospede(tiposave,urlhospede,modoabertura,urltemphospede);
 	}
 
 	/*comandos para cadastro de hotel*/
@@ -289,6 +354,7 @@ int main(int argc, char** argv) {
 					system("clear");
 				}
 			}
+			defineconstantes();
 			/*Funcoes*/
 			/*Após a config feita, o usuário será direcionado para a tela de opções*/
 			/*Abaixo sera a parte dos comandos relacionados ao sistema*/

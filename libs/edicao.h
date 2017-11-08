@@ -446,7 +446,7 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 }
 /*função para editar os dados do hotel*/
 /*recebe por parametro o tipo de salvamento*/
-void editahotel(int tipo){
+void editahotel(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*chama a struct, para ter acesso a suas variaveis*/
 	struct hotel ht;
 	/*cria os dois ponteiros para ter acesso aos arquivos*/
@@ -459,201 +459,199 @@ void editahotel(int tipo){
 	/*recebe o codigo que sera editado*/
 	printf("Digite o codigo a ser editado: ");
 	scanf("%i",&codigo);
+	/*abre os dois arquivos, o original e o temporario*/
+	arquivo = fopen(url,modoabertura);
+	arquivo2 = fopen(urltemp,modoabertura);
+	/*verifica se houve erro na abertura dos arquivos*/
+	/*se houve mostra mensagem de erro na tela*/
+	if(arquivo2 == NULL){
+		vermelho("\nErro em localizar o arquivo de hotel!\n");
+	}
+	if(arquivo == NULL){
+		vermelho("\nErro em localizar o arquivo do hotel\n");
+	}
+	/*se esta tudo ok, */
 	/*verifica o tipo de salvamento*/
 	switch(tipo){
 		/*se for o tipo 1, arquivo txt*/
 		case 1:
-			/*abre os dois arquivos, o original e o temporario*/
-			arquivo = fopen("saves/hoteis.txt","a+");
-			arquivo2 = fopen("saves/temphotel.txt","a+");
-			/*verifica se houve erro na abertura dos arquivos*/
-			/*se houve mostra mensagem de erro na tela*/
-			if(arquivo2 == NULL){
-				vermelho("\nErro em localizar o arquivo de hotel!\n");
-			}
-			if(arquivo == NULL){
-				vermelho("\nErro em localizar o arquivo do hotel\n");
-			}
-			/*se esta tudo ok, */
-			else{
-				/*verifica recebe o valor 0, que será usado para verifica se alguma opção de edição foi escolhida*/
-				verifica = 0;
-				/*le o arquivo, armazenando por vez, um hotel*/
-				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,ht.insc,
-					ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status) !=EOF){
-					/*verifica se o codigo lido é diferente do digitado*/
-					if(ht.codigo != codigo){
-						/*se for salva os dados no arquivo temporario*/
-						fprintf(arquivo2,"%u",ht.codigo);
-						fprintf(arquivo2,"\n%s",ht.nomefantasia);
-						fprintf(arquivo2,"\n%s",ht.razaosocial);
-						fprintf(arquivo2,"\n%s",ht.cnpj);
-						fprintf(arquivo2,"\n%s",ht.insc);
-						fprintf(arquivo2,"\n%s",ht.rua);
-						fprintf(arquivo2,"\n%s",ht.numero);
-						fprintf(arquivo2,"\n%s",ht.bairro);
-						fprintf(arquivo2,"\n%s",ht.cidadeestado.cidade);
-						fprintf(arquivo2,"\n%s",ht.cidadeestado.estado);
-						fprintf(arquivo2,"\n%s",ht.cep);
-						fprintf(arquivo2,"\n%s",ht.complemento);
-						fprintf(arquivo2,"\n%s",ht.telefone);
-						fprintf(arquivo2,"\n%s",ht.email);
-						fprintf(arquivo2,"\n%s",ht.nomeresponsavel);
-						fprintf(arquivo2,"\n%s",ht.telefoneresponsavel);
-						fprintf(arquivo2,"\n%s\n\n",ht.status);	
+			/*verifica recebe o valor 0, que será usado para verifica se alguma opção de edição foi escolhida*/
+			verifica = 0;
+			/*le o arquivo, armazenando por vez, um hotel*/
+			while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,ht.insc,
+				ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status) !=EOF){
+				/*verifica se o codigo lido é diferente do digitado*/
+				if(ht.codigo != codigo){
+					/*se for salva os dados no arquivo temporario*/
+					fprintf(arquivo2,"%u",ht.codigo);
+					fprintf(arquivo2,"\n%s",ht.nomefantasia);
+					fprintf(arquivo2,"\n%s",ht.razaosocial);
+					fprintf(arquivo2,"\n%s",ht.cnpj);
+					fprintf(arquivo2,"\n%s",ht.insc);
+					fprintf(arquivo2,"\n%s",ht.rua);
+					fprintf(arquivo2,"\n%s",ht.numero);
+					fprintf(arquivo2,"\n%s",ht.bairro);
+					fprintf(arquivo2,"\n%s",ht.cidadeestado.cidade);
+					fprintf(arquivo2,"\n%s",ht.cidadeestado.estado);
+					fprintf(arquivo2,"\n%s",ht.cep);
+					fprintf(arquivo2,"\n%s",ht.complemento);
+					fprintf(arquivo2,"\n%s",ht.telefone);
+					fprintf(arquivo2,"\n%s",ht.email);
+					fprintf(arquivo2,"\n%s",ht.nomeresponsavel);
+					fprintf(arquivo2,"\n%s",ht.telefoneresponsavel);
+					fprintf(arquivo2,"\n%s\n\n",ht.status);	
+				}
+				/*se for igual*/
+				else{
+					/*mostra o hotel selecionado*/
+					azulclaro("\nHotel selecionado:\n\n");
+					printf("Código: %u",ht.codigo);
+					printf("\nRazão Social: %s",ht.razaosocial);
+					printf("\nNome Fantasia: %s",ht.nomefantasia);
+					printf("\nCNPJ: %s",ht.cnpj);
+					printf("\nInscrição Estadual: %s",ht.insc);
+					printf("\nRua: %s",ht.rua);
+					printf("\nNumero: %s",ht.numero);
+					printf("\nBairro: %s",ht.bairro);
+					printf("\nCidade: %s",ht.cidadeestado.cidade);
+					printf("\nEstado: %s",ht.cidadeestado.estado);
+					printf("\nCEP: %s",ht.cep);
+					printf("\nComplemento: %s",ht.complemento);
+					printf("\nTelefone: %s",ht.telefone);
+					printf("\nE-Mail: %s",ht.email);
+					printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+					printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+					printf("\nStatus: %s\n\n",ht.status);
+					/*recebe a opção de edição selecionada*/
+					branco("Digite o que será editado:\n1 - Nome Fantasia\n2 - Razão Social\n3 - CNPJ\n4 - Inscrição Estadual\n5 - Rua\n6 - Número\n7 - Bairro\n8 - CEP\n9 - Complemento\n10 - Cidade\n11 - Estado\n12 - Telefone\n13 - E-Mail\n"
+					"14 - Nome do Responsável\n15 - Telefone do Responsável\n16 - Status\n0 - Cancelar\n: ");
+					scanf("%i",&op);
+					/*verifica essa opção*/
+					/*variavel verifica recebe 1 nos valores de edição validos*/
+					switch(op){
+						/*caso 0, não vai haver edição*/
+						case 0:
+							remove("saves/temphotel.txt");
+							vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+						break;
+						/*caso seja igual a 1, edita o nome fantasia*/
+						case 1:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Nome Fantasia: ");
+							scanf("%[^\n]s",ht.nomefantasia);
+							verifica = 1;
+						break;
+						case 2:
+						/*caso for igual a 2, edita a razao social*/
+							setbuf(stdin,NULL);
+							printf("Digite o novo Razão Social: ");
+							scanf("%[^\n]s",ht.razaosocial);
+							verifica = 1;
+						break;
+						/*caso for igual a 3, edita o cnpj*/
+						case 3:
+							setbuf(stdin,NULL);
+							printf("Digite o novo CNPJ:");
+							scanf("%[^\n]s",ht.cnpj);
+							verifica = 1;
+						break;
+						/*caso for iugal a 4, edita a inscrição estadual*/
+						case 4:
+							setbuf(stdin,NULL);
+							printf("Digite a nova Inscrição Estadual: ");
+							scanf("%[^\n]s",ht.insc);
+							verifica = 1;
+						break;
+						/*caso for igual a 5, edita a rua onde se encontra o hotel*/
+						case 5:
+							setbuf(stdin,NULL);
+							printf("Digite a nova Rua : ");
+							scanf("%[^\n]s",ht.rua);
+							verifica = 1;
+						break;
+						case 6:
+						/*caso for igual a 6, edita o numero onde se encontra o hotel*/
+							setbuf(stdin,NULL);
+							printf("Digite o novo Número: ");
+							scanf("%[^\n]s",ht.numero);
+							verifica = 1;
+						break;
+						/*caso for igual a 7, edita o bairro onde se encontra o hotel*/
+						case 7:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Bairro: ");
+							scanf("%[^\n]s",ht.bairro);
+							verifica = 1;
+						break;
+						/*caso for igual a 8, edita o cep de onde se encontra o hotel*/
+						case 8:
+							setbuf(stdin,NULL);
+							printf("Digite o novo CEP: ");
+							scanf("%[^\n]s",ht.cep);
+							verifica = 1;
+						break;
+						/*caso for igual a 9 edita o complemento do hotel*/
+						case 9:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Complemento: ");
+							scanf("%[^\n]s",ht.complemento);
+							verifica = 1;
+						break;
+						case 10:
+						/*caso for igual a 10, edita a cidade onde se encontra o hotel*/
+							setbuf(stdin,NULL);
+							printf("Digite a nova Cidade: ");
+							scanf("%[^\n]s",ht.cidadeestado.cidade);
+							verifica = 1;
+						break;
+						/*caso for igual a 11, edita o estado onde se encontra o hotel*/
+						case 11:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Estado: ");
+							scanf("%[^\n]s",ht.cidadeestado.estado);
+							verifica = 1;
+						break;
+						/*caso for igual a 12, edita o telefone do hotel*/
+						case 12:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Telefone: ");
+							scanf("%[^\n]s",ht.telefone);
+							verifica = 1;
+						break;
+						/*caso for igual a 13, edita o email do hotel*/
+						case 13:
+							setbuf(stdin,NULL);
+							printf("Digite o novo E-mail: ");
+							scanf("%[^\n]s",ht.email);
+							verifica = 1;
+						break;
+						/*caso for igual a 14, edita o nome do responsavel do hotel*/
+						case 14:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Nome do Responsável: ");
+							scanf("%[^\n]s",ht.nomeresponsavel);
+							verifica = 1;
+						break;
+						case 15:
+						/*caso for igual a 15, edita o telefone do responsavel do hotel*/
+							setbuf(stdin,NULL);
+							printf("Digite o novo Telefone do Responsável: ");
+							scanf("%[^\n]s",ht.telefoneresponsavel);
+							verifica = 1;
+						break;
+						/*caso for igual a 16, edita o status do hotel*/
+						case 16:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Status: ");
+							scanf("%[^\n]s",ht.status);
+							verifica = 1;
+						break;
+						/*caso for uma opção diferente das listadas acima mostra mensagem de erro*/
+						default:
+							vermelho("\nOpção invalida!!\n");
+						break;
 					}
-					/*se for igual*/
-					else{
-						/*mostra o hotel selecionado*/
-						azulclaro("\nHotel selecionado:\n\n");
-						printf("Código: %u",ht.codigo);
-						printf("\nRazão Social: %s",ht.razaosocial);
-						printf("\nNome Fantasia: %s",ht.nomefantasia);
-						printf("\nCNPJ: %s",ht.cnpj);
-						printf("\nInscrição Estadual: %s",ht.insc);
-						printf("\nRua: %s",ht.rua);
-						printf("\nNumero: %s",ht.numero);
-						printf("\nBairro: %s",ht.bairro);
-						printf("\nCidade: %s",ht.cidadeestado.cidade);
-						printf("\nEstado: %s",ht.cidadeestado.estado);
-						printf("\nCEP: %s",ht.cep);
-						printf("\nComplemento: %s",ht.complemento);
-						printf("\nTelefone: %s",ht.telefone);
-						printf("\nE-Mail: %s",ht.email);
-						printf("\nNome do Responsável: %s",ht.nomeresponsavel);
-						printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
-						printf("\nStatus: %s\n\n",ht.status);
-						/*recebe a opção de edição selecionada*/
-						branco("Digite o que será editado:\n1 - Nome Fantasia\n2 - Razão Social\n3 - CNPJ\n4 - Inscrição Estadual\n5 - Rua\n6 - Número\n7 - Bairro\n8 - CEP\n9 - Complemento\n10 - Cidade\n11 - Estado\n12 - Telefone\n13 - E-Mail\n"
-						"14 - Nome do Responsável\n15 - Telefone do Responsável\n16 - Status\n0 - Cancelar\n: ");
-						scanf("%i",&op);
-						/*verifica essa opção*/
-						/*variavel verifica recebe 1 nos valores de edição validos*/
-						switch(op){
-							/*caso 0, não vai haver edição*/
-							case 0:
-								remove("saves/temphotel.txt");
-								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
-							break;
-							/*caso seja igual a 1, edita o nome fantasia*/
-							case 1:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Nome Fantasia: ");
-								scanf("%[^\n]s",ht.nomefantasia);
-								verifica = 1;
-							break;
-							case 2:
-							/*caso for igual a 2, edita a razao social*/
-								setbuf(stdin,NULL);
-								printf("Digite o novo Razão Social: ");
-								scanf("%[^\n]s",ht.razaosocial);
-								verifica = 1;
-							break;
-							/*caso for igual a 3, edita o cnpj*/
-							case 3:
-								setbuf(stdin,NULL);
-								printf("Digite o novo CNPJ:");
-								scanf("%[^\n]s",ht.cnpj);
-								verifica = 1;
-							break;
-							/*caso for iugal a 4, edita a inscrição estadual*/
-							case 4:
-								setbuf(stdin,NULL);
-								printf("Digite a nova Inscrição Estadual: ");
-								scanf("%[^\n]s",ht.insc);
-								verifica = 1;
-							break;
-							/*caso for igual a 5, edita a rua onde se encontra o hotel*/
-							case 5:
-								setbuf(stdin,NULL);
-								printf("Digite a nova Rua : ");
-								scanf("%[^\n]s",ht.rua);
-								verifica = 1;
-							break;
-							case 6:
-							/*caso for igual a 6, edita o numero onde se encontra o hotel*/
-								setbuf(stdin,NULL);
-								printf("Digite o novo Número: ");
-								scanf("%[^\n]s",ht.numero);
-								verifica = 1;
-							break;
-							/*caso for igual a 7, edita o bairro onde se encontra o hotel*/
-							case 7:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Bairro: ");
-								scanf("%[^\n]s",ht.bairro);
-								verifica = 1;
-							break;
-							/*caso for igual a 8, edita o cep de onde se encontra o hotel*/
-							case 8:
-								setbuf(stdin,NULL);
-								printf("Digite o novo CEP: ");
-								scanf("%[^\n]s",ht.cep);
-								verifica = 1;
-							break;
-							/*caso for igual a 9 edita o complemento do hotel*/
-							case 9:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Complemento: ");
-								scanf("%[^\n]s",ht.complemento);
-								verifica = 1;
-							break;
-							case 10:
-							/*caso for igual a 10, edita a cidade onde se encontra o hotel*/
-								setbuf(stdin,NULL);
-								printf("Digite a nova Cidade: ");
-								scanf("%[^\n]s",ht.cidadeestado.cidade);
-								verifica = 1;
-							break;
-							/*caso for igual a 11, edita o estado onde se encontra o hotel*/
-							case 11:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Estado: ");
-								scanf("%[^\n]s",ht.cidadeestado.estado);
-								verifica = 1;
-							break;
-							/*caso for igual a 12, edita o telefone do hotel*/
-							case 12:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Telefone: ");
-								scanf("%[^\n]s",ht.telefone);
-								verifica = 1;
-							break;
-							/*caso for igual a 13, edita o email do hotel*/
-							case 13:
-								setbuf(stdin,NULL);
-								printf("Digite o novo E-mail: ");
-								scanf("%[^\n]s",ht.email);
-								verifica = 1;
-							break;
-							/*caso for igual a 14, edita o nome do responsavel do hotel*/
-							case 14:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Nome do Responsável: ");
-								scanf("%[^\n]s",ht.nomeresponsavel);
-								verifica = 1;
-							break;
-							case 15:
-							/*caso for igual a 15, edita o telefone do responsavel do hotel*/
-								setbuf(stdin,NULL);
-								printf("Digite o novo Telefone do Responsável: ");
-								scanf("%[^\n]s",ht.telefoneresponsavel);
-								verifica = 1;
-							break;
-							/*caso for igual a 16, edita o status do hotel*/
-							case 16:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Status: ");
-								scanf("%[^\n]s",ht.status);
-								verifica = 1;
-							break;
-							/*caso for uma opção diferente das listadas acima mostra mensagem de erro*/
-							default:
-								vermelho("\nOpção invalida!!\n");
-							break;
-						}
 						
-					}
 				}
 			}
 			/*se verifica igual a 1 salva o novo dado e os outros dados antigos que nao foram alterados no arquivo temporario*/
@@ -687,184 +685,170 @@ void editahotel(int tipo){
 		break;
 		/*tipo de salvamento 2, arquivo binario*/
 		case 2:
-			/*abre os arquivos, original e temporario*/
-			arquivo = fopen("saves/hoteis.bin","ab+");
-			arquivo2 = fopen("saves/temphotel.bin","ab+");
-			/*verifica erros na abertura dos arquivos*/
-			/*se hovuer mostra mensagem de erro*/
-			if(arquivo2 == NULL){
-				vermelho("\nErro em localizar o arquivo de hotel!\n");
-			}
-			if(arquivo == NULL){
-				vermelho("\nErro em localizar o arquivo de hotel!\n");
-			}
-			/*se estiver tudo ok*/
-			else{
-				/*a variavel verifica recebe 0, para ver os dados que podem ser editados*/
-				verifica = 0;
-				/*le o arquivo inteiro, armazena um hotel por vez*/
-				while(!feof(arquivo)){
-					/*comando de leitura*/
-					fread(&ht,sizeof(struct hotel),1,arquivo);
-					/*verifica se o codigo lido é diferente do codigo digitado*/
-					if(ht.codigo != codigo){
-						/*se for, salva os dados no arquivo temporario*/
-						fwrite(&ht,sizeof(struct hotel),1,arquivo2);
+			/*a variavel verifica recebe 0, para ver os dados que podem ser editados*/
+			verifica = 0;
+			/*le o arquivo inteiro, armazena um hotel por vez*/
+			while(!feof(arquivo)){
+				/*comando de leitura*/
+				fread(&ht,sizeof(struct hotel),1,arquivo);
+				/*verifica se o codigo lido é diferente do codigo digitado*/
+				if(ht.codigo != codigo){
+					/*se for, salva os dados no arquivo temporario*/
+					fwrite(&ht,sizeof(struct hotel),1,arquivo2);
+				}
+				/*se for igual*/
+				else{
+					/*verifica o final do arquivo para evitar bugs*/
+					if(feof(arquivo)){
+						/*sai do laço*/
+						break;
 					}
-					/*se for igual*/
-					else{
-						/*verifica o final do arquivo para evitar bugs*/
-						if(feof(arquivo)){
-							/*sai do laço*/
-							break;
-						}
-						/*mostra o hotel selecionado*/
-						azulclaro("\nHotel selecionado:\n\n");
-						printf("Código: %u",ht.codigo);
-						printf("\nRazão Social: %s",ht.razaosocial);
-						printf("\nNome Fantasia: %s",ht.nomefantasia);
-						printf("\nCNPJ: %s",ht.cnpj);
-						printf("\nInscrição Estadual: %s",ht.insc);
-						printf("\nRua: %s",ht.rua);
-						printf("\nNumero: %s",ht.numero);
-						printf("\nBairro: %s",ht.bairro);
-						printf("\nCidade: %s",ht.cidadeestado.cidade);
-						printf("\nEstado: %s",ht.cidadeestado.estado);
-						printf("\nCEP: %s",ht.cep);
-						printf("\nComplemento: %s",ht.complemento);
-						printf("\nTelefone: %s",ht.telefone);
-						printf("\nE-Mail: %s",ht.email);
-						printf("\nNome do Responsável: %s",ht.nomeresponsavel);
-						printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
-						printf("\nStatus: %s\n\n",ht.status);
-						/*recebe a opção que será editado*/
-						branco("Digite o que será editado:\n1 - Nome Fantasia\n2 - Razão Social\n3 - CNPJ\n4 - Inscrição Estadual\n5 - Rua\n6 - Número\n7 - Bairro\n8 - CEP\n9 - Complemento\n10 - Cidade\n11 - Estado\n12 - Telefone\n13 - E-Mail\n"
-						"14 - Nome do Responsável\n15 - Telefone do Responsável\n16 - Status\n: ");
-						scanf("%i",&op);
-						/*verifica a opção que será editado*/
-						switch(op){
-							/*caso 0, não vai haver edição*/
-							case 0:
-								remove("saves/temphospede.bin");
-								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
-							break;
-							/*caso seja igual a 1, edita o nome fantasia*/
-							case 1:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Nome Fantasia: ");
-								scanf("%[^\n]s",ht.nomefantasia);
-								verifica = 1;
-							break;
-							case 2:
-							/*caso for igual a 2, edita a razao social*/
-								setbuf(stdin,NULL);
-								printf("Digite o novo Razão Social: ");
-								scanf("%[^\n]s",ht.razaosocial);
-								verifica = 1;
-							break;
-							/*caso for igual a 3, edita o cnpj*/
-							case 3:
-								setbuf(stdin,NULL);
-								printf("Digite o novo CNPJ:");
-								scanf("%[^\n]s",ht.cnpj);
-								verifica = 1;
-							break;
-							/*caso for iugal a 4, edita a inscrição estadual*/
-							case 4:
-								setbuf(stdin,NULL);
-								printf("Digite a nova Inscrição Estadual: ");
-								scanf("%[^\n]s",ht.insc);
-								verifica = 1;
-							break;
-							/*caso for igual a 5, edita a rua onde se encontra o hotel*/
-							case 5:
-								setbuf(stdin,NULL);
-								printf("Digite a nova Rua : ");
-								scanf("%[^\n]s",ht.rua);
-								verifica = 1;
-							break;
-							case 6:
-							/*caso for igual a 6, edita o numero onde se encontra o hotel*/
-								setbuf(stdin,NULL);
-								printf("Digite o novo Número: ");
-								scanf("%[^\n]s",ht.numero);
-								verifica = 1;
-							break;
-							/*caso for igual a 7, edita o bairro onde se encontra o hotel*/
-							case 7:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Bairro: ");
-								scanf("%[^\n]s",ht.bairro);
-								verifica = 1;
-							break;
-							/*caso for igual a 8, edita o cep de onde se encontra o hotel*/
-							case 8:
-								setbuf(stdin,NULL);
-								printf("Digite o novo CEP: ");
-								scanf("%[^\n]s",ht.cep);
-								verifica = 1;
-							break;
-							/*caso for igual a 9 edita o complemento do hotel*/
-							case 9:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Complemento: ");
-								scanf("%[^\n]s",ht.complemento);
-								verifica = 1;
-							break;
-							case 10:
-							/*caso for igual a 10, edita a cidade onde se encontra o hotel*/
-								setbuf(stdin,NULL);
-								printf("Digite a nova Cidade: ");
-								scanf("%[^\n]s",ht.cidadeestado.cidade);
-								verifica = 1;
-							break;
-							/*caso for igual a 11, edita o estado onde se encontra o hotel*/
-							case 11:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Estado: ");
-								scanf("%[^\n]s",ht.cidadeestado.estado);
-								verifica = 1;
-							break;
-							/*caso for igual a 12, edita o telefone do hotel*/
-							case 12:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Telefone: ");
-								scanf("%[^\n]s",ht.telefone);
-								verifica = 1;
-							break;
-							/*caso for igual a 13, edita o email do hotel*/
-							case 13:
-								setbuf(stdin,NULL);
-								printf("Digite o novo E-mail: ");
-								scanf("%[^\n]s",ht.email);
-								verifica = 1;
-							break;
-							/*caso for igual a 14, edita o nome do responsavel do hotel*/
-							case 14:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Nome do Responsável: ");
-								scanf("%[^\n]s",ht.nomeresponsavel);
-								verifica = 1;
-							break;
-							case 15:
-							/*caso for igual a 15, edita o telefone do responsavel do hotel*/
-								setbuf(stdin,NULL);
-								printf("Digite o novo Telefone do Responsável: ");
-								scanf("%[^\n]s",ht.telefoneresponsavel);
-								verifica = 1;
-							break;
-							/*caso for igual a 16, edita o status do hotel*/
-							case 16:
-								setbuf(stdin,NULL);
-								printf("Digite o novo Status: ");
-								scanf("%[^\n]s",ht.status);
-								verifica = 1;
-							break;
-							/*caso for alguma opção diferente das listadas acima, mostra mensagem de erro*/
-							default:
-								vermelho("\nOpção invalida!!\n");
-							break;
-						}
+					/*mostra o hotel selecionado*/
+					azulclaro("\nHotel selecionado:\n\n");
+					printf("Código: %u",ht.codigo);
+					printf("\nRazão Social: %s",ht.razaosocial);
+					printf("\nNome Fantasia: %s",ht.nomefantasia);
+					printf("\nCNPJ: %s",ht.cnpj);
+					printf("\nInscrição Estadual: %s",ht.insc);
+					printf("\nRua: %s",ht.rua);
+					printf("\nNumero: %s",ht.numero);
+					printf("\nBairro: %s",ht.bairro);
+					printf("\nCidade: %s",ht.cidadeestado.cidade);
+					printf("\nEstado: %s",ht.cidadeestado.estado);
+					printf("\nCEP: %s",ht.cep);
+					printf("\nComplemento: %s",ht.complemento);
+					printf("\nTelefone: %s",ht.telefone);
+					printf("\nE-Mail: %s",ht.email);
+					printf("\nNome do Responsável: %s",ht.nomeresponsavel);
+					printf("\nTelefone do Responsável: %s",ht.telefoneresponsavel);
+					printf("\nStatus: %s\n\n",ht.status);
+					/*recebe a opção que será editado*/
+					branco("Digite o que será editado:\n1 - Nome Fantasia\n2 - Razão Social\n3 - CNPJ\n4 - Inscrição Estadual\n5 - Rua\n6 - Número\n7 - Bairro\n8 - CEP\n9 - Complemento\n10 - Cidade\n11 - Estado\n12 - Telefone\n13 - E-Mail\n"
+					"14 - Nome do Responsável\n15 - Telefone do Responsável\n16 - Status\n: ");
+					scanf("%i",&op);
+					/*verifica a opção que será editado*/
+					switch(op){
+						/*caso 0, não vai haver edição*/
+						case 0:
+							remove("saves/temphospede.bin");
+							vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+						break;
+						/*caso seja igual a 1, edita o nome fantasia*/
+						case 1:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Nome Fantasia: ");
+							scanf("%[^\n]s",ht.nomefantasia);
+							verifica = 1;
+						break;
+						case 2:
+						/*caso for igual a 2, edita a razao social*/
+							setbuf(stdin,NULL);
+							printf("Digite o novo Razão Social: ");
+							scanf("%[^\n]s",ht.razaosocial);
+							verifica = 1;
+						break;
+						/*caso for igual a 3, edita o cnpj*/
+						case 3:
+							setbuf(stdin,NULL);
+							printf("Digite o novo CNPJ:");
+							scanf("%[^\n]s",ht.cnpj);
+							verifica = 1;
+						break;
+						/*caso for iugal a 4, edita a inscrição estadual*/
+						case 4:
+							setbuf(stdin,NULL);
+							printf("Digite a nova Inscrição Estadual: ");
+							scanf("%[^\n]s",ht.insc);
+							verifica = 1;
+						break;
+						/*caso for igual a 5, edita a rua onde se encontra o hotel*/
+						case 5:
+							setbuf(stdin,NULL);
+							printf("Digite a nova Rua : ");
+							scanf("%[^\n]s",ht.rua);
+							verifica = 1;
+						break;
+						case 6:
+						/*caso for igual a 6, edita o numero onde se encontra o hotel*/
+							setbuf(stdin,NULL);
+							printf("Digite o novo Número: ");
+							scanf("%[^\n]s",ht.numero);
+							verifica = 1;
+						break;
+						/*caso for igual a 7, edita o bairro onde se encontra o hotel*/
+						case 7:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Bairro: ");
+							scanf("%[^\n]s",ht.bairro);
+							verifica = 1;
+						break;
+						/*caso for igual a 8, edita o cep de onde se encontra o hotel*/
+						case 8:
+							setbuf(stdin,NULL);
+							printf("Digite o novo CEP: ");
+							scanf("%[^\n]s",ht.cep);
+							verifica = 1;
+						break;
+						/*caso for igual a 9 edita o complemento do hotel*/
+						case 9:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Complemento: ");
+							scanf("%[^\n]s",ht.complemento);
+							verifica = 1;
+						break;
+						case 10:
+						/*caso for igual a 10, edita a cidade onde se encontra o hotel*/
+							setbuf(stdin,NULL);
+							printf("Digite a nova Cidade: ");
+							scanf("%[^\n]s",ht.cidadeestado.cidade);
+							verifica = 1;
+						break;
+						/*caso for igual a 11, edita o estado onde se encontra o hotel*/
+						case 11:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Estado: ");
+							scanf("%[^\n]s",ht.cidadeestado.estado);
+							verifica = 1;
+						break;
+						/*caso for igual a 12, edita o telefone do hotel*/
+						case 12:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Telefone: ");
+							scanf("%[^\n]s",ht.telefone);
+							verifica = 1;
+						break;
+						/*caso for igual a 13, edita o email do hotel*/
+						case 13:
+							setbuf(stdin,NULL);
+							printf("Digite o novo E-mail: ");
+							scanf("%[^\n]s",ht.email);
+							verifica = 1;
+						break;
+						/*caso for igual a 14, edita o nome do responsavel do hotel*/
+						case 14:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Nome do Responsável: ");
+							scanf("%[^\n]s",ht.nomeresponsavel);
+							verifica = 1;
+						break;
+						case 15:
+						/*caso for igual a 15, edita o telefone do responsavel do hotel*/
+							setbuf(stdin,NULL);
+							printf("Digite o novo Telefone do Responsável: ");
+							scanf("%[^\n]s",ht.telefoneresponsavel);
+							verifica = 1;
+						break;
+						/*caso for igual a 16, edita o status do hotel*/
+						case 16:
+							setbuf(stdin,NULL);
+							printf("Digite o novo Status: ");
+							scanf("%[^\n]s",ht.status);
+							verifica = 1;
+						break;
+						/*caso for alguma opção diferente das listadas acima, mostra mensagem de erro*/
+						default:
+							vermelho("\nOpção invalida!!\n");
+						break;
 					}
 				}
 				/*se verifica igual a 1, uma opção de edição valida foi escolhida*/
@@ -1074,6 +1058,11 @@ void editacategoria(int tipo){
 						scanf("%i",&op);
 						/*verifica as opções de edição*/
 						switch(op){
+							/*caso 0, não vai haver edição*/
+							case 0:
+								remove("saves/temphospede.txt");
+								vermelhoclaro("\nProcesso Abortado com Sucesso!\n");
+							break;
 							/*caso for o tipo 1, edita a descrição da categoria*/
 							case 1:
 								setbuf(stdin,NULL);
@@ -1186,10 +1175,14 @@ void editaacomodacao(int tipo){
 						fprintf(arquivo2,"\n%i",ac.categoriaselecionada);
 						fprintf(arquivo2,"\n%s\n\n",ac.status);
 					}
+					/*se o codigo for igual ao digitado*/
 					else{
+						/*verifica o final do arquivo, para evitar bug de repetições*/
 						if(feof(arquivo)){
+							/*caso esteja, sai do while*/
 							break;
 						}
+						/*mostra a acomodação selecionada*/
 						azulclaro("\nAcomodação Selecionada: \n\n");
 						printf("Código: %i",ac.codigo);
 						printf("\nDescrição: %s",ac.descricao);
@@ -1203,9 +1196,11 @@ void editaacomodacao(int tipo){
 						printf("\nCom Hidromassagem: %i",ac.extra.hidromassagem);
 						printf("\nCom Banheira: %i",ac.extra.banheira);
 						printf("\nCategoria da Acomodação: %i\n\n",ac.categoriaselecionada);
+						/*armazena o opção de edição do usuário*/
 						branco("Digite o que será editado: \n1 - Descrição\n2 - Categoria Selecionada\n3 - TV\n4 - TV a Cabo\n5 - Ar Condicionado\n6 - Frigobar\n7 - Banheiro\n8 - Cama de Casal"
 						"\n9 - Cama de Solteiro\n10 - Hidromassagem\n11 - Banheira\n12 - Status\n: ");
 						scanf("%i",&op);
+						/*variavel verifica, para verificar as opções de edição validas*/
 						verifica = 0;
 						switch(op){
 							case 1:

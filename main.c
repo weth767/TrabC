@@ -193,7 +193,7 @@ void menu(char com[50],int tiposave){
 	}
 	/*editar hotel*/
 	else if(strcmp(com,"edht") == 0){
-		editahotel(tiposave);
+		editahotel(tiposave,urlhotel,modoabertura,urltemphotel);
 	}
 
 	/*comando para o fornecedor*/

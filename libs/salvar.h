@@ -28,6 +28,7 @@ void salvarhospede(int tipo,char url[100],char modoabertura[5]){
 			else{
 				fprintf(arquivo,"%u",h.codigo);
 				fprintf(arquivo,"\n%s",h.nome);
+				fprintf(arquivo,"\n%i",h.sexo);
 				fprintf(arquivo,"\n%s",h.cpf);
 				fprintf(arquivo,"\n%s",h.rg);
 				fprintf(arquivo,"\n%s",h.rua);

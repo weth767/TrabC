@@ -135,22 +135,21 @@ void config(){
 /*função para verificar o tipo de save*/
 int verificaconfig(){
 	/*caso o tipo de save for igual a um valor diferente de 0, retorna o número de acordo com esse tipo de save,
-	1 para texto
-	2 para binario 
-	3 e 4 não implementados ainda
-	0 retorna invalido*/
+	1 para texto*/
 	if(verificasave() == 1){
 		return 1;	
 	}
+	/*2 para binario*/
 	else if(verificasave() == 2){
 		return 2;
-	}
+	}/*3 e 4 não implementados ainda*/
 	else if(verificasave() == 3){
 		printf("Opcao Ainda nao implementada!!!\n\n");
 	}
 	else if(verificasave() == 4){
 		printf("Opcao Ainda nao implementada!!!\n\n");
 	}
+	/*0 retorna invalido*/
 	else{
 		return 0;
 	}
@@ -211,7 +210,7 @@ void menu(char com[50],int tiposave){
 	}
 	/*editar fornecedores*/
 	else if(strcmp(com,"edf") == 0){
-		editafornecedor(tiposave);
+		editafornecedor(tiposave,urlfornecedor,modoabertura,urltempfornecedor);
 	}
 
 	/*comando para cadastro de usuario*/
@@ -229,7 +228,7 @@ void menu(char com[50],int tiposave){
 	}
 	/*editar usuário*/
 	else if(strcmp(com,"edus") == 0){
-		editausuario();
+		editausuario(urlusuario,modoabertura,urltempusuario);
 	}
 
 	/*comando para cadastro de categoria*/
@@ -247,7 +246,7 @@ void menu(char com[50],int tiposave){
 	}
 	/*editar categoria*/
 	else if(strcmp(com,"edc") == 0){
-		editacategoria(tiposave);
+		editacategoria(tiposave,urlcategoria,modoabertura,urltempcategoria);
 	}
 
 
@@ -284,7 +283,7 @@ void menu(char com[50],int tiposave){
 	}
 	/*editar acomodação*/
 	else if(strcmp(com,"edac") == 0){
-		editaacomodacao(tiposave);
+		editaacomodacao(tiposave,urlacomodacao,modoabertura,urltempacomodacao);
 	}
 
 	/*Outros comandos*/

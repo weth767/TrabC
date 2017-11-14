@@ -24,6 +24,8 @@ void cadastrahospede(){
 	/*recebe os dados do hospede*/
 	printf("Digite o Nome do Hóspede: ");
 	scanf("%[^\n]s",h.nome);
+	printf("Digite o Sexo do Hóspede:\n1 - Masculino\n 2 - Feminino\n3 - Outros\n: ");
+	scanf("%i",&h.sexo);
 	setbuf(stdin,NULL);
 	printf("Digite o CPF do Hóspede: ");
 	scanf("%[^\n]s",h.cpf);

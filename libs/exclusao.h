@@ -38,12 +38,13 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 			/*se estiver tudo ok, varre o arquivo*/
 			else{
 				/*faz a leitura do arquivo até que chegue ao final dele, armazenando os dados da struct hospede*/
-				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
+				while( fscanf(arquivo,"%u\n %s\n %i\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,&h.sexo,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 					/*verifica se o codigo que o usuário digitou é diferente do codigo lido, se for salva no arquivo temporario*/
 					if(h.codigo != codigo){
 						fprintf(arquivo2,"%u",h.codigo);
 						fprintf(arquivo2,"\n%s",h.nome);
+						fprintf(arquivo2,"\n%i",h.sexo);
 						fprintf(arquivo2,"\n%s",h.cpf);
 						fprintf(arquivo2,"\n%s",h.rg);
 						fprintf(arquivo2,"\n%s",h.rua);
@@ -65,6 +66,7 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						azulclaro("\nHospede selecionado: \n\n");
 						printf("Código: %u",h.codigo);
 						printf("\nNome: %s",h.nome);
+						printf("\nSexo: %i",h.sexo);
 						printf("\nCPF: %s",h.cpf);
 						printf("\nRG: %s",h.rg);
 						printf("\nRua: %s",h.rua);
@@ -137,6 +139,7 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						azulclaro("\nHospede selecionado: \n\n");
 						printf("Código: %u",h.codigo);
 						printf("\nNome: %s",h.nome);
+						printf("\nSexo: %i",h.sexo);
 						printf("\nCPF: %s",h.cpf);
 						printf("\nRG: %s",h.rg);
 						printf("\nRua: %s",h.rua);
@@ -1001,7 +1004,7 @@ void excluiusuario(){
 					break;		
 				}
 				/*mostra o usuário selecionado*/
-				amarelo("Usuário Selecionado: \n\n");
+				azulclaro("Usuário Selecionado: \n\n");
 				printf("Código: %u",u.codigo);
 				printf("\nNome do Usuário: %s",u.nome);
 				printf("\nLogin: %s",u.login);

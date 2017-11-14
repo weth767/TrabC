@@ -16,6 +16,7 @@ struct cidadeestado{
 struct hospede{
 	unsigned int codigo;
 	char nome[50];
+	int sexo;
 	char cpf[14];
 	char rg[20];
 	char rua[40];

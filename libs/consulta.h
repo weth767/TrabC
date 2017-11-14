@@ -29,12 +29,21 @@ void consultahospede(int tipo,char url[50],char modoabertura[5]){
 			else{
 				/*padronizo os dados que serao buscados*/
 				azulclaro("\nDados dos Hospedes\n");
-				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
+				while(fscanf(arquivo,"%u\n %s\n %i\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n\n",&h.codigo,h.nome,&h.sexo,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 						/*E vou listando os itens para o usuario em forma de lista*/
 						printf("\n----------------------------------------------------------------------------\n");
 						printf("Código: %u",h.codigo);
 						printf("\nNome: %s",h.nome);
+						if(h.sexo == 1){
+							printf("\nSexo: Masculino");
+						}
+						else if(h.sexo == 2){
+							printf("\nSexo: Feminino");
+						}
+						else if(h.sexo == 3){
+							printf("\nSexo: Outros");
+						}
 						printf("\nCPF: %s",h.cpf);
 						printf("\nRG: %s",h.rg);
 						printf("\nRua: %s",h.rua);
@@ -85,6 +94,15 @@ void consultahospede(int tipo,char url[50],char modoabertura[5]){
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",h.codigo);
 					printf("\nNome: %s",h.nome);
+					if(h.sexo == 1){
+						printf("\nSexo: Masculino");
+					}
+					else if(h.sexo == 2){
+						printf("\nSexo: Feminino");
+					}
+					else if(h.sexo == 3){
+						printf("\nSexo: Outros");
+					}
 					printf("\nCPF: %s",h.cpf);
 					printf("\nRG: %s",h.rg);
 					printf("\nRua: %s",h.rua);

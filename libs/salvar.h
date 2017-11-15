@@ -8,7 +8,7 @@
 #include "cores.h"
 /*********Comentar*******************/
 /*funcao para salvar para o hospede no arquivo texto*/
-void salvarhospede(int tipo,char url[100],char modoabertura[5]){
+void salvarhospede(int tipo,char url[50],char modoabertura[5]){
 	/*chama a struct hospede para usar as variaveis do hospede*/
 	struct hospede h;
 	setlocale(LC_ALL, "Portuguese");
@@ -73,7 +73,7 @@ void salvarhospede(int tipo,char url[100],char modoabertura[5]){
 	}
 }
 
-void salvarhotel(int tipo){
+void salvarhotel(int tipo,char url[50],char modoabertura[5]){
 	//realizo a chamada da struct hotel, para ter acesso as variaveis relacionadas a essa struct
 	struct hotel ht;
 	//coloca o local padrão como portugues, assim pegará todos os acentos.
@@ -83,7 +83,7 @@ void salvarhotel(int tipo){
 	switch(tipo){
 		case 1:
 		/*abre o arquivo texto*/
-			arquivo = fopen("saves/hoteis.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
 				vermelho("\nErro em realizar o cadastro de hotel!!\n\n");
@@ -115,7 +115,7 @@ void salvarhotel(int tipo){
 		break;
 		case 2:
 		/*abre o arquivo binário*/
-			arquivo = fopen("saves/hoteis.bin","ab");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se o arquivo foi aberto*/
 			/*caso houver erro, mostra mensagem de erro na tela*/
 			if(arquivo == NULL){
@@ -139,7 +139,7 @@ void salvarhotel(int tipo){
 	
 }
 
-void salvarcategorias(int tipo){
+void salvarcategorias(int tipo,char url[50],char modoabertura[5]){
 	struct categorias c;
 	//chama a struct categorias para ter acesso a suas variaveis
 	setlocale(LC_ALL,"Portuguese");
@@ -148,7 +148,7 @@ void salvarcategorias(int tipo){
 	switch(tipo){
 		case 1:
 			//crio um ponteiro que apontara para a localizacao do arquivo
-			arquivo = fopen("saves/categorias.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			//abro o arquivo
 			//agora verifico se o arquivo existe, senao sera criado na hora
 			//senao for criado da mensagem de erro
@@ -171,7 +171,7 @@ void salvarcategorias(int tipo){
 		break;
 		case 2:
 		/*abre o arquivo binario*/
-			arquivo = fopen("saves/categorias.bin","ab");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se o arquivo foi aberto*/
 			/*caso haja erro, mostra mensagem de erro na tela*/
 			if(arquivo == NULL){
@@ -194,7 +194,7 @@ void salvarcategorias(int tipo){
 	
 }
 	
-void salvaracomodacao(int tipo){
+void salvaracomodacao(int tipo,char url[50],char modoabertura[5]){
 	//realizo a chamada da struct acomodacoes, para ter acesso as variaveis relacionadas a essa struct
 	struct acomodacoes ac;
 	//coloca o local padrão como portugues, assim pegará todos os acentos.
@@ -203,7 +203,7 @@ void salvaracomodacao(int tipo){
 	FILE *arquivo;
 	switch(tipo){
 		case 1:
-			arquivo = fopen("saves/acomodacoes.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
 				vermelho("\nErro em realizar o cadastro de acomodações!!\n\n");
@@ -231,7 +231,7 @@ void salvaracomodacao(int tipo){
 		break;
 		case 2:
 		/*abre o arquivo binario*/
-			arquivo = fopen("saves/acomodacoes.bin","ab");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve erro na abertura do arquivo*/
 			/*se houver erro, mostra mensagem de erro*/
 			if(arquivo == NULL){
@@ -251,7 +251,7 @@ void salvaracomodacao(int tipo){
 	}
 }
 
-void salvarproduto(int tipo){
+void salvarproduto(int tipo,char url[50],char modoabertura[5]){
 	//chama a struct produtos para ter acesso as variaveis dela
 	struct produtos p;
 	//seta o local padrão, ou seja o idioma que deve ser interpretado como portugues
@@ -260,7 +260,7 @@ void salvarproduto(int tipo){
 	switch(tipo){
 		/*caso 1 salvar em txt*/
 		case 1:
-			arquivo = fopen("saves/produtos.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			//verifico se esta nulo o arquivo, ou seja ocorrerá algum erro no salvamento
 			if(arquivo == NULL){
 				vermelho("\nErro em realizar o cadastro de produtos!!\n");
@@ -283,7 +283,7 @@ void salvarproduto(int tipo){
 		/*caso 2 salvar em binario*/
 		case 2:
 			/*tenta abrir o arquivo*/
-			arquivo = fopen("saves/produtos.bin","ab");
+			arquivo = fopen(url,modoabertura);
 			if(arquivo == NULL){
 				vermelho("\nErro em realizar o cadastro de produtos!!\n");
 			}
@@ -305,7 +305,7 @@ void salvarproduto(int tipo){
 	
 }
 
-void salvarfornecedor(int tipo){
+void salvarfornecedor(int tipo,char url[50],char modoabertura[5]){
 	/*chama a struct do forncedor para ter acesso as suas variaveis*/
 	struct fornecedores f;
 	/*seta o linguagem local como portugues para evitar erros de leitura*/
@@ -317,7 +317,7 @@ void salvarfornecedor(int tipo){
 		/*se for tipo 1 ou txt*/
 		case 1:
 		/*abre o arquivo*/
-			arquivo = fopen("saves/fornecedores.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se sua abertura aconteceu*/
 			/*se houver algum erro, mostra mensagem de erro*/
 			if(arquivo == NULL){
@@ -354,7 +354,7 @@ void salvarfornecedor(int tipo){
 		/*se for o tipo 2, ou binario*/
 		case 2:
 		/*abre o arquivo binario*/
-			arquivo = fopen("saves/fornecedores.bin","ab");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se o arquivo foi aberto*/
 			/*caso tenha acontecido algum erro mostra mensagem na tela*/
 			if(arquivo == NULL){
@@ -377,13 +377,13 @@ void salvarfornecedor(int tipo){
 	}
 }
 
-void salvarusuarios(){
+void salvarusuarios(char url[50],char modoabertura[5]){
 	struct usuarios u;
 	//faço a chamada da struct, para ter acesso as varíaveis desta;*/
 	/*coloco como linguagem obrigatória, o português, para evitar certos problemas de acentuação*/
 	setlocale(LC_ALL,"Portuguese");
 	FILE *arquivo;
-	arquivo = fopen("saves/usuarios.bin","ab");
+	arquivo = fopen(url,modoabertura);
 	//verifico a nulidade do arquivo que sera criado
 	if(arquivo == NULL){
 		vermelho("\nErro em realizar o cadastro de usuário!\n");

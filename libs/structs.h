@@ -126,5 +126,17 @@ struct config{
 	char master_login[20];
 	char master_senha[20];
 };
+/*struct para a entrada de produtos industrializados*/
+struct entradaprodutos{
+	unsigned int codigo;
+	unsigned int codigoproduto;
+	unsigned int codigofornecedor;
+	float frete;
+	float imposto;
+	int quantidade;
+	float precocusto;
+	float totalnota;
+	char status[20];
+}
 
 #endif

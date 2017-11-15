@@ -180,15 +180,15 @@ void menu(char com[50],int tiposave){
 	/*comandos para cadastro de hotel*/
 	else if(strcmp(com,"cadht") == 0){
 		cadastrahotel();
-		salvarhotel(tiposave);
+		salvarhotel(tiposave,urlhotel,modoabertura);
 	}
 	/*consulta dos dados do hotel*/
 	else if(strcmp(com,"csht") == 0){
-		consultahotel(tiposave);
+		consultahotel(tiposave,urlhotel,modoabertura);
 	}
 	/*excluir hotel*/
 	else if(strcmp(com,"exht") == 0){
-		excluihotel(tiposave);
+		excluihotel(tiposave,urlhotel,modoabertura,urltemphotel);
 	}
 	/*editar hotel*/
 	else if(strcmp(com,"edht") == 0){
@@ -198,15 +198,15 @@ void menu(char com[50],int tiposave){
 	/*comando para o fornecedor*/
 	else if(strcmp(com,"cadf") == 0){
 		cadastrafornecedor();
-		salvarfornecedor(tiposave);
+		salvarfornecedor(tiposave,urlfornecedor,modoabertura);
 	}
 	/*consulta os dados do fornecedor*/
 	else if(strcmp(com,"csf") == 0){
-		consultafornecedor(tiposave);
+		consultafornecedor(tiposave,urlfornecedor,modoabertura);
 	}
 	/*excluir forncedores*/
 	else if(strcmp(com,"exf") == 0){
-		excluifornecedor(tiposave);
+		excluifornecedor(tiposave,urlfornecedor,modoabertura,urltempfornecedor);
 	}
 	/*editar fornecedores*/
 	else if(strcmp(com,"edf") == 0){
@@ -216,15 +216,15 @@ void menu(char com[50],int tiposave){
 	/*comando para cadastro de usuario*/
 	else if(strcmp(com,"cadus") == 0){
 		cadastrausuario();
-		salvarusuarios();
+		salvarusuarios(urlusuario,modoabertura);
 	}
 	/*consulta dados do usuario*/
 	else if(strcmp(com,"csus") == 0){
-		consultausuario();
+		consultausuario(urlusuario,modoabertura);
 	}
 	/*excluir usuário*/
 	else if(strcmp(com,"exus") == 0){
-		excluiusuario();
+		excluiusuario(urlusuario,modoabertura,urltempusuario);
 	}
 	/*editar usuário*/
 	else if(strcmp(com,"edus") == 0){
@@ -234,15 +234,15 @@ void menu(char com[50],int tiposave){
 	/*comando para cadastro de categoria*/
 	else if(strcmp(com,"cadc") == 0){
 		cadastracategoria();
-		salvarcategorias(tiposave);
+		salvarcategorias(tiposave,urlcategoria,modoabertura);
 	}
 	/*comando para consultar categoria*/
 	else if(strcmp(com,"csc") == 0){
-		consultacategoria(tiposave);	
+		consultacategoria(tiposave,urlcategoria,modoabertura);	
 	}
 	/*excluir categoria*/
 	else if(strcmp(com,"exc") == 0){
-		excluicategoria(tiposave);
+		excluicategoria(tiposave,urlcategoria,modoabertura,urltempcategoria);
 	}
 	/*editar categoria*/
 	else if(strcmp(com,"edc") == 0){
@@ -253,15 +253,15 @@ void menu(char com[50],int tiposave){
 	/*comandos de cadastrar produto*/
 	else if(strcmp(com,"cadp") == 0){
 		cadastraproduto();
-		salvarproduto(tiposave);
+		salvarproduto(tiposave,urlproduto,modoabertura);
 	}
 	/*consultar os produtos*/
 	else if(strcmp(com,"csp") == 0){
-		consultaproduto(tiposave);
+		consultaproduto(tiposave,urlproduto,modoabertura);
 	}
 	/*excluir produto*/
 	else if(strcmp(com,"exp") == 0){
-		excluiproduto(tiposave);
+		excluiproduto(tiposave,urlproduto,modoabertura,urltempproduto);
 	}
 	/*editar produto*/
 	else if(strcmp(com,"edp") == 0){
@@ -270,20 +270,20 @@ void menu(char com[50],int tiposave){
 
 	/*comando para cadastrar acomodação*/
 	else if(strcmp(com,"cadac") == 0){
-		cadastraacomodacao();
-		salvaracomodacao(tiposave);
+		cadastraacomodacao(urlcategoria,modoabertura);
+		salvaracomodacao(tiposave,urlacomodacao,modoabertura);
 	}
 	/*consultar acomodação*/
 	else if(strcmp(com,"csac") == 0){
-		consultaacomodacao(tiposave);
+		consultaacomodacao(tiposave,urlacomodacao,modoabertura);
 	}
 	/*excluir acomodação*/
 	else if(strcmp(com,"exac") == 0){
-		excluiacomodacao(tiposave);
+		excluiacomodacao(tiposave,urlacomodacao,modoabertura,urltempacomodacao);
 	}
 	/*editar acomodação*/
 	else if(strcmp(com,"edac") == 0){
-		editaacomodacao(tiposave,urlacomodacao,modoabertura,urltempacomodacao);
+		editaacomodacao(tiposave,urlacomodacao,modoabertura,urltempacomodacao,urlcategoria);
 	}
 
 	/*Outros comandos*/

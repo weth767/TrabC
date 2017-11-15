@@ -134,7 +134,7 @@ void consultahospede(int tipo,char url[50],char modoabertura[5]){
 }
 /*função de consulta de dados dos hoteis*/
 /*recebe por parametro o tipo de salvamento*/
-void consultahotel(int tipo){
+void consultahotel(int tipo,char url[50],char modoabertura[5]){
 	/*chama a struct do hotel para ter acesso a suas variaveis*/
 	struct hotel ht;
 	/*cria um ponterio do tipo arquivo para abrir o arquivo do hotel*/
@@ -145,7 +145,7 @@ void consultahotel(int tipo){
 		/*caso for tipo 1, arquivo texto*/
 		case 1:
 			/*abre o arquivo*/
-			arquivo = fopen("saves/hoteis.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			/*verifca se houve erros na abertura*/
 			/*se houve, mostra mensagem na tela*/
 			if(arquivo == NULL){
@@ -189,7 +189,7 @@ void consultahotel(int tipo){
 		break;
 		case 2:
 			/*caso o tipo de salvamento for 2, arquivo binário*/
-			arquivo = fopen("saves/hoteis.bin","ab+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se há erros na abertura do arquivo*/
 			if(arquivo == NULL){
 				/*se houver, mostra mensagem de erro na tela*/
@@ -239,7 +239,7 @@ void consultahotel(int tipo){
 }
 /*função de consulta de produtos*/
 /*recebe o tipo de salvamento por parametro*/
-void consultaproduto(int tipo){
+void consultaproduto(int tipo,char url[50],char modoabertura[5]){
 	/*chama a struct para acessar as variaveis do produto*/
 	struct produtos p;
 	ciano("\nConsulta de Produtos\n\n");
@@ -250,7 +250,7 @@ void consultaproduto(int tipo){
 		/*se o tipo de salvamento for 1, arquivo texto*/
 		case 1:
 			/*abre o arquivo de produtos*/
-			arquivo = fopen("saves/produtos.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve erros na abertura do arquivo*/
 			/*se houve algum erro mostra mensagem na tela*/
 			if(arquivo == NULL){
@@ -284,7 +284,7 @@ void consultaproduto(int tipo){
 		/*caso for o tipo de salvamento 2, arquivo binário*/
 		case 2:
 			/*abre o arquivo*/
-			arquivo = fopen("saves/produtos.bin","ab+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve algum erro na abertura do arquivo*/
 			/*se houve algum erro mostra na tela um aviso*/
 			if(arquivo == NULL){
@@ -326,7 +326,7 @@ void consultaproduto(int tipo){
 }
 /*função de consulta de acomodação*/
 /*recebe como parametro, o tipo de salvamento*/
-void consultaacomodacao(int tipo){
+void consultaacomodacao(int tipo,char url[50],char modoabertura[5]){
 	/*chama a struct de acomodações para ter acesso a suas variaveis*/
 	struct acomodacoes ac;
 	/*cria um ponteiro do tipo arquivo para abrir o arquivo de acomods*/
@@ -337,7 +337,7 @@ void consultaacomodacao(int tipo){
 		/*caso for o tipo de salvamento 1, arquivo texto*/
 		case 1:
 			/*abre o arquivo de acomodacoes*/
-			arquivo = fopen("saves/acomodacoes.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve erro na abertura do arquivo*/
 			/*se houver erro mostra mensagem de erro na tela*/
 			if(arquivo == NULL){
@@ -379,7 +379,7 @@ void consultaacomodacao(int tipo){
 			/*tipo de salvamento 2, arquivo binário*/
 			/*consulta em binário*/
 			/*abre o arquivo das acomodações*/
-			arquivo = fopen("saves/acomodacoes.bin","ab+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve erros na abertura*/
 			/*se houve algum erro, mostra mensagem de erro na tela*/
 			if(arquivo == NULL){
@@ -426,7 +426,7 @@ void consultaacomodacao(int tipo){
 	}
 }
 /*função para consulta de categorias, recebe como parametro o tipo de salvamento*/
-void consultacategoria(int tipo){
+void consultacategoria(int tipo,char url[50],char modoabertura[5]){
 	/*struct de categorias, para ter acesso a suas variaveis*/
 	struct categorias c;
 	/*cria um ponterio de arquivo, para abrir os arquivos*/
@@ -437,7 +437,7 @@ void consultacategoria(int tipo){
 		/*se for o tipo de salvamento 1, arquivo texto*/
 		case 1:
 		/*abre o arquivo */
-		arquivo = fopen("saves/categorias.txt","a+");
+		arquivo = fopen(url,modoabertura);
 		/*verifica se há erros na abertura do arquivo*/
 		/*se houver erros, mostra mensagem na tela*/
 		if(arquivo == NULL){
@@ -467,7 +467,7 @@ void consultacategoria(int tipo){
 			/*tipo de salvamento 2, arquivo binário*/
 			case 2:
 			/*abre o arquivo*/
-			arquivo = fopen("saves/categorias.bin","ab+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve erro na abertura do arquivo*/
 			/*se houver erros, mostra mensagem na tela*/
 			if(arquivo == NULL){
@@ -505,7 +505,7 @@ void consultacategoria(int tipo){
 	}
 }
 /*função para consultar o fornecedor, recebe por parametro no o tipo de salvamento*/
-void consultafornecedor(int tipo){
+void consultafornecedor(int tipo,char url[50],char modoabertura[5]){
 	/*chama a struct para ter acesso a suas variaveis*/
 	struct fornecedores f;
 	/*cria um ponteiro do tipo arquivo para acessar o arquivo de fornecedores*/
@@ -516,7 +516,7 @@ void consultafornecedor(int tipo){
 		/*caso for o tipo 1, arquivo texto*/
 		case 1:
 			/*abre o arquivo de fornecedores*/
-			arquivo = fopen("saves/fornecedores.txt","a+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve erros na abertura do arquivo*/
 			/*se houver, mostra mensagem na tela*/
 			if(arquivo == NULL){
@@ -563,7 +563,7 @@ void consultafornecedor(int tipo){
 		/*tipo de salvamento 2, arquivo binário*/
 		case 2:
 			/*abre o arquivo dos fornecedores*/
-			arquivo = fopen("saves/fornecedores.bin","ab+");
+			arquivo = fopen(url,modoabertura);
 			/*verifica se houve erros na abertura dos arquivos*/
 			/*se houver erros, mostra mensagem na tela*/
 			if(arquivo == NULL){
@@ -614,7 +614,7 @@ void consultafornecedor(int tipo){
 	}
 }
 /*função de consultar usuário*/
-void consultausuario(){
+void consultausuario(char url[50],char modoabertura[5]){
 	/*chama a struct dos usuários, para ter acesso a suas variaveis*/
 	struct usuarios u;
 	/*cria um ponteiro do tipo arquivo*/
@@ -622,7 +622,7 @@ void consultausuario(){
 	ciano("\nConsulta de Usuários\n\n");
 	int t;
 	/*abre o arquivo de usuários*/
-	arquivo = fopen("saves/usuarios.bin","ab+");
+	arquivo = fopen(url,modoabertura);
 	/*verifica se houve erro na abertura do arquivo*/
 	/*se houver erro, mostra mensagem na tela*/
 	if(arquivo == NULL){
@@ -1143,6 +1143,75 @@ int verificausuario(char login[20],char senha[20]){
 	fclose(arquivo);
 	/*retorna se encontrou ou nao*/
 	return verifica;
+}
+/*função para gerar o codigo automatico da entrada de produtos*/
+int codigo_entradaprodutos(int tipo){
+	/*chama a struct para ter acesso a suas variaveis*/
+	struct entradaprodutos ep;
+	int codigo;
+	/*cria um ponteiro de arquivo para acessar o arquivo onde será salva os dados de entrada de produtos*/
+	FILE *arquivo;
+	/*um switch para verificar o tipo de salvamento*/
+	switch(tipo){
+		/*se for tipo 1, arquivo texto*/
+		case 1:
+			/*abre o arquivo*/
+			arquivo = fopen("saves/entradaprodutos.txt","a+");
+			/*verifica se ja existe*/
+			if(arquivo == NULL){
+				/*se nao codigo igual a 0*/
+				codigo = 0;
+			}
+			/*se ja existir*/
+			else{
+				/*le o arquivo */
+				while(fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %f\n %f\n %s\n\n",&ep.codigo,&ep.codigoproduto,&ep.codigofornecedor,
+					&ep.frete,&ep.imposto,&ep.quantidade,&ep.precocusto,&ep.totalnota,status) != EOF){
+					/*pega o ultimo codigo cadastrado*/
+					codigo = ep.codigo;
+				}
+				/*incrementa ele*/
+				codigo++;
+				/*fecha o arquivo*/
+				fclose(arquivo);
+			}
+		break;
+		/*for o tipo de salvamento 2, arquivo binario*/
+		case 2:
+			/**abre o arquivo*/
+			arquivo = fopen("saves/entradaprodutos.bin","ab+");
+			/*verifica se o arquivo ja existe*/
+			if(arquivo == NULL){
+				/*se nao codigo igual a 0*/
+				codigo = 0;
+			}
+			/*se existir*/
+			else{
+				/*le o arquivo*/
+				while(!feof(arquivo)){
+					/*verifica se ja esta no final do arquivo*/
+					if(feof(arquivo)){
+						/*se estiver da um break e sai do laço*/
+						break;
+					}
+					/*le os dados*/
+					fread(&ep,sizeof(struct entradaprodutos),1,arquivo);
+					/*armazena o codigo*/
+					codigo = ep.codigo;
+				}
+				/*incrementa o codigo*/
+				codigo++;
+				/*fecha o arquivo*/
+				fclose(arquivo;)
+			}
+		break;
+		/*mostra mensagem de erro para salvamentos nao incrementados*/
+		default:
+			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
+		break;
+	}
+	/*retorna o codigo*/
+	return codigo;
 }
 
 #endif 

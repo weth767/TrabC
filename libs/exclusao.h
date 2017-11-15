@@ -182,7 +182,7 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	}
 }
 /*função exclui hotel, recebe como parametro o tipo de salvamento*/
-void excluihotel(int tipo){
+void excluihotel(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*cria dois ponteiros, um para o arquivo e um para o arquivo temporário*/
 	FILE *arquivo;
 	FILE *arquivo2;
@@ -199,8 +199,8 @@ void excluihotel(int tipo){
 		/*caso for o tipo 1, é arquivo texto*/
 		case 1:
 		/*abre o arquivo original e o arquivo temporário*/
-			arquivo = fopen("saves/hoteis.txt","a+");
-			arquivo2 = fopen("saves/temphotel.txt","a+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica erro nos dois arquivos*/
 			/*se houver erros, mostra mensagem na tela*/
 			if(arquivo2 == NULL){
@@ -264,10 +264,10 @@ void excluihotel(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/hoteis.txt");
-					/*renomeia o arquivo temporário*/
-					rename("saves/temphotel.txt","saves/hoteis.txt");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -279,8 +279,8 @@ void excluihotel(int tipo){
 		/*para o tipo de salvamento 2, arquivo binário*/
 		case 2:
 			/*abre os dois arquivos*/
-			arquivo = fopen("saves/hoteis.bin","ab+");
-			arquivo2 = fopen("saves/temphotel.bin","ab+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se houve erro na abertura dos arquivos*/
 			/*se houver erro mostra mensagem na tela*/
 			if(arquivo2 == NULL){
@@ -337,10 +337,10 @@ void excluihotel(int tipo){
 				scanf("%i",&op);
 				/*se sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/hoteis.bin");
-					/*renomeia o arquivo temporario*/
-					rename("saves/temphotel.bin","saves/hoteis.bin");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -356,7 +356,7 @@ void excluihotel(int tipo){
 	}
 }
 /*função para excluir categoria, recebe por parametro o tipo de salvamento*/
-void excluicategoria(int tipo){
+void excluicategoria(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*cria dois ponteiros para os arquivos*/
 	FILE *arquivo;
 	FILE *arquivo2;
@@ -373,8 +373,8 @@ void excluicategoria(int tipo){
 		/*se for tipo 1, arquivo texto*/
 		case 1:
 			/*abre os dois arquivos*/
-			arquivo = fopen("saves/categorias.txt","a+");
-			arquivo2 = fopen("saves/tempcategoria.txt","a+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se houve erros na abertura dos arquivos*/
 			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
@@ -412,10 +412,10 @@ void excluicategoria(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/categorias.txt");
-					/*renomeia o arquivo temporário*/
-					rename("saves/tempcategoria.txt","saves/categorias.txt");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra a mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -427,8 +427,8 @@ void excluicategoria(int tipo){
 		/*tipo de salvamento 2, ou seja arquivo binário*/
 		case 2:
 			/*abre os arquivos, original e temporário*/
-			arquivo = fopen("saves/categorias.bin","ab+");
-			arquivo2 = fopen("saves/tempcategoria.bin","ab+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se há erros na abertura nos arquivos*/
 			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
@@ -473,10 +473,10 @@ void excluicategoria(int tipo){
 				scanf("%i",&op);
 				/*se for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/categorias.bin");
-					/*renomeia o arquivo temporario*/
-					rename("saves/tempcategoria.bin","saves/categorias.vin");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					verde("\nDado excluido com sucesso!\n\n");
 				}
 				/*fecha os dois arquivos*/
@@ -491,7 +491,7 @@ void excluicategoria(int tipo){
 	}
 }
 /*função para excluir a acomodação, recebe o tipo de salvamento como parametro*/
-void excluiacomodacao(int tipo){
+void excluiacomodacao(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*cria os ponteiros para acessar os arquivos*/
 	FILE *arquivo;
 	FILE *arquivo2;
@@ -507,8 +507,8 @@ void excluiacomodacao(int tipo){
 	switch(tipo){
 		/*caso, for tipo de salvamento 1, salva em arquivo txt */
 		case 1:
-			arquivo = fopen("saves/acomodacoes.txt","a+");
-			arquivo2 = fopen("saves/tempacomodacao.txt","a+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se houve erro na abertura do arquivo*/
 			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
@@ -563,10 +563,10 @@ void excluiacomodacao(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/acomodacoes.txt");
-					/*renomeia o arquivo temporário com os outros dados*/
-					rename("saves/tempacomodacao.txt","saves/acomodacoes.txt");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -578,8 +578,8 @@ void excluiacomodacao(int tipo){
 		/*tipo de salvamento 2, arquivo binário*/
 		case 2:
 			/*abre os dois arquivos */
-			arquivo = fopen("saves/acomodacoes.bin","ab");
-			arquivo2 = fopen("saves/tempacomodacao.bin","ab");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se houve erros na abertura dos arquivos*/
 			/*se houver erros mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
@@ -625,10 +625,10 @@ void excluiacomodacao(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/acomodacoes.bin");
-					/*renomeia o arquivo temporário com os outros dados*/
-					rename("saves/tempacomodacao.bin","saves/acomodacoes.bin");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -644,7 +644,7 @@ void excluiacomodacao(int tipo){
 	}
 }
 /*função para excluir produto*/
-void excluiproduto(int tipo){
+void excluiproduto(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*cria dois ponteiros de arquivos*/
 	FILE *arquivo;
 	FILE *arquivo2;
@@ -661,8 +661,8 @@ void excluiproduto(int tipo){
 		/*caso for tipo de salvamento 1, salva em arquivo texto*/
 		case 1:
 			/*abre os dois arquivos, o temporario e o original */
-			arquivo = fopen("saves/produtos.txt","a+");
-			arquivo2 = fopen("saves/tempproduto.txt","a+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se há erros na abertura dos arquivos*/
 			/*se houver algum erro, mostra mensagem na tela*/
 			if(arquivo2 == NULL){
@@ -703,10 +703,10 @@ void excluiproduto(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/produtos.txt");
-					/*renomeia o arquivo temporário*/
-					rename("saves/tempproduto.txt","saves/produtos.txt");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*e mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -718,8 +718,8 @@ void excluiproduto(int tipo){
 		/*caso o tipo de salvamento for o 2, arquivo binário*/
 		case 2:
 			/*abre os arquivos, original e temporário*/
-			arquivo = fopen("saves/produtos.bin","ab+");
-			arquivo2 = fopen("saves/tempproduto.bin","ab+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se houve erros na abertura dos arquivos*/
 			/*se houver erros, mostra mensagem dna tela*/
 			if(arquivo2 == NULL){
@@ -766,10 +766,10 @@ void excluiproduto(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/produtos.bin");
-					/*renomeia o arquivo temporário*/
-					rename("saves/tempproduto.bin","saves/produtos.bin");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -785,7 +785,7 @@ void excluiproduto(int tipo){
 	}
 }
 /*função para excluir fornecedor, recebe o tipo de salvamento pro parametro*/
-void excluifornecedor(int tipo){
+void excluifornecedor(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 	/*chama struct para ter acesso as variáveis*/
 	struct fornecedores f;
 	/*cria o ponteiro, para os dois arquivos, original e temporário*/
@@ -802,8 +802,8 @@ void excluifornecedor(int tipo){
 		/*caso for o tipo de salvamento 1, arquivo texto*/
 		case 1:
 			/*abre os dois arquivos, o temporário e o original*/
-			arquivo = fopen("saves/fornecedores.txt","a+");
-			arquivo2 = fopen("saves/tempfornecedor.txt","a+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se há erros na abertura dos arquivos*/
 			/*se houver, mostra mensagem de erro*/
 			if(arquivo2 == NULL){
@@ -871,10 +871,10 @@ void excluifornecedor(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/fornecedores.txt");
-					/* e renomeia o arquivo temporário*/
-					rename("saves/tempfornecedor.txt","saves/fornecedores.txt");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -886,8 +886,8 @@ void excluifornecedor(int tipo){
 		/*tipo de salvamento 2, arquivo binário*/
 		case 2:
 			/*abre os dois arquivos*/
-			fopen("saves/fornecedores.bin","ab+");
-			fopen("saves/tempfornecedor.bin","ab+");
+			arquivo = fopen(url,modoabertura);
+			arquivo2 = fopen(urltemp,modoabertura);
 			/*verifica se há erros na abertura dos arquivos*/
 			/*se houver erros, mostra mensagem de erro na tela*/
 			if(arquivo2 == NULL){
@@ -943,10 +943,10 @@ void excluifornecedor(int tipo){
 				scanf("%i",&op);
 				/*se a resposta for sim*/
 				if(op == 1){
-					/*remove o arquivo original*/
-					remove("saves/fornecedores.bin");
-					/*e renomeia o arquivo temporário*/
-					rename("saves/tempfornecedor.bin","saves/fornecedores.bin");
+					/*remove o arquivo*/
+					remove(url);
+					/*renomeia o temporario com os outros dados que não foram excluidos*/
+					rename(urltemp,url);
 					/*mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
@@ -962,7 +962,7 @@ void excluifornecedor(int tipo){
 	}
 }
 /*função para excluir usuário*/
-void excluiusuario(){
+void excluiusuario(char url[50],char modoabertura[5],char urltemp[50]){
 	/*chama a struct pra ter acesso as variáveis dela*/
 	struct usuarios u;
 	/*cria dois ponteiros, um para o arquivo temporário e um para o arquivo original*/
@@ -976,8 +976,8 @@ void excluiusuario(){
 	printf("Digite o código a ser excluido: ");
 	scanf("%u",&codigo);
 	/*abre os dois arquivos, temporário e original*/
-	arquivo = fopen("saves/usuarios.bin","ab+");
-	arquivo2 = fopen("saves/tempusuario.bin","ab+");
+	arquivo = fopen(url,modoabertura);
+	arquivo2 = fopen(urltemp,modoabertura);
 	/*verifica se houve erro na abertura dos arquivos*/
 	/*se houver, mostra na tela*/
 	if(arquivo2 == NULL){
@@ -1023,11 +1023,11 @@ void excluiusuario(){
 		scanf("%i",&op);
 		if(op == 1){
 			/*se sim, remove o arquivo original*/
-				remove("saves/usuarios.bin");
-				/*renomeia o arquivo temporário*/
-				rename("saves/tempusuario.bin","saves/usuarios.bin");
-				/*mostra mensagem de sucesso na tela*/
-				verde("\nDado excluido com sucesso!\n\n");
+			/*remove o arquivo*/
+			remove(url);
+			/*renomeia o temporario com os outros dados que não foram excluidos*/
+			rename(urltemp,url);
+			verde("\nDado excluido com sucesso!\n\n");
 		}
 		/*fecha os arquivos*/
 		fclose(arquivo);

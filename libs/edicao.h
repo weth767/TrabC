@@ -1125,7 +1125,7 @@ void editacategoria(int tipo,char url[50],char modoabertura[5],char urltemp[50])
 	}
 }
 /*função para editar os dados de acomodações*/
-void editaacomodacao(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
+void editaacomodacao(int tipo,char url[50],char modoabertura[5],char urltemp[50],char urlcategoria[50]){
 	/*cria dois ponteiros do tipo arquivo para ter acesso aos dois arquivos, temporario e original*/
 	FILE *arquivo;
 	FILE *arquivo2;
@@ -1210,7 +1210,7 @@ void editaacomodacao(int tipo,char url[50],char modoabertura[5],char urltemp[50]
 							break;
 							case 2:
 							/*se for o caso 2, altera a categoria*/
-								consultacategoria(tipo);
+								consultacategoria(tipo,urlcategoria,modoabertura);
 								setbuf(stdin,NULL);
 								printf("Digite a nova Categoria Selecionada: ");
 								scanf("%i",&ac.categoriaselecionada);
@@ -1375,7 +1375,7 @@ void editaacomodacao(int tipo,char url[50],char modoabertura[5],char urltemp[50]
 							break;
 							case 2:
 							/*se for o caso 2, altera a categoria*/
-								consultacategoria(tipo);
+								consultacategoria(tipo,urlcategoria,modoabertura);
 								setbuf(stdin,NULL);
 								printf("Digite a nova Categoria Selecionada: ");
 								scanf("%i",&ac.categoriaselecionada);

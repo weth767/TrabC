@@ -24,7 +24,7 @@ void cadastrahospede(){
 	/*recebe os dados do hospede*/
 	printf("Digite o Nome do Hóspede: ");
 	scanf("%[^\n]s",h.nome);
-	printf("Digite o Sexo do Hóspede:\n1 - Masculino\n 2 - Feminino\n3 - Outros\n: ");
+	printf("Digite o Sexo do Hóspede:\n1 - Masculino\n2 - Feminino\n3 - Outros\n: ");
 	scanf("%i",&h.sexo);
 	setbuf(stdin,NULL);
 	printf("Digite o CPF do Hóspede: ");
@@ -165,7 +165,7 @@ void cadastracategoria(){
 }
 /*função para cadastrar os dados da acomodação*/
 /*recebe os dados para salvar na struct*/
-void cadastraacomodacao(){
+void cadastraacomodacao(char urlcategoria[50],char modoabertura[5]){
 	//chama a struct das acomodacoes
 	struct acomodacoes ac;
 	//coloca o linguagem local para portugues, assim pegará os acentos
@@ -180,7 +180,7 @@ void cadastraacomodacao(){
 	scanf("%[^\n]s",ac.descricao);
 	setbuf(stdin,NULL);
 	/*para adicionar as categorias, mostra para o usuário as categorias que ele já tem cadastrada*/
-	consultacategoria(verificasave());
+	consultacategoria(verificasave(),urlcategoria,modoabertura);
 	/*continua recebendo normalmente os outros dados da acomodação*/
 	printf("Digite o código da categoria desejada: ");
 	scanf("%i",&ac.categoriaselecionada);
@@ -333,5 +333,9 @@ void cadastrafornecedor(){
 	scanf("%[^\n]s",f.trepresentante);
 	/*salva o fornecedor com padrão ativo*/
 	strcpy(f.status,"Ativo");
+}
+
+void cadastra_entradaprodutos(){
+	
 }
 #endif 

@@ -7,6 +7,7 @@
 #include "structs.h"
 #include "consulta.h"
 #include "config.h"
+#include "salvar.h"
 
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 /*recebe os dados do hospede e salva na struct*/
@@ -235,8 +236,8 @@ void cadastraproduto(){
 	printf("Digite o Estoque mínimo do Produto: ");
 	scanf("%i",&p.estoqueminimo);
 	setbuf(stdin,NULL);
-	printf("Digite o Valor de Compra do Produto: ");
-	scanf("%f",&p.precocusto);
+	printf("Digite a Porcentagem de Lucro do Produto: ");
+	scanf("%f",&p.lucro);
 	setbuf(stdin,NULL);
 	printf("Digite o Valor de Venda do Produto: ");
 	scanf("%f",&p.precovenda);
@@ -256,6 +257,7 @@ void cadastrausuario(){
 	u.codigo = codigousuario();
 	/*faço o cadastro dos dados do usuário e */
 	/*limpo o buffer para evitar erros nas strings*/
+	ciano("\nCadastro de Usuários\n\n");
 	setbuf(stdin,NULL);
 	printf("Digite o nome do usuário: ");
 	scanf("%[^\n]s",u.nome);
@@ -283,6 +285,7 @@ void cadastrafornecedor(){
 	e soma mais um*/
 	f.codigo = codigofornecedor(verificasave());
 	/*recebe o restante dos dados do fornecedor*/
+	ciano("\nCadastro de Fornecedores\n\n");
 	setbuf(stdin,NULL);
 	printf("Digite o Nome Fantasia do Fornecedor: ");
 	scanf("%[^\n]s",f.nomefantasia);
@@ -334,8 +337,103 @@ void cadastrafornecedor(){
 	/*salva o fornecedor com padrão ativo*/
 	strcpy(f.status,"Ativo");
 }
-
-void cadastra_entradaprodutos(){
-	
+/*função para armazenar os dados na entrada de produtos*/
+/*recebe por parametro o url do produto e o modo de abertura*/
+void cadastra_entradaprodutos(char urlproduto[50],char urlfornecedor[50],char modoabertura[5]){
+	/*chama a struct de entrada de produtos para acessar suas variaveis*/
+	struct entradaprodutos ep;
+	int verifica = 0;
+	float soma = 0.0;
+	int quantidade_produtos = 0;
+	ciano("\nCadastro de Nota Fiscal\n\n");
+	/*seta linguagem padrão o portugues*/
+	setlocale(LC_ALL,"Portuguese");
+	/*auto incrementa o código*/
+	ep.codigo = codigo_entradaprodutos(verificasave());
+	setbuf(stdin,NULL);
+	/*recebe a quantidade de produtos diferentes presentes na nota*/
+	printf("Digite a quantidade de produtos distintos na nota: ");
+	scanf("%i",&ep.produtos_distintos);
+	/*recebe o código do produto*/
+	for(int i = 0; i < ep.produtos_distintos; i++){
+		verifica = 0;
+		/*verifica até que esteja certo*/
+		while(verifica == 0){
+			/*seta o buffer com vazio para evitar erros*/
+			/*recebe os valores para entrada dos produtos*/
+			setbuf(stdin,NULL);
+			printf("Digite o código do %iº Produto: ",i + 1);
+			scanf("%u",&ep.codigoproduto[i]);
+			/*verifica se o código é igual a 0, se for, cadastra um novo produto*/
+			if(ep.codigoproduto[i] == 0){
+				cadastraproduto();
+				salvarproduto(verificasave(),urlproduto,modoabertura);
+			}
+			/*se o codigo for igual a -1*/
+			else if(ep.codigoproduto[i] == -1){
+				/*mostra os produtos cadastrados*/
+				consultaproduto(verificasave(),urlproduto,modoabertura);
+			}
+			/*se a verificação do código for diferente de 1, quer dizer que o código não está cadastrado, ou seja o usuário digitou
+			um código inválido*/
+			else if(!(valida_codigoproduto(verificasave(),urlproduto,modoabertura,ep.codigoproduto[i]) == 1)){
+				vermelho("\nCódigo inválido!\n");
+			}
+			/*se não acontecer nada disto, está tudo ok*/
+			else{
+				verifica = 1;
+			}
+		}
+		verifica = 0;
+		while(verifica == 0){
+			/*seta o buffer com vazio para evitar erros*/
+			setbuf(stdin,NULL);
+			/*recebe o código do fornecedor*/
+			printf("Digite o código do %iº Fornecedor: ",i + 1);
+			scanf("%u",&ep.codigofornecedor[i]);
+			/*verifica se o codigo é igual a zero*/
+			if(ep.codigofornecedor[i] == 0){
+				/*se for cadastra um novo fornecedor*/
+				cadastrafornecedor();
+				salvarfornecedor(verificasave(),urlfornecedor,modoabertura);
+			}
+			/*se o codigo for igual a -1*/
+			else if(ep.codigofornecedor[i] == -1){
+				/*mostra os fornecedores cadastrados*/
+				consultafornecedor(verificasave(),urlfornecedor,modoabertura);
+			}
+			/*se a verificação for diferente de 1, mostra codigo invalido na tela*/
+			else if(!(valida_codigofornecedor(verificasave(),urlfornecedor,modoabertura,ep.codigofornecedor[i]) == 1)){
+				vermelho("\nCódigo Inválido!\n");
+			}
+			/*se estiver tudo ok, continua normalmente*/
+			else{
+				verifica = 1;
+			}
+		}
+		/*recebe mais alguns dados ainda dentro do for*/
+		setbuf(stdin,NULL);
+		printf("Digite a quantidade do %iº Produto: ",i + 1);
+		scanf("%i",&ep.quantidade[i]);
+		setbuf(stdin,NULL);
+		printf("Digite o valor do %iº Produto: ",i + 1);
+		scanf("%f",&ep.precocusto[i]);
+		/*realiza a soma total dos valores, para atribuir ao total da nota no final*/
+		soma = soma + ep.precocusto[i];
+		/*define por default o status como ativo*/
+		strcpy(ep.status[i],"Ativo");
+	}
+	/*recebe o restante dos dados fora do for*/
+	/*seta o buffer com vazio para evitar erros*/
+	setbuf(stdin,NULL);
+	/*recebe o valor do frete e do imposto*/
+	printf("Digite o valor do Frete: ");
+	scanf("%f",&ep.frete);
+	setbuf(stdin,NULL);
+	printf("Digite o valor do Imposto: ");
+	scanf("%f",&ep.imposto);
+	/*soma os valores com o frete e o imposto e atribui ao total da nota*/
+	soma = soma + ep.frete + ep.imposto;
+	ep.totalnota = soma;
 }
 #endif 

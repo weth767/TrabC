@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "structs.h"
 #include "cores.h"
 
@@ -129,8 +130,7 @@ void consultahospede(int tipo,char url[50],char modoabertura[5]){
 		default:
 			vermelho("\nOpcao ainda não implementada ou não existente\n\n");
 		break;
-	}
-	
+	}	
 }
 /*função de consulta de dados dos hoteis*/
 /*recebe por parametro o tipo de salvamento*/
@@ -260,14 +260,14 @@ void consultaproduto(int tipo,char url[50],char modoabertura[5]){
 			else{
 				/*verifica o arquivo e mostra os produtos cadastrados*/
 				azulclaro("\nDados do(s) Produto(s)\n\n");
-				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status)!= EOF){
 					/*mostra os produtos em forma de lista*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição: %s",p.descricao);
 					printf("\nEstoque: %i",p.estoque);
 					printf("\nEstoque Minimo: %i",p.estoqueminimo);
-					printf("\nPreço de Custo: R$%.2f",p.precocusto);
+					printf("\nLucro: %.2f%%",p.lucro);
 					printf("\nPreço de Venda: R$%.2f",p.precovenda);
 					printf("\nStatus: %s",p.status);
 					printf("\n----------------------------------------------------------------------------\n");
@@ -307,7 +307,7 @@ void consultaproduto(int tipo,char url[50],char modoabertura[5]){
 					printf("\nDescrição: %s",p.descricao);
 					printf("\nEstoque: %i",p.estoque);
 					printf("\nEstoque Minimo: %i",p.estoqueminimo);
-					printf("\nPreço de Custo: R$%.2f",p.precocusto);
+					printf("\nLucro: %.2f%%",p.lucro);
 					printf("\nPreço de Venda: R$%.2f",p.precovenda);
 					printf("\nStatus: %s",p.status);
 					printf("\n----------------------------------------------------------------------------\n");
@@ -683,7 +683,7 @@ int codigohospede(int tipo){
 			/*se já foi criado*/
 			else{
 				/*le o arquivo, pega o ultimo hospede cadastrado e verifica seu codigo*/
-				while( fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
+				while( fscanf(arquivo,"%u\n %s\n %i\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,&h.sexo,h.cpf,h.rg,h.rua,h.numero,
 					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 					/*a variavel codigo, recebe o ultimo codigo salvo*/
 					codigo = h.codigo;
@@ -754,8 +754,9 @@ int codigohotel(int tipo){
 			/*se já existia*/
 			else{
 				/*le o ultimo hotel cadastrado, pega seu código*/
-				while(fscanf(arquivo,"%u\n",&codigo)!= EOF){
-					fgetc(arquivo);
+				while(fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,ht.insc,
+					ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status)!= EOF){
+					codigo = ht.codigo;
 				}
 				/*e incrementa esse código*/
 				codigo++;
@@ -821,7 +822,7 @@ int codigoproduto(int tipo){
 			/*se já havia sido criado antes*/
 			else{
 				/*le o arquivo até o final, e pega o ultimo produto cadastrados*/
-				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status)!= EOF){
 					/*armazena o ultimo código cadastrado*/
 					codigo = p.codigo;
 				}
@@ -1164,9 +1165,16 @@ int codigo_entradaprodutos(int tipo){
 			}
 			/*se ja existir*/
 			else{
-				/*le o arquivo */
-				while(fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %f\n %f\n %s\n\n",&ep.codigo,&ep.codigoproduto,&ep.codigofornecedor,
-					&ep.frete,&ep.imposto,&ep.quantidade,&ep.precocusto,&ep.totalnota,status) != EOF){
+				while(!feof(arquivo)){
+					/*le o código e a quantidade de produtos distintos*/
+					fscanf(arquivo,"%u\n %i\n",&ep.codigo,&ep.produtos_distintos);
+					/*um for para ler a quantidade de produtos comprados*/
+					for(int i = 0; i < ep.produtos_distintos; i++){
+						/*pega esses valores*/
+						fscanf(arquivo,"%u %u %i %f %s\n",&ep.codigoproduto[i],&ep.codigofornecedor[i],&ep.quantidade[i],&ep.precocusto[i],ep.status[i]);
+					}
+					/*pega o restante dos valores*/
+					fscanf(arquivo,"%f\n %f\n %f\n\n",&ep.frete,&ep.imposto,&ep.totalnota);
 					/*pega o ultimo codigo cadastrado*/
 					codigo = ep.codigo;
 				}
@@ -1202,7 +1210,7 @@ int codigo_entradaprodutos(int tipo){
 				/*incrementa o codigo*/
 				codigo++;
 				/*fecha o arquivo*/
-				fclose(arquivo;)
+				fclose(arquivo);
 			}
 		break;
 		/*mostra mensagem de erro para salvamentos nao incrementados*/
@@ -1212,6 +1220,520 @@ int codigo_entradaprodutos(int tipo){
 	}
 	/*retorna o codigo*/
 	return codigo;
+}
+/*função para validar o codigo do hospede*/
+/*recebe por parametro o codigo do hospede, o tipo de salvamento, o url e modo de abertura*/
+int valida_codigohospede(int tipo,char url[50],char modoabertura[5],int codigo){
+	/*chama a struct do hospede para ter acesso as variaveis*/
+	struct hospede h;
+	int contador;
+	/*cria um ponteiro de arquivo para poder abrir o arquivo de hospede*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica se há erros na abertura*/
+	if(arquivo == NULL){
+		/*se houver, mostra erro na tela*/
+		vermelho("\nErro na abertura do arquivo!\n");
+	}
+	else{
+		switch(tipo){
+			case 1:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,h.cpf,h.rg,h.rua,h.numero,
+								h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == h.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+			case 2:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fread(&h,sizeof(struct hospede),1,arquivo);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == h.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+		}
+	}	
+}
+
+/*função para validar o codigo do ĥotel*/
+/*recebe por parametro o codigo do hotel, o tipo de salvamento, o url e modo de abertura*/
+int valida_codigohotel(int tipo,char url[50],char modoabertura[5],int codigo){
+	/*chama a struct do hospede para ter acesso as variaveis*/
+	struct hotel ht;
+	int contador;
+	/*cria um ponteiro de arquivo para poder abrir o arquivo de hotel*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica se há erros na abertura*/
+	if(arquivo == NULL){
+		/*se houver, mostra erro na tela*/
+		vermelho("\nErro na abertura do arquivo!\n");
+	}
+	else{
+		switch(tipo){
+			case 1:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,ht.nomefantasia,ht.cnpj,ht.insc,
+					ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == ht.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+			case 2:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fread(&ht,sizeof(struct hotel),1,arquivo);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == ht.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+		}
+	}	
+}
+
+
+/*função para validar o codigo do produto*/
+/*recebe por parametro o codigo do produto, o tipo de salvamento, o url e modo de abertura*/
+int valida_codigoproduto(int tipo,char url[50],char modoabertura[5],int codigo){
+	/*chama a struct do hospede para ter acesso as variaveis*/
+	struct produtos p;
+	int contador;
+	/*cria um ponteiro de arquivo para poder abrir o arquivo de produto*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica se há erros na abertura*/
+	if(arquivo == NULL){
+		/*se houver, mostra erro na tela*/
+		vermelho("\nErro na abertura do arquivo!\n");
+	}
+	else{
+		switch(tipo){
+			case 1:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == p.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+			case 2:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fread(&p,sizeof(struct produtos),1,arquivo);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == p.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+		}
+	}	
+}
+/*função para validar o codigo da categoria*/
+/*recebe por parametro o codigo da categoria, o tipo de salvamento, o url e modo de abertura*/
+int valida_codigocategoria(int tipo,char url[50],char modoabertura[5],int codigo){
+	/*chama a struct do hospede para ter acesso as variaveis*/
+	struct categorias c;
+	int contador;
+	/*cria um ponteiro de arquivo para poder abrir o arquivo de categoria*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica se há erros na abertura*/
+	if(arquivo == NULL){
+		/*se houver, mostra erro na tela*/
+		vermelho("\nErro na abertura do arquivo!\n");
+	}
+	else{
+		switch(tipo){
+			case 1:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fscanf(arquivo,"%u\n %s\n %f\n %i\n %i\n %s",&c.codigo,c.descricao,&c.valor,&c.quantidadeadultos,&c.quantidadecriancas,c.status);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == c.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+			case 2:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fread(&c,sizeof(struct categorias),1,arquivo);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == c.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+		}
+	}	
+}
+
+/*função para validar o codigo da acomodação*/
+/*recebe por parametro o codigo da acomodação, o tipo de salvamento, o url e modo de abertura*/
+int valida_codigoacomodacao(int tipo,char url[50],char modoabertura[5],int codigo){
+	/*chama a struct do hospede para ter acesso as variaveis*/
+	struct acomodacoes ac;
+	int contador;
+	/*cria um ponteiro de arquivo para poder abrir o arquivo de acomodação*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica se há erros na abertura*/
+	if(arquivo == NULL){
+		/*se houver, mostra erro na tela*/
+		vermelho("\nErro na abertura do arquivo!\n");
+	}
+	else{
+		switch(tipo){
+			case 1:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fscanf(arquivo,"%u\n %s\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %i\n %s",&ac.codigo,ac.descricao,&ac.extra.tv,&ac.extra.tvcabo,
+					&ac.extra.arcondicionado,&ac.extra.frigobar,&ac.extra.banheiro,&ac.extra.camacasal,&ac.extra.camasolteiro,&ac.extra.hidromassagem,&ac.extra.banheira,&ac.categoriaselecionada,ac.status);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == ac.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+			case 2:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fread(&ac,sizeof(struct acomodacoes),1,arquivo);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == ac.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+		}
+	}	
+}
+
+/*função para validar o codigo da fornecedor*/
+/*recebe por parametro o codigo da fornecedor, o tipo de salvamento, o url e modo de abertura*/
+int valida_codigofornecedor(int tipo,char url[50],char modoabertura[5],int codigo){
+	/*chama a struct do hospede para ter acesso as variaveis*/
+	struct fornecedores f;
+	int contador;
+	/*cria um ponteiro de arquivo para poder abrir o arquivo de fornecedor*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica se há erros na abertura*/
+	if(arquivo == NULL){
+		/*se houver, mostra erro na tela*/
+		vermelho("\nErro na abertura do arquivo!\n");
+	}
+	else{
+		switch(tipo){
+			case 1:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&f.codigo,f.nomefantasia,f.razaosocial,
+					f.cnpj,f.insc,f.rua,f.numero,f.bairro,f.cep,f.complemento,f.cidadeestado.cidade,f.cidadeestado.estado,f.telefone,f.celular,f.email,f.nrepresentante,
+					f.trepresentante,f.status);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == f.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+			case 2:
+				while(contador != 1){
+					/*zera o contador para verificar o codigo*/
+					contador = 0;
+					/*inicia a leitura do arquivo*/
+					while(!feof(arquivo)){
+						/*le cada dado*/
+						fread(&f,sizeof(struct fornecedores),1,arquivo);
+						/*verifica se há está no final do arquivo*/
+						if(feof(arquivo)){
+							break;
+						}
+						if(codigo == f.codigo){
+							contador++;
+						}
+					}
+					/*verifica se contador maior diferente de zero, ou seja há algum código como esse cadastrado*/
+					if(contador == 1){
+						/*se for igual a 1, o codigo digitado está ok*/
+						return 1;
+					}
+					/*se for maior que 1, há valores repitidos no código*/
+					else if(contador > 1){
+						vermelho("\nErro, há códigos duplicados!\n");
+					}
+					/*se for diferente desses valores mostra codigo invalido ou nao cadastrado*/
+					else{
+						vermelho("\nCódigo inválido!\n");
+					}
+				}
+				fclose(arquivo);
+			break;
+		}
+	}	
 }
 
 #endif 

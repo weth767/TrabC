@@ -271,7 +271,7 @@ void salvarproduto(int tipo,char url[50],char modoabertura[5]){
 				fprintf(arquivo,"\n%s",p.descricao);
 				fprintf(arquivo,"\n%i",p.estoque);
 				fprintf(arquivo,"\n%i",p.estoqueminimo);
-				fprintf(arquivo,"\n%.2f",p.precocusto);
+				fprintf(arquivo,"\n%.2f",p.lucro);
 				fprintf(arquivo,"\n%.2f",p.precovenda);
 				fprintf(arquivo,"\n%s\n\n",p.status);
 				/*mostra mensagem de sucesso*/

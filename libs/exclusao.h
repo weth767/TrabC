@@ -674,7 +674,7 @@ void excluiproduto(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 			/*se estiver tudo ok, passa para próxima parte*/
 			else{
 				/*lê o arquivo, armazenando o dado de cada produto na struct*/
-				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.precocusto,&p.precovenda,p.status)!= EOF){
+				while(fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status)!= EOF){
 					/*se o código lido é diferente do código digitado pelo usuário*/
 					/*salva os dados no arquivo temporário*/
 					if(p.codigo != codigo){
@@ -682,7 +682,7 @@ void excluiproduto(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						fprintf(arquivo2,"\n%s",p.descricao);
 						fprintf(arquivo2,"\n%i",p.estoque);
 						fprintf(arquivo2,"\n%i",p.estoqueminimo);
-						fprintf(arquivo2,"\n%.2f",p.precocusto);
+						fprintf(arquivo2,"\n%.2f",p.lucro);
 						fprintf(arquivo2,"\n%.2f",p.precovenda);
 						fprintf(arquivo2,"\n%s\n\n",p.status);
 					}
@@ -693,7 +693,7 @@ void excluiproduto(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						printf("\nDescrição: %s",p.descricao);
 						printf("\nEstoque: %i",p.estoque);
 						printf("\nEstoque Minimo: %i",p.estoqueminimo);
-						printf("\nPreço de Custo: R$%.2f",p.precocusto);
+						printf("\nLucro: %.2f%%",p.lucro);
 						printf("\nPreço de Venda: R$%.2f",p.precovenda);
 						printf("\nStatus: %s\n\n",p.status);
 					}
@@ -755,7 +755,7 @@ void excluiproduto(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						printf("\nDescrição: %s",p.descricao);
 						printf("\nEstoque: %i",p.estoque);
 						printf("\nEstoque Minimo: %i",p.estoqueminimo);
-						printf("\nPreço de Custo: R$%.2f",p.precocusto);
+						printf("\nLucro: %.2f%%",p.lucro);
 						printf("\nPreço de Venda: R$%.2f",p.precovenda);
 						printf("\nStatus: %s\n\n",p.status);
 					}

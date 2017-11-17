@@ -87,7 +87,7 @@ struct produtos{
 	char descricao[50];
 	int estoque;
 	int estoqueminimo;
-	float precocusto;
+	float lucro;
 	float precovenda;
 	char status[20];
 };
@@ -129,14 +129,16 @@ struct config{
 /*struct para a entrada de produtos industrializados*/
 struct entradaprodutos{
 	unsigned int codigo;
-	unsigned int codigoproduto;
-	unsigned int codigofornecedor;
+	int produtos_distintos;
+	unsigned int codigoproduto[999];
+	unsigned int codigofornecedor[999];
+	char status[999][20];
+	int quantidade[999];
+	float precocusto[999];
 	float frete;
 	float imposto;
-	int quantidade;
-	float precocusto;
 	float totalnota;
-	char status[20];
-}
+	
+};
 
 #endif

@@ -140,5 +140,15 @@ struct entradaprodutos{
 	float totalnota;
 	
 };
+/*struct para saida de produtos industrializados*/
+struct saidaprodutos{
+	unsigned int codigo;
+	int produtos_distintos;
+	unsigned int codigoproduto[999];
+	char status[999][20];
+	int quantidade[999];
+	float precovenda[999];
+	float totalpagar;
+};
 
 #endif

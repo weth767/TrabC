@@ -7,7 +7,7 @@
 #include "cores.h"
 /*função para realizar a entrada dos produtos e ainda calcular o preço de venda do produto*/
 /*recebe por parametro o tipo de salvamento, o url e o modo de abertura*/
-float* entradaprodutos(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
+float* entrada_produtos(int tipo,char url[50],char modoabertura[5]){
 	/*chama a struct para ter acesso as variaveis e vetores*/
 	struct entradaprodutos ep;
 	int quantidades = 0;
@@ -19,24 +19,31 @@ float* entradaprodutos(int tipo,char url[50],char modoabertura[5],char urltemp[5
 	if(arquivo == NULL){
 		vermelho("\nErro em realizar a abertura do arquivo!\n");
 	}
+	/*se estiver ok, continua a execução*/
 	else{
+		/*um for para atualizar a quantidades de produtos*/
 		for(int i = 0; i < ep.produtos_distintos; i++){
 			quantidades = quantidades + ep.quantidade[i];
 		}
 		/*verifica o tipo de salvamento*/
 		switch(tipo){
-			/*tipo 1quantidades = quantidades + ep.quantidade[i];
+			/*tipo 1 arquivo texto
+			quantidades = quantidades + ep.quantidade[i];
 			/*começa a realizar o salvamento*/
 				fprintf(arquivo,"%u\n",ep.codigo);
 				fprintf(arquivo,"%i\n",ep.produtos_distintos);
 				/*um for para todos os produtos que foram comprados na nota*/
 				for(int i = 0; i < ep.produtos_distintos; i++){
-					fprintf(arquivo,"%u %u %i %f %s\n",ep.codigoproduto,ep.codigofornecedor,ep.quantidade,ep.precocusto,ep.status);
+					fprintf(arquivo,"%u",ep.codigoproduto[i]);
+					fprintf(arquivo,"%u",ep.codigofornecedor[i]);
+					fprintf(arquivo,"%i",ep.quantidade[i]);
+					fprintf(arquivo,"%f",ep.precocusto[i]);
+					fprintf(arquivo,"%s\n",ep.status[i]);
 				}
 				/*agora cadastra o restante dos produtos*/
-				fprintf(arquivo,"%f\n",&ep.frete);
-				fprintf(arquivo,"%f\n",&ep.imposto);
-				fprintf(arquivo,"%f\n\n",&ep.totalnota);
+				fprintf(arquivo,"%f\n",ep.frete);
+				fprintf(arquivo,"%f\n",ep.imposto);
+				fprintf(arquivo,"%f\n\n",ep.totalnota);
 				/*fecha o arquivo*/
 				fclose(arquivo);
 				/*mostra mensagem de sucesso na tela*/
@@ -62,8 +69,7 @@ float* entradaprodutos(int tipo,char url[50],char modoabertura[5],char urltemp[5
 	valores[0] = ep.frete / quantidades;
 	valores[1] = ep.imposto / quantidades;
 	/*retorna esses valores*/
-	atualiza_valorprodutos(tipo,url,modoabertura,valores,urltemp);
-	return valores;
+	return &valores[0];
 }
 /*função para atualizar o valor dos produtos
 recebe como parametro o ponteiro do vetor retornado pela função acima*/
@@ -104,7 +110,8 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					/*sai do laço for */
 					for(int i = 0; i < ep.produtos_distintos; i++){
 						if(p.codigo == ep.codigoproduto[i]){
-							p.precovenda = ep.precocusto + valores[0] + valores[1];
+							p.precovenda = p.precovenda + valores[0] + valores[1];
+							p.precovenda = p.precovenda + (p.precovenda * p.lucro);
 							break;
 						}
 					}
@@ -142,7 +149,7 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					fread(&p,sizeof(struct produtos),1,arquivo);
 					for(int i = 0; i < ep.produtos_distintos; i++){
 						if(p.codigo == ep.codigoproduto[i]){
-							p.precovenda = ep.precocusto + valores[0] + valores[1];
+							p.precovenda = ep.precocusto[i] + valores[0] + valores[1];
 							break;
 						}
 					}
@@ -157,11 +164,134 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 				/*mostra ao usuário, mensagem de sucesso na operação*/
 				verde("\nNota cadastrada com sucesso!\n");
 			break;
+			/*erro para opções de salvamento não implementadas*/
 			default:
 				vermelho("\nOpção de salvamento ainda não implementada!\n");
 			break;
 		}
 	}
+}
+/*função para a saída de produtos, ou seja, para a venda dos produtos no hotel*/
+void saida_produtos(int tipo,char url[50],char modoabertura[5]){
+	/*chama a struct de saida de produtos, para ter acesso a suas variáveis*/
+	struct saidaprodutos sp;
+	/*cria um ponteiro do tipo arquivo, para acessar o arquivo de produtos futuramente*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifico se o arquivo abriu corretamente, se não abriu, mostro mensagem de erro na tela*/
+	if(arquivo == NULL){
+		vermelho("\nErro em realizar a abertura do arquivo!\n");
+	}
+	/*se o arquivo abriu ok, continua a execução*/
+	else{
+		/*verifico o tipo de salvamento*/
+		switch(tipo){
+			/*caso for o tipo 1, o salvamento é em arquivo texto*/
+			case 1:
+				/*salva os dados da venda do produto*/
+				fprintf(arquivo,"%u\n",sp.codigo);
+				fprintf(arquivo,"%i\n",sp.produtos_distintos);
+				for(int i = 0; i < sp.produtos_distintos; i++){
+					fprintf(arquivo,"%u %i %f %s\n",sp.codigoproduto[i],sp.quantidade[i],sp.precovenda[i],sp.status[i]);
+				}
+				fprintf(arquivo,"%f\n\n",sp.totalpagar);
+				/*fecha o arquivo e mostra mensagem de sucesso*/
+				fclose(arquivo);
+				verde("\nDados salvos com sucesso!\n");
+			break;
+			/*caso 2, arquivo binário*/
+			case 2:
+				/*salva os dados no arquivo*/
+				fwrite(&sp,sizeof(struct saidaprodutos),1,arquivo);
+				/*fecha o arquivo*/
+				fclose(arquivo);
+				/*mostra mensagem de sucesso*/
+				verde("\nDados salvos com sucesso!\n");
+			break;
+			/*opção de salvamento invalida*/
+			default:
+				vermelho("\nOpção de salvamento não implementada!\n");
+			break;
+
+		}
+	}
+}
+
+/*função para retornar os valores de todos os produtos cadastrados no arquivo*/
+/*recebe por parametro o url do produto, o modo de abertura, e o tipo de salvamento*/
+float* retorna_valoresprodutos(int tipo, char url[50], char modoabertura[5]){
+	/*chama a struct de saida de produtos e de produtos para acessar suas variaveis*/
+	struct saidaprodutos sp;
+	struct produtos p;
+	float *valores;
+	int contador = 0;
+	/*cria um ponteiro, de arquivo para acessar o arquivo de produto*/
+	FILE *arquivo;
+	/*abre o arquivo de produto, para acessar os valores de venda dos produtos*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica se o arquivo foi aberto com sucesso*/
+	if(arquivo == NULL){
+		/*se der problema, mostra mensagem de erro */
+		vermelho("\nErro em realizar abertura do arquivo!\n");
+	}
+	/*se estiver tudo ok, continua a execução da função*/
+	else{
+		/*verifica o tipo de salvamento que está configurado*/
+		switch(tipo){
+			case 1:/*caso 1, salvamento em arquivo texto*/
+				/*um while para ler até o final do arquivo*/
+				while(!feof(arquivo)){
+					/*verifica se já está no final do arquivo para evitar repetições indesejadas*/
+					if(feof(arquivo)){
+						/*sai do laço*/
+						break;
+					}
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,
+						&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status);
+					/*aumenta o valor de contador para que a alocaçao seja criada com o tamanho de arquivos que tem no arquivo*/
+					contador++;
+					/*aloca espaço referente a quantidade de produtos cadastrados*/
+					valores = (float *)malloc(contador * sizeof(float));
+					/*adiciona a posição zero do vetor, seu tamanho*/
+					valores[0] = contador;
+					/*adiciona o valor na posicao da quantidade de dados*/
+					valores[contador] = p.precovenda;
+				}
+				/*fecha o arquivo*/
+				fclose(arquivo);
+			break;
+			case 2:
+				/*um while para ler o arquivo até seu final*/
+				while(!feof(arquivo)){
+					/*verifica se já está no final do arquivo, para evitar repetições*/
+					if(feof(arquivo)){
+						/*sai do laço*/
+						break;
+					}
+					/*comando de leitura*/
+					fread(&p,sizeof(struct produtos),1,arquivo);
+					/*aumenta o valor do contador, para que a alocação seja criada com o tamanho igual a quantidade de produtos 
+					que tem cadastradas no arquivo*/
+					contador++;
+					/*comando para alocar mais espaço, aloca a quantidade de produtos cadastrados*/
+					valores = (float *) malloc(contador * sizeof(float));
+					/*adiciona a posição zero do vetor, seu tamanho*/
+					valores[0] = contador;
+					/*adiciona o valor na posicao da quantidade de dados*/
+					valores[contador] = p.precovenda;
+				}
+				/*fecha o arquivo*/
+				fclose(arquivo);
+			break;
+			default:
+				/*opção de salvamento não valida*/
+				vermelho("\nOpção de salvamento ainda não implementada!\n");
+			break;
+		}
+	}
+	return &valores[0];
 }
 
 #endif

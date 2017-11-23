@@ -29,6 +29,8 @@ char urlcategoria[50];
 char urlacomodacao[50];
 char urlfornecedor[50];
 char urlusuario[50];
+char url_entradaprodutos[50];
+char url_saidaprodutos[50];
 char urltemphospede[50];
 char urltemphotel[50];
 char urltempproduto[50];
@@ -36,6 +38,8 @@ char urltempcategoria[50];
 char urltempacomodacao[50];
 char urltempfornecedor[50];
 char urltempusuario[50];
+char urltemp_entradaprodutos[50];
+char urltemp_saidaprodutos[50];
 /**/
 
 /*função para definição dos urls e modo de abertura dos arquivos*/
@@ -53,6 +57,8 @@ void defineconstantes(){
 		strcpy(urlcategoria,"saves/categorias.txt");
 		strcpy(urlacomodacao,"saves/acomodacoes.txt");
 		strcpy(urlfornecedor,"saves/fornecedores.txt");
+		strcpy(url_entradaprodutos,"saves/entradaprodutos.txt");
+		strcpy(url_saidaprodutos,"saves/saidaprodutos.txt");
 		/*caminhos temporarios*/
 		strcpy(urltemphospede,"saves/temphospedes.txt");
 		strcpy(urltemphotel,"saves/temphoteis.txt");
@@ -60,6 +66,8 @@ void defineconstantes(){
 		strcpy(urltempcategoria,"saves/tempcategorias.txt");
 		strcpy(urltempacomodacao,"saves/tempacomodacoes.txt");
 		strcpy(urltempfornecedor,"saves/tempfornecedores.txt");
+		strcpy(urltemp_entradaprodutos,"saves/tempentradaprodutos.txt");
+		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.txt");
 	}
 	else if(verificasave() == 2){
 		/*caminhos originais do binario*/
@@ -70,6 +78,8 @@ void defineconstantes(){
 		strcpy(urlcategoria,"saves/categorias.bin");
 		strcpy(urlacomodacao,"saves/acomodacoes.bin");
 		strcpy(urlfornecedor,"saves/fornecedores.bin");
+		strcpy(url_entradaprodutos,"saves/entradaprodutos.bin");
+		strcpy(url_saidaprodutos,"saves/saidaprodutos.bin");
 		/*caminhos temporarios do binario*/
 		strcpy(urltemphospede,"saves/temphospedes.bin");
 		strcpy(urltemphotel,"saves/temphoteis.bin");
@@ -77,6 +87,8 @@ void defineconstantes(){
 		strcpy(urltempcategoria,"saves/tempcategorias.bin");
 		strcpy(urltempacomodacao,"saves/tempacomodacoes.bin");
 		strcpy(urltempfornecedor,"saves/tempfornecedores.bin");
+		strcpy(urltemp_entradaprodutos,"saves/tempentradaprodutos.bin");
+		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.bin");
 	}
 	/*opção de salvamento ainda nao implementada*/
 	else{
@@ -154,7 +166,7 @@ int verificaconfig(){
 		return 0;
 	}
 }
-
+float *valores;
 char resposta[3];
 /*função menu, aqui são verificados os comandos referentes ao sistema*/
 void menu(char com[50],int tiposave){
@@ -286,6 +298,17 @@ void menu(char com[50],int tiposave){
 		editaacomodacao(tiposave,urlacomodacao,modoabertura,urltempacomodacao,urlcategoria);
 	}
 
+	/*comando para compra e venda de produtos no hotel*/
+	else if(strcmp(com,"cpp") == 0){
+		cadastra_entradaprodutos(urlproduto,urlfornecedor,modoabertura);
+		valores = entrada_produtos(tiposave,url_entradaprodutos,modoabertura);
+	}
+
+	else if(strcmp(com,"vdp") == 0){
+		cadastra_saidaprodutos(urlproduto, modoabertura);
+		saida_produtos(tiposave,url_saidaprodutos,modoabertura);
+	}
+
 	/*Outros comandos*/
 	/*comando para limpar a tela*/
 	else if(strcmp(com,"lt") == 0){
@@ -310,7 +333,55 @@ void menu(char com[50],int tiposave){
 	}
 	/*comando help do sistema*/
 	else if(strcmp(com,"help") == 0){
-
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("TODOS OS COMANDOS A SEGUIR SÃO EM LETRA MINUSCULA\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("USUARIO\n");
+		printf("Digite cadus para cadastrar novos usuarios.\n");
+		printf("Digite csus para fazer consulta de usuario.\n");
+		printf("Digite edus para editar o usuario.\n");
+		printf("Digite exus para excluir usuario.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("HÓSPEDE\n");
+		printf("Digite cadhp para cadastrar novos hóspedes.\n");
+		printf("Digite cshp para fazer consulta de hóspede.\n");
+		printf("Digite edhp para editar um hóspede.\n");
+		printf("Digite exhp para excluir um hóspede.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("HOTEL\n");
+		printf("Digite cadht para cadastrar novos hoteis.\n");
+		printf("Digite csht para fazer consulta de um hotel.\n");
+		printf("Digite edht para editar um hotel.\n");
+		printf("Digite exht para excluir hotel.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("PRODUTO\n");
+		printf("Digite cadp para cadastrar novos produtos.\n");
+		printf("Digite csp para fazer consulta de um produto.\n");
+		printf("Digite edht para editar um produto.\n");
+		printf("Digite exht para excluir um produto.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("FORNECEDOR\n");
+		printf("Digite cadf para cadastrar novos fornecedores.\n");
+		printf("Digite csf para fazer consulta de um fornecedor.\n");
+		printf("Digite edf para editar um fornecedor.\n");
+		printf("Digite exf para excluir um fornecedor.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("CATEGORIA\n");
+		printf("Digite cadc para cadastrar uma nova categoria.\n");
+		printf("Digite csc para fazer consulta de um categoria.\n");
+		printf("Digite edc para editar uma categoria.\n");
+		printf("Digite exc para excluir uma categoria.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("ACOMODAÇÃO\n");
+		printf("Digite cadac para cadastrar uma nova acomodação.\n");
+		printf("Digite csac para fazer consulta de uma acomodação.\n");
+		printf("Digite edac para editar uma acomodação.\n");
+		printf("Digite exac para excluir uma acomodação.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("OUTROS COMANDOS\n");
+		printf("Digite lt para limpar a tela.\n");
+		printf("Digite rconfig para refazer as configurações iniciais do Sistema.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
 	}
 	/*comando inválido*/
 	else{

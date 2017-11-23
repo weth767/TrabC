@@ -1221,6 +1221,82 @@ int codigo_entradaprodutos(int tipo){
 	/*retorna o codigo*/
 	return codigo;
 }
+
+/*função para devolver o código incrementado para saida de produtos*/
+int codigo_saidaprodutos(int tipo){
+	/*chama a struct de saida de produtos, para ter acesso a suas variaveis*/
+	struct saidaprodutos sp;
+	/*cria um ponteiro para ter acesso ao arquivo de saida de produtos*/
+	FILE *arquivo;
+	int codigo;
+	/*verifica o tipo de salvamento*/
+	switch(tipo){
+		case 1:/*arquivo texto*/
+			/*abre o arquivo*/
+			arquivo = fopen("saidaprodutos.txt","a+");
+			/*verifica se o arquivo já existia antes*/
+			if(arquivo == NULL){
+				codigo = 0;
+			}
+			else{
+				/*le o arquivo até o final, com um while*/
+				while(!feof(arquivo)){
+					/*verifica antes, se já está no final do arquivo para evitar erros*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %i\n",&sp.codigo,&sp.produtos_distintos);
+					/*depois de lido a quantidade de produtos distintos*/
+					/*le os outros dados que estão em forma de vetores*/
+					for(int i = 0; i < sp.produtos_distintos; i++){
+						/*le o resto dos dados*/
+						fscanf(arquivo,"%u %i %f %s\n",&sp.codigoproduto[i],&sp.quantidade[i],&sp.precovenda[i],sp.status[i]);
+					}
+					/*depois de lido todos os dados*/
+					/*retornar o codigo incrementado */
+				}
+				codigo = sp.codigo;
+				/*incrementa ele*/
+				codigo++;
+				/*fecha o arquivo*/
+				fclose(arquivo);
+			}
+		break;
+		case 2: /*caso 2, arquivo binário*/
+			/*abre o arquivo*/
+			arquivo = fopen("saidaprodutos.bin","ab+");
+			/*verifica o arquivo, se já existia antes ou foi criado agora*/
+			if(arquivo == NULL){
+				/*o codigo vai ser 0*/
+				codigo = 0;
+			}
+			else{
+				/*le o arquivo todo com o while*/
+				while(!feof(arquivo)){
+					/*verifica se já está no final do arquivo, da um break se tiver*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*comando de leitura*/
+					fread(&sp,sizeof(struct saidaprodutos),1,arquivo);
+				}
+				codigo = sp.codigo;
+				/*recebe e incrementa o código lido*/
+				codigo++;
+				/*fecha o arquivo*/
+				fclose(arquivo);
+			}
+		break;
+		/*tipo de salvamento inválido*/
+		default:
+			vermelho("\nOpção de salvamento inválida!\n");
+		break;
+	}
+	/*retorna o codigo*/
+	return codigo;
+}
+
 /*função para validar o codigo do hospede*/
 /*recebe por parametro o codigo do hospede, o tipo de salvamento, o url e modo de abertura*/
 int valida_codigohospede(int tipo,char url[50],char modoabertura[5],int codigo){

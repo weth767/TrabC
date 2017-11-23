@@ -4,10 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#include <math.h>
 #include "structs.h"
 #include "consulta.h"
 #include "config.h"
 #include "salvar.h"
+#include "produto.h"
 
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 /*recebe os dados do hospede e salva na struct*/
@@ -344,7 +346,6 @@ void cadastra_entradaprodutos(char urlproduto[50],char urlfornecedor[50],char mo
 	struct entradaprodutos ep;
 	int verifica = 0;
 	float soma = 0.0;
-	int quantidade_produtos = 0;
 	ciano("\nCadastro de Nota Fiscal\n\n");
 	/*seta linguagem padrão o portugues*/
 	setlocale(LC_ALL,"Portuguese");
@@ -435,5 +436,60 @@ void cadastra_entradaprodutos(char urlproduto[50],char urlfornecedor[50],char mo
 	/*soma os valores com o frete e o imposto e atribui ao total da nota*/
 	soma = soma + ep.frete + ep.imposto;
 	ep.totalnota = soma;
+}
+
+/*função para cadastrar a saida de produtos*/
+/*recebe por parametro, o url do produto...*/
+void cadastra_saidaprodutos(char urlproduto[50], char modoabertura[5]){
+	/*chama a struct de saida de produtos para ter acesso a suas variaveis*/
+	struct saidaprodutos sp;
+	int verifica = 0;
+	int tamanho;
+	int resposta;
+	/*seta a linguagem local, como português, para evitar alguns erros que possam aparecer*/
+	setlocale(LC_ALL,"Portuguese");
+	ciano("\nVenda de Produtos\n");
+	/*receber o código da saida de produtos auto incrementada*/
+	sp.codigo = codigo_saidaprodutos(verificasave());
+	/*recebe o ponteiro da função que retorna os valores dos produtos*/
+	float *valores = retorna_valoresprodutos(verificasave(),urlproduto,modoabertura);
+	/*pega o tamanho do vetor, que está na posição 1*/
+	tamanho = (int)valores[0];
+	/*inicia a quantidade de produtos distintos com 0*/
+	/*e inicia a nota com 0 também*/
+	sp.totalpagar = 0;
+	sp.produtos_distintos = 0;
+	while(verifica == 0){
+		/*recebe os outros dados dos produtos que podem ser mais de um cada*/
+		/*recebe o código do produto*/
+		setbuf(stdin,NULL);
+		printf("Digite o código do %iº produto: ", sp.produtos_distintos + 1);
+		scanf("%u",&sp.codigoproduto[sp.produtos_distintos]);
+		/*recebe o quantidade do produto comprada*/
+		setbuf(stdin,NULL);
+		printf("Digite a quantidade do %iº produto: ",sp.produtos_distintos + 1);
+		scanf("%i",&sp.quantidade[sp.produtos_distintos]);
+		/*recebe o valor de cada produto para somar ao total da nota*/
+		for (int i = 1; i < tamanho; i++){
+			for(int j = 0; j < sp.produtos_distintos; j++){
+				if(sp.codigoproduto[j] == i){
+					sp.precovenda[sp.produtos_distintos] = valores[i];
+					break;
+				}
+			}
+		}
+		sp.totalpagar += sp.precovenda[sp.produtos_distintos];
+		/*atualiza a quantidade de produtos distintos a cada produto novo acrescentado*/
+		sp.produtos_distintos++;
+		/*verifica se o cliente deseja mais alguma coisa*/
+		setbuf(stdin,NULL);
+		printf("\nDeseja mais inserir mais algum produto na conta\n1 - Sim\n0 - Não\n: ");
+		scanf("%i",&resposta);
+		if(resposta == 0){
+			verifica = 1;
+		}
+	}
+	/*mostra o total a pagar*/
+	printf("\nTotal a pagar: R$%.2f\n",sp.totalpagar);
 }
 #endif 

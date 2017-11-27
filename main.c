@@ -19,6 +19,8 @@
 #include "libs/exclusao.h"
 #include "libs/edicao.h"
 #include "libs/cores.h"
+#include "libs/reserva.h"
+#include "libs/produto.h"
 /***/
 /*constantes*/
 char modoabertura[5];
@@ -31,6 +33,7 @@ char urlfornecedor[50];
 char urlusuario[50];
 char url_entradaprodutos[50];
 char url_saidaprodutos[50];
+char url_reserva[50];
 char urltemphospede[50];
 char urltemphotel[50];
 char urltempproduto[50];
@@ -40,6 +43,7 @@ char urltempfornecedor[50];
 char urltempusuario[50];
 char urltemp_entradaprodutos[50];
 char urltemp_saidaprodutos[50];
+char urltemp_reserva[50];
 /**/
 
 /*função para definição dos urls e modo de abertura dos arquivos*/
@@ -59,6 +63,7 @@ void defineconstantes(){
 		strcpy(urlfornecedor,"saves/fornecedores.txt");
 		strcpy(url_entradaprodutos,"saves/entradaprodutos.txt");
 		strcpy(url_saidaprodutos,"saves/saidaprodutos.txt");
+		strcpy(url_reserva,"saves/reservas.txt");
 		/*caminhos temporarios*/
 		strcpy(urltemphospede,"saves/temphospedes.txt");
 		strcpy(urltemphotel,"saves/temphoteis.txt");
@@ -68,6 +73,7 @@ void defineconstantes(){
 		strcpy(urltempfornecedor,"saves/tempfornecedores.txt");
 		strcpy(urltemp_entradaprodutos,"saves/tempentradaprodutos.txt");
 		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.txt");
+		strcpy(urltemp_reserva,"saves/tempreservas.txt");
 	}
 	else if(verificasave() == 2){
 		/*caminhos originais do binario*/
@@ -80,6 +86,7 @@ void defineconstantes(){
 		strcpy(urlfornecedor,"saves/fornecedores.bin");
 		strcpy(url_entradaprodutos,"saves/entradaprodutos.bin");
 		strcpy(url_saidaprodutos,"saves/saidaprodutos.bin");
+		strcpy(url_reserva,"saves/reservas.bin");
 		/*caminhos temporarios do binario*/
 		strcpy(urltemphospede,"saves/temphospedes.bin");
 		strcpy(urltemphotel,"saves/temphoteis.bin");
@@ -89,6 +96,7 @@ void defineconstantes(){
 		strcpy(urltempfornecedor,"saves/tempfornecedores.bin");
 		strcpy(urltemp_entradaprodutos,"saves/tempentradaprodutos.bin");
 		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.bin");
+		strcpy(urltemp_reserva,"saves/tempreservas.bin");
 	}
 	/*opção de salvamento ainda nao implementada*/
 	else{
@@ -173,8 +181,7 @@ void menu(char com[50],int tiposave){
 	/*comandos de hospede*/
 	/*cadastro de hospede*/
 	if((strcmp(com,"cadhp") == 0)){
-		cadastrahospede();
-		salvarhospede(tiposave,urlhospede,modoabertura);
+		salvarhospede(tiposave,urlhospede,modoabertura,cadastrahospede());
 	}
 	/*Consulta de Hospede*/
 	else if(strcmp(com,"cshp") == 0){
@@ -191,8 +198,7 @@ void menu(char com[50],int tiposave){
 
 	/*comandos para cadastro de hotel*/
 	else if(strcmp(com,"cadht") == 0){
-		cadastrahotel();
-		salvarhotel(tiposave,urlhotel,modoabertura);
+		salvarhotel(tiposave,urlhotel,modoabertura,cadastrahotel());
 	}
 	/*consulta dos dados do hotel*/
 	else if(strcmp(com,"csht") == 0){
@@ -209,8 +215,7 @@ void menu(char com[50],int tiposave){
 
 	/*comando para o fornecedor*/
 	else if(strcmp(com,"cadf") == 0){
-		cadastrafornecedor();
-		salvarfornecedor(tiposave,urlfornecedor,modoabertura);
+		salvarfornecedor(tiposave,urlfornecedor,modoabertura,cadastrafornecedor());
 	}
 	/*consulta os dados do fornecedor*/
 	else if(strcmp(com,"csf") == 0){
@@ -227,8 +232,7 @@ void menu(char com[50],int tiposave){
 
 	/*comando para cadastro de usuario*/
 	else if(strcmp(com,"cadus") == 0){
-		cadastrausuario();
-		salvarusuarios(urlusuario,modoabertura);
+		salvarusuarios(urlusuario,modoabertura,cadastrausuario());
 	}
 	/*consulta dados do usuario*/
 	else if(strcmp(com,"csus") == 0){
@@ -244,9 +248,8 @@ void menu(char com[50],int tiposave){
 	}
 
 	/*comando para cadastro de categoria*/
-	else if(strcmp(com,"cadc") == 0){
-		cadastracategoria();
-		salvarcategorias(tiposave,urlcategoria,modoabertura);
+	else if(strcmp(com,"cadc") == 0){	
+		salvarcategorias(tiposave,urlcategoria,modoabertura,cadastracategoria());
 	}
 	/*comando para consultar categoria*/
 	else if(strcmp(com,"csc") == 0){
@@ -264,8 +267,7 @@ void menu(char com[50],int tiposave){
 
 	/*comandos de cadastrar produto*/
 	else if(strcmp(com,"cadp") == 0){
-		cadastraproduto();
-		salvarproduto(tiposave,urlproduto,modoabertura);
+		salvarproduto(tiposave,urlproduto,modoabertura,cadastraproduto());
 	}
 	/*consultar os produtos*/
 	else if(strcmp(com,"csp") == 0){
@@ -282,8 +284,7 @@ void menu(char com[50],int tiposave){
 
 	/*comando para cadastrar acomodação*/
 	else if(strcmp(com,"cadac") == 0){
-		cadastraacomodacao(urlcategoria,modoabertura);
-		salvaracomodacao(tiposave,urlacomodacao,modoabertura);
+		salvaracomodacao(tiposave,urlacomodacao,modoabertura,cadastraacomodacao(urlcategoria,modoabertura));
 	}
 	/*consultar acomodação*/
 	else if(strcmp(com,"csac") == 0){
@@ -299,14 +300,28 @@ void menu(char com[50],int tiposave){
 	}
 
 	/*comando para compra e venda de produtos no hotel*/
+	/*compra de produtos*/
 	else if(strcmp(com,"cpp") == 0){
-		cadastra_entradaprodutos(urlproduto,urlfornecedor,modoabertura);
-		valores = entrada_produtos(tiposave,url_entradaprodutos,modoabertura);
+		struct entradaprodutos ep = cadastra_entradaprodutos(urlproduto,urlfornecedor,modoabertura);
+		valores = entrada_produtos(tiposave,url_entradaprodutos,modoabertura,ep);
+		atualiza_valorprodutos(tiposave,urlproduto,modoabertura,urltempproduto,valores,ep);
 	}
-
+	/*Venda de produtos*/
 	else if(strcmp(com,"vdp") == 0){
-		cadastra_saidaprodutos(urlproduto, modoabertura);
-		saida_produtos(tiposave,url_saidaprodutos,modoabertura);
+		saida_produtos(tiposave,url_saidaprodutos,modoabertura,cadastra_saidaprodutos(urlproduto, modoabertura));
+	}
+	/*Comandos de reserva*/
+	/*comando para realizar a reserva*/
+	else if(strcmp(com,"rsv") == 0){
+
+		reserva(tiposave,url_reserva,modoabertura,cadastra_reserva(urlacomodacao,urlcategoria,urlhospede,modoabertura));
+	}
+	/*comando para consultar reserva de acordo com o código*/
+	else if(strcmp(com,"csrsvc") == 0){
+		int c;
+		branco("Digite o código da Reserva: ");
+		scanf("%i",&c);
+		consulta_reservas(tiposave,url_reserva,modoabertura,c);
 	}
 
 	/*Outros comandos*/

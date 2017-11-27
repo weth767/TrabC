@@ -5,13 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cores.h"
+#include <locale.h>
 /*função para realizar a entrada dos produtos e ainda calcular o preço de venda do produto*/
 /*recebe por parametro o tipo de salvamento, o url e o modo de abertura*/
-float* entrada_produtos(int tipo,char url[50],char modoabertura[5]){
+float* entrada_produtos(int tipo,char url[50],char modoabertura[5],struct entradaprodutos ep){
 	/*chama a struct para ter acesso as variaveis e vetores*/
-	struct entradaprodutos ep;
 	int quantidades = 0;
 	float *valores;
+	setlocale(LC_ALL, "Portuguese");
 	/*cria um ponteiro do tipo arquivo para acessar o arquivo de entrada produto*/
 	FILE *arquivo;
 	/*abre o arquivo*/
@@ -27,17 +28,17 @@ float* entrada_produtos(int tipo,char url[50],char modoabertura[5]){
 		}
 		/*verifica o tipo de salvamento*/
 		switch(tipo){
+			case 1:
 			/*tipo 1 arquivo texto
-			quantidades = quantidades + ep.quantidade[i];
 			/*começa a realizar o salvamento*/
 				fprintf(arquivo,"%u\n",ep.codigo);
 				fprintf(arquivo,"%i\n",ep.produtos_distintos);
 				/*um for para todos os produtos que foram comprados na nota*/
 				for(int i = 0; i < ep.produtos_distintos; i++){
-					fprintf(arquivo,"%u",ep.codigoproduto[i]);
-					fprintf(arquivo,"%u",ep.codigofornecedor[i]);
-					fprintf(arquivo,"%i",ep.quantidade[i]);
-					fprintf(arquivo,"%f",ep.precocusto[i]);
+					fprintf(arquivo,"%u,",ep.codigoproduto[i]);
+					fprintf(arquivo,"%u,",ep.codigofornecedor[i]);
+					fprintf(arquivo,"%i,",ep.quantidade[i]);
+					fprintf(arquivo,"%f,",ep.precocusto[i]);
 					fprintf(arquivo,"%s\n",ep.status[i]);
 				}
 				/*agora cadastra o restante dos produtos*/
@@ -73,16 +74,15 @@ float* entrada_produtos(int tipo,char url[50],char modoabertura[5]){
 }
 /*função para atualizar o valor dos produtos
 recebe como parametro o ponteiro do vetor retornado pela função acima*/
-void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urltemp[50],float *valores){
-	/*chama as structs de entrada de produtos e de produtos*/
+void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urltemp[50],float *valores,struct entradaprodutos ep){
+	/*chama as structs de produtos*/
 	struct produtos p;
-	struct entradaprodutos ep;
 	FILE *arquivo;
 	FILE *arquivo2;
 	/*será lido o arquivo de produtos inteiro para, que com os dados sejam comparadas os codigos dos produtos com os codigos que estão
 	na entrada de produtos e assim poder atualizar o valor do devido produto*/
 	arquivo = fopen(url,modoabertura);
-	arquivo = fopen(url,modoabertura);
+	arquivo2 = fopen(urltemp,modoabertura);
 	/*verificar a integridade da abertura do arquivo*/
 	if(arquivo == NULL || arquivo2 == NULL){
 		vermelho("\nErro em realizar a abertura do arquivo!\n");
@@ -103,6 +103,20 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					/*comando de leitura*/
 					fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,
 						p.descricao,&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status);
+					if(feof(arquivo)){
+						break;
+					}
+
+					printf("\n----------------------------------------------------------------------------\n");
+					ciano("Informações Antigas do Produto: \n\n");
+					printf("Código: %u",p.codigo);
+					printf("\nDescrição: %s",p.descricao);
+					printf("\nEstoque: %i",p.estoque);
+					printf("\nEstoque Minimo: %i",p.estoqueminimo);
+					printf("\nLucro: %.2f%%",p.lucro);
+					printf("\nPreço de Venda: R$%.2f",p.precovenda);
+					printf("\nStatus: %s",p.status);
+					printf("\n----------------------------------------------------------------------------\n");
 					/*depois de lido um produto*/
 					/*terá um for para verificar todos os códigos que estiveram na nota fiscal*/
 					/*e verifica no for até achar o codigo igual ao primeiro produto lido, senão tiver, continuará lendo até o final do arquivo*/
@@ -115,6 +129,16 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 							break;
 						}
 					}
+					printf("\n----------------------------------------------------------------------------\n");
+					ciano("Informações Novas do Produto: \n\n");
+					printf("Código: %u",p.codigo);
+					printf("\nDescrição: %s",p.descricao);
+					printf("\nEstoque: %i",p.estoque);
+					printf("\nEstoque Minimo: %i",p.estoqueminimo);
+					printf("\nLucro: %.2f%%",p.lucro);
+					printf("\nPreço de Venda: R$%.2f",p.precovenda);
+					printf("\nStatus: %s",p.status);
+					printf("\n----------------------------------------------------------------------------\n");
 					/*salva esses dados no arquivo temporario*/
 					/*para todos os produtos, mesmo que não esteja na nota*/
 					fprintf(arquivo2,"%u",p.codigo);
@@ -125,6 +149,8 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					fprintf(arquivo2,"\n%.2f",p.precovenda);
 					fprintf(arquivo2,"\n%s\n\n",p.status);
 				}
+				fclose(arquivo);
+				fclose(arquivo2);
 				/*assim que acabar de ler o arquivo*/
 				/*deve-se renomear o arquivo temporario e excluir o antigo*/
 				remove(url);
@@ -147,16 +173,39 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					/*se achar, atualiza o valor de venda dele*/
 					/*sai do laço for */
 					fread(&p,sizeof(struct produtos),1,arquivo);
+					if(feof(arquivo)){
+						break;
+					}
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %u",p.codigo);
+					printf("\nDescrição: %s",p.descricao);
+					printf("\nEstoque: %i",p.estoque);
+					printf("\nEstoque Minimo: %i",p.estoqueminimo);
+					printf("\nLucro: %.2f%%",p.lucro);
+					printf("\nPreço de Venda: R$%.2f",p.precovenda);
+					printf("\nStatus: %s",p.status);
+					printf("\n----------------------------------------------------------------------------\n");
 					for(int i = 0; i < ep.produtos_distintos; i++){
 						if(p.codigo == ep.codigoproduto[i]){
 							p.precovenda = ep.precocusto[i] + valores[0] + valores[1];
 							break;
 						}
 					}
+					printf("\n----------------------------------------------------------------------------\n");
+					printf("Código: %u",p.codigo);
+					printf("\nDescrição:%s",p.descricao);
+					printf("\nEstoque: %i",p.estoque);
+					printf("\nEstoque Minimo: %i",p.estoqueminimo);
+					printf("\nLucro: %.2f%%",p.lucro);
+					printf("\nPreço de Venda: R$%.2f",p.precovenda);
+					printf("\nStatus: %s",p.status);
+					printf("\n----------------------------------------------------------------------------\n");
 					/*salva esses dados no arquivo temporario*/
 					/*para todos os produtos, mesmo que não esteja na nota*/
 					fwrite(&p,sizeof(struct produtos),1,arquivo2);
 				}
+				fclose(arquivo);
+				fclose(arquivo2);
 				/*assim que acabar de ler o arquivo*/
 				/*deve-se renomear o arquivo temporario e excluir o antigo*/
 				remove(url);
@@ -172,9 +221,8 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 	}
 }
 /*função para a saída de produtos, ou seja, para a venda dos produtos no hotel*/
-void saida_produtos(int tipo,char url[50],char modoabertura[5]){
+void saida_produtos(int tipo,char url[50],char modoabertura[5],struct saidaprodutos sp){
 	/*chama a struct de saida de produtos, para ter acesso a suas variáveis*/
-	struct saidaprodutos sp;
 	/*cria um ponteiro do tipo arquivo, para acessar o arquivo de produtos futuramente*/
 	FILE *arquivo;
 	/*abre o arquivo*/
@@ -222,10 +270,10 @@ void saida_produtos(int tipo,char url[50],char modoabertura[5]){
 /*recebe por parametro o url do produto, o modo de abertura, e o tipo de salvamento*/
 float* retorna_valoresprodutos(int tipo, char url[50], char modoabertura[5]){
 	/*chama a struct de saida de produtos e de produtos para acessar suas variaveis*/
-	struct saidaprodutos sp;
 	struct produtos p;
 	float *valores;
 	int contador = 0;
+	int cont;
 	/*cria um ponteiro, de arquivo para acessar o arquivo de produto*/
 	FILE *arquivo;
 	/*abre o arquivo de produto, para acessar os valores de venda dos produtos*/
@@ -242,6 +290,16 @@ float* retorna_valoresprodutos(int tipo, char url[50], char modoabertura[5]){
 			case 1:/*caso 1, salvamento em arquivo texto*/
 				/*um while para ler até o final do arquivo*/
 				while(!feof(arquivo)){
+					/*aumenta o valor de contador para que a alocaçao seja criada com o tamanho de arquivos que tem no arquivo*/
+					contador++;
+				}
+				/*aloca espaço referente a quantidade de produtos cadastrados*/
+				valores = (float *)malloc((contador + 1)* sizeof(float));
+				/*adiciona a posição zero do vetor, seu tamanho*/
+				valores[0] = contador;
+				cont = 1;
+				/*um while para ler o arquivo até seu final*/
+				while(!feof(arquivo)){
 					/*verifica se já está no final do arquivo para evitar repetições indesejadas*/
 					if(feof(arquivo)){
 						/*sai do laço*/
@@ -250,19 +308,24 @@ float* retorna_valoresprodutos(int tipo, char url[50], char modoabertura[5]){
 					/*comando de leitura*/
 					fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,p.descricao,
 						&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status);
-					/*aumenta o valor de contador para que a alocaçao seja criada com o tamanho de arquivos que tem no arquivo*/
-					contador++;
-					/*aloca espaço referente a quantidade de produtos cadastrados*/
-					valores = (float *)malloc(contador * sizeof(float));
-					/*adiciona a posição zero do vetor, seu tamanho*/
-					valores[0] = contador;
-					/*adiciona o valor na posicao da quantidade de dados*/
-					valores[contador] = p.precovenda;
+					valores[cont] = p.precovenda;
+					cont++;
 				}
 				/*fecha o arquivo*/
 				fclose(arquivo);
 			break;
 			case 2:
+				
+				/*um while para ler até o final do arquivo*/
+				while(!feof(arquivo)){
+					/*aumenta o valor de contador para que a alocaçao seja criada com o tamanho de arquivos que tem no arquivo*/
+					contador++;
+				}
+				/*aloca espaço referente a quantidade de produtos cadastrados*/
+				valores = (float *)malloc((contador + 1) * sizeof(float));
+				/*adiciona a posição zero do vetor, seu tamanho*/
+				valores[0] = contador;
+				cont = 1;
 				/*um while para ler o arquivo até seu final*/
 				while(!feof(arquivo)){
 					/*verifica se já está no final do arquivo, para evitar repetições*/
@@ -272,15 +335,8 @@ float* retorna_valoresprodutos(int tipo, char url[50], char modoabertura[5]){
 					}
 					/*comando de leitura*/
 					fread(&p,sizeof(struct produtos),1,arquivo);
-					/*aumenta o valor do contador, para que a alocação seja criada com o tamanho igual a quantidade de produtos 
-					que tem cadastradas no arquivo*/
-					contador++;
-					/*comando para alocar mais espaço, aloca a quantidade de produtos cadastrados*/
-					valores = (float *) malloc(contador * sizeof(float));
-					/*adiciona a posição zero do vetor, seu tamanho*/
-					valores[0] = contador;
-					/*adiciona o valor na posicao da quantidade de dados*/
-					valores[contador] = p.precovenda;
+					valores[cont] = p.precovenda;
+					cont++;
 				}
 				/*fecha o arquivo*/
 				fclose(arquivo);

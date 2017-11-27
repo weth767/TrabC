@@ -38,8 +38,9 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 			/*se estiver tudo ok, varre o arquivo*/
 			else{
 				/*faz a leitura do arquivo até que chegue ao final dele, armazenando os dados da struct hospede*/
-				while( fscanf(arquivo,"%u\n %s\n %i\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,&h.sexo,h.cpf,h.rg,h.rua,h.numero,
-					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
+				while(fscanf(arquivo,"%u\n %s\n %i\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %i/%i/%i\n %s\n %s\n %s\n %s\n %s\n\n",&h.codigo,h.nome,&h.sexo,
+					h.cpf,h.rg,h.rua,h.numero,h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,&h.data_nascimento.dia,
+					&h.data_nascimento.mes,&h.data_nascimento.ano,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 					/*verifica se o codigo que o usuário digitou é diferente do codigo lido, se for salva no arquivo temporario*/
 					if(h.codigo != codigo){
 						fprintf(arquivo2,"%u",h.codigo);
@@ -54,7 +55,7 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						fprintf(arquivo2,"\n%s",h.cidadeestado.estado);
 						fprintf(arquivo2,"\n%s",h.cep);
 						fprintf(arquivo2,"\n%s",h.complemento);
-						fprintf(arquivo2,"\n%s",h.datanascimento);
+						fprintf(arquivo,"\n%i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 						fprintf(arquivo2,"\n%s",h.telefone);
 						fprintf(arquivo2,"\n%s",h.celular);
 						fprintf(arquivo2,"\n%s",h.estadocivil);
@@ -76,7 +77,7 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						printf("\nEstado: %s",h.cidadeestado.estado);
 						printf("\nCEP: %s",h.cep);
 						printf("\nComplemento: %s",h.complemento);
-						printf("\nData de Nascimento: %s",h.datanascimento);
+						printf("\nData de Nascimento: %i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 						printf("\nTelefone: %s",h.telefone);
 						printf("\nCelular: %s",h.celular);
 						printf("\nEstado Cívil: %s",h.estadocivil);
@@ -149,7 +150,7 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						printf("\nEstado: %s",h.cidadeestado.estado);
 						printf("\nCEP: %s",h.cep);
 						printf("\nComplemento: %s",h.complemento);
-						printf("\nData de Nascimento: %s",h.datanascimento);
+						printf("\nData de Nascimento: %i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 						printf("\nTelefone: %s",h.telefone);
 						printf("\nCelular: %s",h.celular);
 						printf("\nEstado Cívil: %s",h.estadocivil);

@@ -6,6 +6,15 @@
 #include <string.h>
 /*structs diretamente importantes ao sistema, possuem status*/
 /*struct de cidade e estado*/
+
+/*struct para cpara as datas*/
+struct data{
+	int dia;
+	int mes;
+	int ano;
+	char status[20];
+};
+/*struct de cidade e estado*/
 struct cidadeestado{
 	unsigned int codigo;
 	char cidade[40];
@@ -25,7 +34,7 @@ struct hospede{
 	struct cidadeestado cidadeestado;
 	char cep[13];
 	char complemento[50];
-	char datanascimento[10];
+	struct data data_nascimento;
 	char telefone[14];
 	char celular[15];
 	char estadocivil[15];
@@ -150,5 +159,15 @@ struct saidaprodutos{
 	float precovenda[999];
 	float totalpagar;
 };
+
+struct reserva{	
+	unsigned int codigo;
+	unsigned int codigo_acomodacao;
+	unsigned int codigo_hospede;
+	struct data data_entrada;
+	struct data data_saida;
+	char status[20];
+};
+
 
 #endif

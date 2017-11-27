@@ -8,9 +8,8 @@
 #include "cores.h"
 /*********Comentar*******************/
 /*funcao para salvar para o hospede no arquivo texto*/
-void salvarhospede(int tipo,char url[50],char modoabertura[5]){
+void salvarhospede(int tipo,char url[50],char modoabertura[5],struct hospede h){
 	/*chama a struct hospede para usar as variaveis do hospede*/
-	struct hospede h;
 	setlocale(LC_ALL, "Portuguese");
 	/*coloca um ponteiro para armazenar a localizacao do arquivo*/
 	FILE *arquivo;
@@ -38,7 +37,7 @@ void salvarhospede(int tipo,char url[50],char modoabertura[5]){
 				fprintf(arquivo,"\n%s",h.cidadeestado.estado);
 				fprintf(arquivo,"\n%s",h.cep);
 				fprintf(arquivo,"\n%s",h.complemento);
-				fprintf(arquivo,"\n%s",h.datanascimento);
+				fprintf(arquivo,"\n%i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 				fprintf(arquivo,"\n%s",h.telefone);
 				fprintf(arquivo,"\n%s",h.celular);
 				fprintf(arquivo,"\n%s",h.estadocivil);
@@ -73,9 +72,8 @@ void salvarhospede(int tipo,char url[50],char modoabertura[5]){
 	}
 }
 
-void salvarhotel(int tipo,char url[50],char modoabertura[5]){
+void salvarhotel(int tipo,char url[50],char modoabertura[5],struct hotel ht){
 	//realizo a chamada da struct hotel, para ter acesso as variaveis relacionadas a essa struct
-	struct hotel ht;
 	//coloca o local padrão como portugues, assim pegará todos os acentos.
 	setlocale(LC_ALL,"Portuguese");
 	//crio uma variavel do tipo arquivo com um ponteiro para que possa criar e salvar dados em um arquivo, nesse caso txt
@@ -139,8 +137,7 @@ void salvarhotel(int tipo,char url[50],char modoabertura[5]){
 	
 }
 
-void salvarcategorias(int tipo,char url[50],char modoabertura[5]){
-	struct categorias c;
+void salvarcategorias(int tipo,char url[50],char modoabertura[5],struct categorias c){
 	//chama a struct categorias para ter acesso a suas variaveis
 	setlocale(LC_ALL,"Portuguese");
 	//coloca como linguagem padrao a portuguesa
@@ -194,9 +191,8 @@ void salvarcategorias(int tipo,char url[50],char modoabertura[5]){
 	
 }
 	
-void salvaracomodacao(int tipo,char url[50],char modoabertura[5]){
-	//realizo a chamada da struct acomodacoes, para ter acesso as variaveis relacionadas a essa struct
-	struct acomodacoes ac;
+void salvaracomodacao(int tipo,char url[50],char modoabertura[5],struct acomodacoes ac){
+	//realizo a chamada da struct acomodacoes, para ter acesso as variaveis relacionadas a essa structs
 	//coloca o local padrão como portugues, assim pegará todos os acentos.
 	setlocale(LC_ALL,"Portuguese");
 	//crio uma variavel do tipo arquivo com um ponteiro para que possa criar e salvar dados em um arquivo, nesse caso txt
@@ -251,9 +247,8 @@ void salvaracomodacao(int tipo,char url[50],char modoabertura[5]){
 	}
 }
 
-void salvarproduto(int tipo,char url[50],char modoabertura[5]){
+void salvarproduto(int tipo,char url[50],char modoabertura[5],struct produtos p){
 	//chama a struct produtos para ter acesso as variaveis dela
-	struct produtos p;
 	//seta o local padrão, ou seja o idioma que deve ser interpretado como portugues
 	setlocale(LC_ALL,"Portuguese");
 	FILE *arquivo;
@@ -305,9 +300,8 @@ void salvarproduto(int tipo,char url[50],char modoabertura[5]){
 	
 }
 
-void salvarfornecedor(int tipo,char url[50],char modoabertura[5]){
+void salvarfornecedor(int tipo,char url[50],char modoabertura[5],struct fornecedores f){
 	/*chama a struct do forncedor para ter acesso as suas variaveis*/
-	struct fornecedores f;
 	/*seta o linguagem local como portugues para evitar erros de leitura*/
 	setlocale(LC_ALL,"Portuguese");
 	/*cria um ponteiro de arquivo*/
@@ -377,8 +371,7 @@ void salvarfornecedor(int tipo,char url[50],char modoabertura[5]){
 	}
 }
 
-void salvarusuarios(char url[50],char modoabertura[5]){
-	struct usuarios u;
+void salvarusuarios(char url[50],char modoabertura[5],struct usuarios u){
 	//faço a chamada da struct, para ter acesso as varíaveis desta;*/
 	/*coloco como linguagem obrigatória, o português, para evitar certos problemas de acentuação*/
 	setlocale(LC_ALL,"Portuguese");

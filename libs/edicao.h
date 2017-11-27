@@ -41,8 +41,9 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 				/*a variavel verifica recebe 0, para controlar quando será escolhido uma opção para edição*/
 				verifica = 0;
 				/*verifica o arquivo todo, armazenando um hospede por vez */
-				while(fscanf(arquivo,"%u\n %s\n %i\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&h.codigo,h.nome,&h.sexo,h.cpf,h.rg,h.rua,h.numero,
-					h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,h.datanascimento,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
+				while(fscanf(arquivo,"%u\n %s\n %i\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %i/%i/%i\n %s\n %s\n %s\n %s\n %s\n\n",&h.codigo,h.nome,&h.sexo,
+					h.cpf,h.rg,h.rua,h.numero,h.bairro,h.cidadeestado.cidade,h.cidadeestado.estado,h.cep,h.complemento,&h.data_nascimento.dia,
+					&h.data_nascimento.mes,&h.data_nascimento.ano,h.telefone,h.celular,h.estadocivil,h.email,h.status) != EOF){
 					/*verifica se o codigo lido é diferente do codigo digitado*/
 					/*se for, salva os dados no arquivo temporario*/
 					if(h.codigo != codigo){
@@ -58,7 +59,7 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						fprintf(arquivo2,"\n%s",h.cidadeestado.estado);
 						fprintf(arquivo2,"\n%s",h.cep);
 						fprintf(arquivo2,"\n%s",h.complemento);
-						fprintf(arquivo2,"\n%s",h.datanascimento);
+						fprintf(arquivo,"\n%i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 						fprintf(arquivo2,"\n%s",h.telefone);
 						fprintf(arquivo2,"\n%s",h.celular);
 						fprintf(arquivo2,"\n%s",h.estadocivil);
@@ -81,7 +82,7 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						printf("\nEstado: %s",h.cidadeestado.estado);
 						printf("\nCEP: %s",h.cep);
 						printf("\nComplemento: %s",h.complemento);
-						printf("\nData de Nascimento: %s",h.datanascimento);
+						printf("\nData de Nascimento: %i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 						printf("\nTelefone: %s",h.telefone);
 						printf("\nCelular: %s",h.celular);
 						printf("\nEstado Cívil: %s",h.estadocivil);
@@ -172,8 +173,8 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 							/*para o tipo 11, edita a data de nascimento do hospede*/
 							case 11:
 								setbuf(stdin,NULL);
-								printf("Digite o nova Data de Nascimento: ");
-								scanf("%[^\n]s",h.datanascimento);
+								printf("Digite a Data de Nascimento do Hóspede(Ex: 06 03 1997): ");
+								scanf("%i %i %i",&h.data_nascimento.dia,&h.data_nascimento.mes,&h.data_nascimento.ano);
 								verifica = 1;
 							break;
 							/*para o tipo 12, edita o telefone do hospede*/
@@ -242,7 +243,7 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 					fprintf(arquivo2,"\n%s",h.cidadeestado.estado);
 					fprintf(arquivo2,"\n%s",h.cep);
 					fprintf(arquivo2,"\n%s",h.complemento);
-					fprintf(arquivo2,"\n%s",h.datanascimento);
+					fprintf(arquivo,"\n%i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 					fprintf(arquivo2,"\n%s",h.telefone);
 					fprintf(arquivo2,"\n%s",h.celular);
 					fprintf(arquivo2,"\n%s",h.estadocivil);
@@ -293,7 +294,7 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 						printf("\nEstado: %s",h.cidadeestado.estado);
 						printf("\nCEP: %s",h.cep);
 						printf("\nComplemento: %s",h.complemento);
-						printf("\nData de Nascimento: %s",h.datanascimento);
+						printf("\nData de Nascimento: %i/%i/%i",h.data_nascimento.dia,h.data_nascimento.mes,h.data_nascimento.ano);
 						printf("\nTelefone: %s",h.telefone);
 						printf("\nCelular: %s",h.celular);
 						printf("\nEstado Cívil: %s",h.estadocivil);
@@ -383,8 +384,8 @@ void editahospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 							/*para o tipo 11, edita a data de nascimento do hospede*/
 							case 11:
 								setbuf(stdin,NULL);
-								printf("Digite o nova Data de Nascimento: ");
-								scanf("%[^\n]s",h.datanascimento);
+								printf("Digite a Data de Nascimento do Hóspede(Ex: 06 03 1997): ");
+								scanf("%i %i %i",&h.data_nascimento.dia,&h.data_nascimento.mes,&h.data_nascimento.ano);
 								verifica = 1;
 							break;
 							/*para o tipo 12, edita o telefone do hospede*/

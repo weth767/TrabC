@@ -36,6 +36,7 @@ char url_entradaprodutos[50];
 char url_saidaprodutos[50];
 char url_reserva[50];
 char urlcheck[50];
+char urlconta[50];
 char urltemphospede[50];
 char urltemphotel[50];
 char urltempproduto[50];
@@ -47,6 +48,7 @@ char urltemp_entradaprodutos[50];
 char urltemp_saidaprodutos[50];
 char urltemp_reserva[50];
 char urltempcheck[50];
+char urltempconta[50];
 /**/
 
 /*função para definição dos urls e modo de abertura dos arquivos*/
@@ -68,6 +70,7 @@ void defineconstantes(){
 		strcpy(url_saidaprodutos,"saves/saidaprodutos.txt");
 		strcpy(url_reserva,"saves/reservas.txt");
 		strcpy(urlcheck,"saves/checks.txt");
+		strcpy(urlconta,"saves/contas.txt");
 		/*caminhos temporarios*/
 		strcpy(urltemphospede,"saves/temphospedes.txt");
 		strcpy(urltemphotel,"saves/temphoteis.txt");
@@ -79,6 +82,7 @@ void defineconstantes(){
 		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.txt");
 		strcpy(urltemp_reserva,"saves/tempreservas.txt");
 		strcpy(urltempcheck,"saves/tempchecks.txt");
+		strcpy(urlconta,"saves/contas.bin");
 	}
 	else if(verificasave() == 2){
 		/*caminhos originais do binario*/
@@ -93,6 +97,7 @@ void defineconstantes(){
 		strcpy(url_saidaprodutos,"saves/saidaprodutos.bin");
 		strcpy(url_reserva,"saves/reservas.bin");
 		strcpy(urlcheck,"saves/checks.bin");
+		strcpy(urlconta,"saves/tempconta.txt");
 		/*caminhos temporarios do binario*/
 		strcpy(urltemphospede,"saves/temphospedes.bin");
 		strcpy(urltemphotel,"saves/temphoteis.bin");
@@ -104,6 +109,7 @@ void defineconstantes(){
 		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.bin");
 		strcpy(urltemp_reserva,"saves/tempreservas.bin");
 		strcpy(urltempcheck,"saves/tempchecks.bin");
+		strcpy(urltempconta,"saves/tempcontas.bin");
 	}
 	/*opção de salvamento ainda nao implementada*/
 	else{
@@ -354,7 +360,8 @@ void menu(char com[50],int tiposave){
 	/*Comandos para checks*/
 	/*comando para realizar checagem, tanto check in quanto check out*/
 	else if(strcmp(com,"chk") == 0){
-		check(tiposave,urlcheck,urltempcheck,modoabertura,checagens(urlacomodacao,urlcategoria,urlhospede,url_reserva,urlcheck,modoabertura));
+		check(tiposave,urlcheck,urltempcheck,modoabertura,checagens(urlacomodacao,urlcategoria,urlhospede,url_reserva,urlcheck,urlconta,
+		urltempconta,modoabertura));
 	}
 	/*comando para consulta de todos os checks*/
 	else if(strcmp(com,"cschk") == 0){

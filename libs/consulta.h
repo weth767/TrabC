@@ -1443,6 +1443,72 @@ int codigo_checks(int tipo){
 	}
 	return codigo;
 }
+/*função para gerar codigo auto incrmenetaod para as contas*/
+/*recebe por parametro o tipo de salvamento*/
+int codigo_conta(int tipo){
+	/*chama a struct de contas para acessar suas variaveis*/
+	struct contas ct;
+	int codigo;
+	/*cria um ponteiro de arquivo, para acessar o arquivo de contas*/
+	FILE *arquivo;
+	/*verifica o tipo de salvamento*/
+	switch(tipo){
+		case 1:	
+			/*abre o arquivo*/
+			arquivo = fopen("saves/contas.txt","a+");
+			/*verifica o arquivo*/
+			if(arquivo == NULL){
+				codigo = 0;
+			}
+			else{
+				/*le o arquivo*/
+				while(!feof(arquivo)){
+					/*verifica o final do arquivo para evitar repetições*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %s\n\n",&ct.codigo,&ct.codigo_hospede,&ct.codigo_acomodacao,
+						&ct.valor,&ct.valor_total,&ct.pago,ct.status);
+				}
+				/*recebe o codigo*/
+				/*fecha o arquivo e retorna incrementado*/
+				codigo = ct.codigo;
+				fclose(arquivo);
+				return codigo++;
+			}
+		break;
+		case 2:
+			/*abre o binario*/
+			arquivo = fopen("saves/contas.bin","ab+");
+			/*verifica o arquivo*/
+			if(arquivo == NULL){
+				codigo = 0;
+			}
+			else{
+				/*le o arquivo*/
+				while(!feof(arquivo)){
+					/*verifica o final do arquivo para evitar repetições*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*comando de leitura*/
+					fread(&ct,sizeof(struct contas),1,arquivo);
+				}
+				/*recebe o codigo*/
+				/*fecha o arquivo e retorna incrementado*/
+				codigo = ct.codigo;
+				fclose(arquivo);
+				return codigo++;
+			}
+		break;
+		/*opção de salvamento invalida*/
+		default:
+			/*mensagem de erro para opções de salvamento não implementadas*/
+			vermelho("\nOpção de salvamento ainda não implementada!\n");
+		break;	
+	}
+}
 
 /*função para validar o codigo do hospede*/
 /*recebe por parametro o codigo do hospede, o tipo de salvamento, o url e modo de abertura*/

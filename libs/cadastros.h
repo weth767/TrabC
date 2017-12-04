@@ -11,6 +11,7 @@
 #include "salvar.h"
 #include "produto.h"
 #include "reserva.h"
+#include "contas.h"
 
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 /*recebe os dados do hospede e salva na struct*/
@@ -633,10 +634,11 @@ void pesquisa_acomodacao(char urlacomodacoes[50],char urlcategoria[50],char urlr
 
 /*função para checkin e checkout*/
 /*recebe por parametro o url da acomdação, das categorias e da reserva*/
-struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhospede[50],char urlreserva[50],char urlchecks[50],char modoabertura[5]){
+struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhospede[50],char urlreserva[50],char urlchecks[50],char urlcontas[50],
+	char urltempcontas[50],char modoabertura[5]){
 	/*chama a struct de checks para acessar suas variaveis*/
 	struct checks ch;
-
+	struct contas ct;
 	char cpf[14];
 	int codigo_reserva;
 	int verifica;
@@ -767,9 +769,23 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 				strcpy(ch.status,"PAGO COM CHEQUE");
 			}
 		}
-		/*verificar quanto o hospede gastou em produtos no hotel*/
-		/*antes de finalizar o checkout*/
+		/*recebe o codigo do hospede*/
+		ct.codigo_hospede = ch.codigo_hospede;
+		/*verifica o codigo da conta dele*/
+		conta_hospede(verificasave(),urlcontas,urltempcontas,modoabertura,ct,-1);
+		printf("Hospede possui conta(1 - para Sim, 2 - para Não): ");
+		scanf("%i",&verifica);
+		if(verifica == 1){
+			/*o usuário digita o código da conta dele*/
+			printf("Digite o código da conta: ");
+			scanf("%i",&ct.codigo);
+			conta_hospede(verificasave(),urlcontas,urltempcontas,modoabertura,ct,10);
+		}
 	}	
 	return ch;
+}
+
+struct contas ct cadastra_conta(){
+	/*CONTINUAR A PARTIR DAQUI, DO CADASTRO DE CONTAS*/
 }
 #endif 

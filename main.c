@@ -21,8 +21,9 @@
 #include "libs/cores.h"
 #include "libs/reserva.h"
 #include "libs/produto.h"
+#include "libs/checks.h"
 /***/
-/*constantes*/
+/*variaveis que serão utilizadas como constantes*/
 char modoabertura[5];
 char urlhospede[50];
 char urlhotel[50];
@@ -34,6 +35,7 @@ char urlusuario[50];
 char url_entradaprodutos[50];
 char url_saidaprodutos[50];
 char url_reserva[50];
+char urlcheck[50];
 char urltemphospede[50];
 char urltemphotel[50];
 char urltempproduto[50];
@@ -44,6 +46,7 @@ char urltempusuario[50];
 char urltemp_entradaprodutos[50];
 char urltemp_saidaprodutos[50];
 char urltemp_reserva[50];
+char urltempcheck[50];
 /**/
 
 /*função para definição dos urls e modo de abertura dos arquivos*/
@@ -64,6 +67,7 @@ void defineconstantes(){
 		strcpy(url_entradaprodutos,"saves/entradaprodutos.txt");
 		strcpy(url_saidaprodutos,"saves/saidaprodutos.txt");
 		strcpy(url_reserva,"saves/reservas.txt");
+		strcpy(urlcheck,"saves/checks.txt");
 		/*caminhos temporarios*/
 		strcpy(urltemphospede,"saves/temphospedes.txt");
 		strcpy(urltemphotel,"saves/temphoteis.txt");
@@ -74,6 +78,7 @@ void defineconstantes(){
 		strcpy(urltemp_entradaprodutos,"saves/tempentradaprodutos.txt");
 		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.txt");
 		strcpy(urltemp_reserva,"saves/tempreservas.txt");
+		strcpy(urltempcheck,"saves/tempchecks.txt");
 	}
 	else if(verificasave() == 2){
 		/*caminhos originais do binario*/
@@ -87,6 +92,7 @@ void defineconstantes(){
 		strcpy(url_entradaprodutos,"saves/entradaprodutos.bin");
 		strcpy(url_saidaprodutos,"saves/saidaprodutos.bin");
 		strcpy(url_reserva,"saves/reservas.bin");
+		strcpy(urlcheck,"saves/checks.bin");
 		/*caminhos temporarios do binario*/
 		strcpy(urltemphospede,"saves/temphospedes.bin");
 		strcpy(urltemphotel,"saves/temphoteis.bin");
@@ -97,6 +103,7 @@ void defineconstantes(){
 		strcpy(urltemp_entradaprodutos,"saves/tempentradaprodutos.bin");
 		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.bin");
 		strcpy(urltemp_reserva,"saves/tempreservas.bin");
+		strcpy(urltempcheck,"saves/tempchecks.bin");
 	}
 	/*opção de salvamento ainda nao implementada*/
 	else{
@@ -311,6 +318,7 @@ void menu(char com[50],int tiposave){
 		saida_produtos(tiposave,url_saidaprodutos,modoabertura,cadastra_saidaprodutos(urlproduto, modoabertura));
 	}
 	/*Comandos de reserva*/
+
 	/*comando para realizar a reserva*/
 	else if(strcmp(com,"rsv") == 0){
 
@@ -319,9 +327,45 @@ void menu(char com[50],int tiposave){
 	/*comando para consultar reserva de acordo com o código*/
 	else if(strcmp(com,"csrsvc") == 0){
 		int c;
+		ciano("\nConsulta de Reserva\n\n");
 		branco("Digite o código da Reserva: ");
 		scanf("%i",&c);
-		consulta_reservas(tiposave,url_reserva,modoabertura,c);
+		consulta_reserva(tiposave,url_reserva,modoabertura,c);
+	}
+	/*comando para consultar todas as reservas*/
+	else if(strcmp(com,"csrsv") == 0){
+		int c;
+		ciano("\nConsulta de Reservas\n\n");
+		consulta_reservas(tiposave,url_reserva,modoabertura);
+	}
+	/*comando para cancelar a reserva feita*/
+	else if(strcmp(com,"canrsv") == 0){
+		int c;
+		branco("\nCancelamento de Reserva\n\n");
+		ciano("Digite o código da Reserva: ");
+		scanf("%i",&c);
+		cancela_reserva(tiposave,url_reserva,urltemp_reserva,modoabertura,c);
+	}
+	/*comando para realizar a pesquisa de acomodações*/
+	else if(strcmp(com,"psrsv") == 0){
+		pesquisa_acomodacao(urlacomodacao,urlcategoria,url_reserva,modoabertura);
+	}
+
+	/*Comandos para checks*/
+	/*comando para realizar checagem, tanto check in quanto check out*/
+	else if(strcmp(com,"chk") == 0){
+		check(tiposave,urlcheck,urltempcheck,modoabertura,checagens(urlacomodacao,urlcategoria,urlhospede,url_reserva,urlcheck,modoabertura));
+	}
+	/*comando para consulta de todos os checks*/
+	else if(strcmp(com,"cschk") == 0){
+		consulta_checks(verificasave(),urlcheck,modoabertura);
+	}
+	/*comando para consulta de checks segundo um código*/
+	else if(strcmp(com,"cschkc") == 0){
+		int c;
+		branco("Digite o código da Checagem: ");
+		scanf("%i",&c);
+		consulta_checks_codigo(verificasave(),urlcheck,modoabertura,c);
 	}
 
 	/*Outros comandos*/

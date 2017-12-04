@@ -160,6 +160,7 @@ struct saidaprodutos{
 	float totalpagar;
 };
 
+/*struct para a realização de reservas no hotel*/
 struct reserva{	
 	unsigned int codigo;
 	unsigned int codigo_acomodacao;
@@ -169,5 +170,32 @@ struct reserva{
 	char status[20];
 };
 
+/*struct para a realização de checkin e checkout*/
+struct checks{
+	unsigned int codigo;
+	unsigned int codigo_hospede;
+	unsigned int codigo_acomodacao;
+	/*0 para checkin
+	1 para checkout*/
+	int tipo;
+	struct data data_checkin;
+	struct data data_checkout;
+	float valor_total;
+	int pago;
+	char status[20];
+};
+/*struct de contas de cada hospede, no caso basicamente a conta do quarto*/
+struct contas{
+	unsigned codigo;
+	unsigned codigo_hospede;
+	unsigned codigo_acomodacao;
+	/*-1 pesquisar a existencia de conta*/
+	/*0 para abertura de conta*/
+	/*1 utilização de conta existente*/
+	float valor;
+	float valor_total;
+	int pago;
+	char status[20];
+};
 
 #endif

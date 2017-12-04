@@ -1308,8 +1308,7 @@ int codigo_saidaprodutos(int tipo){
 int codigoreserva(int tipo){
 	/*chama a struct para ter acesso a suas variaveis*/
 	struct reserva r;
-	int codigo;
-	int contalinhas;
+	unsigned int codigo;
 	/*cria um ponteiro do tipo arquivo para acessar o arquivo de reservas*/
 	FILE *arquivo;
 	/*switch para verificar o tipo de salvamento */
@@ -1317,12 +1316,8 @@ int codigoreserva(int tipo){
 		case 1:/*caso 1, arquivo texto*/
 			/*abre o arquivo texto*/
 			arquivo = fopen("saves/reservas.txt","a+");
-			contalinhas = 0;
-			/*conta a quantidade de linhas se for igual a 0, o codigo será igual a 1*/
-			while(!feof){
-				contalinhas++;
-			}
-			if(contalinhas == 0){
+			/*verifica sua criação*/
+			if(arquivo == NULL){
 				codigo = 1;
 			}
 			else{
@@ -1332,7 +1327,6 @@ int codigoreserva(int tipo){
 					fscanf(arquivo,"%u\n %u\n %u\n %i/%i/%i\n %i/%i/%i\n %s\n\n",&r.codigo,&r.codigo_acomodacao,&r.codigo_hospede,
 						&r.data_entrada.dia,&r.data_entrada.mes,&r.data_entrada.ano,&r.data_saida.dia,&r.data_saida.mes,&r.data_saida.ano,r.status);
 					codigo = r.codigo;
-					printf("\nFunção codigoreserva:%i\n",codigo);
 					/*verifica se já esta no final do arquivo, para evitar repetições indesejadas*/
 					if(feof(arquivo)){
 						/*sai da laço*/
@@ -1347,12 +1341,7 @@ int codigoreserva(int tipo){
 			/*abre o arquivo*/
 			arquivo = fopen("saves/reservas.bin","ab+");
 			/*verifica se foi criado nessa abertura ou não*/
-			contalinhas = 0;
-			/*conta a quantidade de linhas se for igual a 0, o codigo será igual a 1*/
-			while(!feof){
-				contalinhas++;
-			}
-			if(contalinhas == 0){
+			if(arquivo == NULL){
 				codigo = 1;
 			}
 			/*senão le o arquivo inteiro e busca o ultimo codigo*/
@@ -1362,7 +1351,6 @@ int codigoreserva(int tipo){
 					/*comando de leitura*/
 					fread(&r,sizeof(struct reserva),1,arquivo);
 					codigo = r.codigo;
-					printf("\nFunção codigoreserva:%i\n",codigo);
 					/*verifica se já está no final do arquivo*/
 					if(feof(arquivo)){
 						/*sai do while*/
@@ -1377,6 +1365,81 @@ int codigoreserva(int tipo){
 			/*mensagem de erro para opções de salvamento não implementadas*/
 			vermelho("\nOpção de salvamento ainda não implementada!\n");
 		break;
+	}
+	return codigo;
+}
+/*função para retornar ó código auto incrementado dos checks*/
+/*recebe por parametro o tipo de salvamento*/
+int codigo_checks(int tipo){
+	/*chama a struct de checks para acessar a suas varaiveis*/
+	struct checks ch;
+	int codigo;
+	/*cria um ponteiro de arquivo para acessar o arquivo de checks*/
+	FILE *arquivo;
+	/*switch para verificar o tipo de salvamento*/
+	switch(tipo){
+		case 1:
+			/*tipo de salvamento em arquivo texto*/
+			arquivo = fopen("saves/checks.txt","a+");
+			/*verifica se o arquivo foi criado agora*/
+			if(arquivo == NULL){
+				/*codigo recebe 0*/
+				codigo = 0;
+			}
+			/*senao */
+			else{
+				/*le o arquivo*/
+				while(!feof(arquivo)){
+					/*comando de leitura para pesquisar todos os checks salvos*/
+					fscanf(arquivo,"%u\n %u\n %u\n %i\n %i/%i/%i\n %i/%i/%i\n %f\n %i\n %s\n\n",&ch.codigo,&ch.codigo_hospede,&ch.codigo_acomodacao,&ch.tipo,
+						&ch.data_checkin.dia,&ch.data_checkin.mes,&ch.data_checkin.ano,&ch.data_checkout.dia,&ch.data_checkout.mes,&ch.data_checkout.ano,
+						&ch.valor_total,&ch.pago,ch.status);
+					/*atribui o codigo lido a variavel, até o ultimo*/
+					codigo = ch.codigo;
+					/*se for o final do arquivo, sai do laço*/
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				/*acrescenta 1 no codigo*/
+				codigo++;
+				/*e fecha o arquivo*/
+				fclose(arquivo);	
+			}
+		break;
+
+		case 2:
+			/*tipo de salvamento em arquivo binario*/
+			arquivo = fopen("saves/checks.bin","ab+");
+			/*verifica se o arquivo foi criado agora*/
+			if(arquivo == NULL){
+				/*codigo recebe 0*/
+				codigo = 0;
+			}
+			/*senao */
+			else{
+				/*le o arquivo*/
+				while(!feof(arquivo)){
+					/*comando de leitura para pesquisar todos os checks salvos*/
+					fread(&ch,sizeof(struct checks),1,arquivo);
+					/*atribui o codigo lido a variavel, até o ultimo*/
+					codigo = ch.codigo;
+					/*se for o final do arquivo, sai do laço*/
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				/*acrescenta 1 no codigo*/
+				codigo++;
+				/*e fecha o arquivo*/
+				fclose(arquivo);	
+			}
+		break;
+		/*opção de salvamento invalida*/
+		default:
+			/*mensagem de erro para opções de salvamento não implementadas*/
+			vermelho("\nOpção de salvamento ainda não implementada!\n");
+		break;	
 	}
 	return codigo;
 }
@@ -1872,6 +1935,70 @@ float retorna_valoracomodacao(int tipo,char urlacomodacao[50],char urlcategoria[
 		}
 	}
 	return valor;
+}
+
+/*função para retorna o dia de checkin do hospede*/
+/*recebe por parametro, o tipo de salvamento, o url do arquivo de checks, o modo de abertura e o codigo*/
+int* retorna_dia_checkin_pago(int tipo,char url[50],char modoabertura[5],int codigo){
+	/*chama struct de checks para utilizar suas variaveis*/
+	struct checks ck;
+	int *dados;
+	dados = (int *)malloc(2 * sizeof(int));
+	/*cria um ponteiro de arquivo para acessar o arquivo de checks*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica erros na sua abertura*/
+	if(arquivo == NULL){
+		vermelho("\nErro em realizar a abertura do arquivo de checks!\n");
+	}
+	else{
+		/*verifica o tipo de salvamento*/
+		switch(tipo){
+			case 1:/*no tipo 1, arquivo texto*/
+				/*le o arquivo*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %u\n %u\n %i\n %i/%i/%i\n %i/%i/%i\n %f\n %i\n %s\n\n",&ck.codigo,&ck.codigo_hospede,&ck.codigo_acomodacao,&ck.tipo,
+						&ck.data_checkin.dia,&ck.data_checkin.mes,&ck.data_checkin.ano,&ck.data_checkout.dia,&ck.data_checkout.mes,&ck.data_checkout.ano,
+						&ck.valor_total,&ck.pago,ck.status);
+					/*verifica o que for igual ao código digitado*/
+					if(ck.codigo == codigo){
+						/*se achar retorna o dia de checkin e se o hospede pagou ou não*/
+						dados[0] = ck.data_checkin.dia;
+						dados[1] = ck.pago;
+						fclose(arquivo);
+						/**retorna indicando a primeira posição do vetor, onde será possível acessar as outras*/
+						return &dados[0];
+					}
+					fclose(arquivo);
+					return 0;
+				}
+			break;
+			case 2:
+				/*le o arquivo*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fread(&ck,sizeof(struct checks),1,arquivo);
+					/*verifica o que for igual ao código digitado*/
+					if(ck.codigo == codigo){
+					/*se achar retorna o dia de checkin e se o hospede pagou ou não*/
+						dados[0] = ck.data_checkin.dia;
+						dados[1] = ck.pago;
+						fclose(arquivo);
+						/**retorna indicando a primeira posição do vetor, onde será possível acessar as outras*/
+						return &dados[0];
+					}
+					fclose(arquivo);
+					return 0;
+				}
+			break;
+			default:/*erro para opções de salvamento invalidas*/
+				vermelho("\nOpção de salvamento ainda não implementada!\n");
+				return 0;
+			break;
+		}
+	}
 }
 
 /*função para retornar o código de um usuário de acordo com o cpf digitado*/

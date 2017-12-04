@@ -100,6 +100,9 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
+				else{
+					remove(urltemp);
+				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
@@ -170,6 +173,9 @@ void excluihospede(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 					rename(urltemp,url);
 					/*e mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
+				}
+				else{
+					remove(urltemp);
 				}
 				/*fecha os arquivos*/
 				fclose(arquivo);
@@ -272,6 +278,9 @@ void excluihotel(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
+				else{
+					remove(urltemp);
+				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
@@ -344,6 +353,9 @@ void excluihotel(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
+				}
+				else{
+					remove(urltemp);
 				}
 				/*fecha os arquivos*/
 				fclose(arquivo);
@@ -420,6 +432,9 @@ void excluicategoria(int tipo,char url[50],char modoabertura[5],char urltemp[50]
 					/*mostra a mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
+				else{
+					remove(urltemp);
+				}
 				/*fecha os arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
@@ -479,6 +494,9 @@ void excluicategoria(int tipo,char url[50],char modoabertura[5],char urltemp[50]
 					/*renomeia o temporario com os outros dados que não foram excluidos*/
 					rename(urltemp,url);
 					verde("\nDado excluido com sucesso!\n\n");
+				}
+				else{
+					remove(urltemp);
 				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
@@ -571,6 +589,9 @@ void excluiacomodacao(int tipo,char url[50],char modoabertura[5],char urltemp[50
 					/*mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
+				else{
+					remove(urltemp);
+				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
@@ -632,6 +653,9 @@ void excluiacomodacao(int tipo,char url[50],char modoabertura[5],char urltemp[50
 					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
+				}
+				else{
+					remove(urltemp);
 				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
@@ -711,6 +735,9 @@ void excluiproduto(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 					/*e mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
+				else{
+					remove(urltemp);
+				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
@@ -773,6 +800,9 @@ void excluiproduto(int tipo,char url[50],char modoabertura[5],char urltemp[50]){
 					rename(urltemp,url);
 					/*mostra mensagem de sucesso*/
 					verde("\nDado excluido com sucesso!\n\n");
+				}
+				else{
+					remove(urltemp);
 				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
@@ -879,6 +909,9 @@ void excluifornecedor(int tipo,char url[50],char modoabertura[5],char urltemp[50
 					/*mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
 				}
+				else{
+					remove(urltemp);
+				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
 				fclose(arquivo2);
@@ -950,6 +983,9 @@ void excluifornecedor(int tipo,char url[50],char modoabertura[5],char urltemp[50
 					rename(urltemp,url);
 					/*mostra mensagem de sucesso na tela*/
 					verde("\nDado excluido com sucesso!\n\n");
+				}
+				else{
+					remove(urltemp);
 				}
 				/*fecha os dois arquivos*/
 				fclose(arquivo);
@@ -1030,6 +1066,10 @@ void excluiusuario(char url[50],char modoabertura[5],char urltemp[50]){
 			rename(urltemp,url);
 			verde("\nDado excluido com sucesso!\n\n");
 		}
+		else{
+			remove(urltemp);
+		}
+
 		/*fecha os arquivos*/
 		fclose(arquivo);
 		fclose(arquivo2);

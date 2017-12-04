@@ -103,10 +103,8 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					/*comando de leitura*/
 					fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,
 						p.descricao,&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status);
-					if(feof(arquivo)){
-						break;
-					}
 
+					/*mostra as informações antigas*/
 					printf("\n----------------------------------------------------------------------------\n");
 					ciano("Informações Antigas do Produto: \n\n");
 					printf("Código: %u",p.codigo);
@@ -122,13 +120,16 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					/*e verifica no for até achar o codigo igual ao primeiro produto lido, senão tiver, continuará lendo até o final do arquivo*/
 					/*se achar, atualiza o valor de venda dele*/
 					/*sai do laço for */
+					printf("\n%i\n",ep.quantidade[0]);
 					for(int i = 0; i < ep.produtos_distintos; i++){
 						if(p.codigo == ep.codigoproduto[i]){
 							p.precovenda = p.precovenda + valores[0] + valores[1];
 							p.precovenda = p.precovenda + (p.precovenda * p.lucro);
+							p.estoque += ep.quantidade[i];
 							break;
 						}
 					}
+					/*mostra a informação atualizada*/
 					printf("\n----------------------------------------------------------------------------\n");
 					ciano("Informações Novas do Produto: \n\n");
 					printf("Código: %u",p.codigo);
@@ -176,6 +177,7 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					if(feof(arquivo)){
 						break;
 					}
+					/*mostra a informação antiga*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição: %s",p.descricao);
@@ -188,9 +190,11 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					for(int i = 0; i < ep.produtos_distintos; i++){
 						if(p.codigo == ep.codigoproduto[i]){
 							p.precovenda = ep.precocusto[i] + valores[0] + valores[1];
+							p.estoque += ep.quantidade[i];
 							break;
 						}
 					}
+					/*mostra a informação atualizada*/
 					printf("\n----------------------------------------------------------------------------\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição:%s",p.descricao);

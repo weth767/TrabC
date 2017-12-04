@@ -10,6 +10,7 @@
 #include "config.h"
 #include "salvar.h"
 #include "produto.h"
+#include "reserva.h"
 
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 /*recebe os dados do hospede e salva na struct*/
@@ -240,7 +241,7 @@ struct acomodacoes cadastraacomodacao(char urlcategoria[50],char modoabertura[5]
 	scanf("%i",&ac.extra.banheira);
 	setbuf(stdin,NULL);
 	/*salva como padrão ativa*/
-	strcpy(ac.status , "Ativo");
+	strcpy(ac.status , "Desocupada");
 	/*retorna a struct da acomodação*/
 	return ac;
 }
@@ -540,6 +541,7 @@ struct reserva cadastra_reserva(char urlacomodacao[50],char urlcategoria[50],cha
 	int verifica = 0;
 	float valor_quarto;
 	/*coloca como linguagem padrão a portuguesa*/
+	ciano("\nReserva\n");
 	setlocale(LC_ALL,"Portuguese");
 	/*recebe o codigo autoincrementado pela função de retorno*/
 	r.codigo = codigoreserva(verificasave());
@@ -577,6 +579,197 @@ struct reserva cadastra_reserva(char urlacomodacao[50],char urlcategoria[50],cha
 	strcpy(r.status,"Confirmada");
 	/*retorna a struct de reservas*/
 	return r;
-	
+}
+/*função para receber os dados que o hospede deseja em sua acomodação*/
+/*recebe por parametro os urls de acomodacao, categoria, e reserva, além do tipo de salvamento, do modo de abertura e as facilidades possiveis*/
+void pesquisa_acomodacao(char urlacomodacoes[50],char urlcategoria[50],char urlreserva[50],char modoabertura[5]){
+	/*chama as structs de data e de acomodações para acessar suas variaveis*/
+	struct data d;
+	struct acomodacoes ac;
+	ciano("\nPesquisa de Acomodações\n");
+	/*recebe os dados do usuário*/
+	setbuf(stdin,NULL);
+	printf("Digite a data de preferência(ex: 06 03 2018): ");
+	scanf("%i %i %i",&d.dia,&d.mes,&d.ano);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de adultos(0 para não importa): ");
+	scanf("%i",&ac.categoria.quantidadeadultos);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de crianças(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.categoria.quantidadecriancas);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de tvs(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.tv);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de tvs a cabo(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.tvcabo);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de ares condicionados(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.arcondicionado);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de frigobares(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.frigobar);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de banheiros(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.banheiro);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de camas de casal(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.camacasal);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de camas de solteiro(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.camasolteiro);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de banheira(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.banheira);
+	setbuf(stdin,NULL);
+	printf("Digite a quantidade de hidromassagens(0 para não importa ou nenhuma): ");
+	scanf("%i",&ac.extra.hidromassagem);
+	/*chama a função de pesquisa de acomodações*/
+	pesquisa_acomodacoes(verificasave(),urlacomodacoes,urlcategoria,urlreserva,modoabertura,
+		d,ac.categoria.quantidadeadultos,ac.categoria.quantidadecriancas,ac.extra.tv,ac.extra.tvcabo,ac.extra.arcondicionado,
+		ac.extra.frigobar,ac.extra.banheiro,ac.extra.camacasal,ac.extra.camasolteiro,ac.extra.banheira,ac.extra.hidromassagem);
+
+}
+
+/*função para checkin e checkout*/
+/*recebe por parametro o url da acomdação, das categorias e da reserva*/
+struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhospede[50],char urlreserva[50],char urlchecks[50],char modoabertura[5]){
+	/*chama a struct de checks para acessar suas variaveis*/
+	struct checks ch;
+
+	char cpf[14];
+	int codigo_reserva;
+	int verifica;
+	int dias;
+	float valor;
+	int f_pagamento;
+	int *dados;
+	ciano("\nChecks\n");
+	/*recebe os dados do usuário*/
+	setbuf(stdin,NULL);
+	printf("Digite 0 para checkin e 1 para checkout: ");
+	scanf("%i",&ch.tipo);
+	/*verifica se o hospede vai fazer checkin ou checkout*/
+	if(ch.tipo == 0){
+		ciano("\nCheck In\n");
+		ch.codigo = codigo_checks(verificasave());
+		/*se for checkin pego todos os dados*/
+		setbuf(stdin,NULL);
+		printf("Digite o CPF do hospede: ");
+		scanf("%[^\n]s",cpf);
+		ch.codigo_hospede = codigo_hospede_cpf(verificasave(),urlhospede,modoabertura,cpf);
+		setbuf(stdin,NULL);
+		/*o hospede fornece ao usuário o seu número da reserva*/
+		printf("Digite o código da reserva: ");
+		scanf("%i",&codigo_reserva);
+		/*mostra a reserva para o usuário do sistema para ele digitar o código da acomodação*/
+		consulta_reserva(verificasave(),urlreserva,modoabertura,codigo_reserva);
+		setbuf(stdin,NULL);
+		printf("Digite o código da Acomodação: ");
+		scanf("%i",&ch.codigo_acomodacao);
+		setbuf(stdin,NULL);
+		/*recebe a data de checkin*/
+		printf("Digite a data de check in(ex 03 04 2012): ");
+		scanf("%i %i %i",&ch.data_checkin.dia,&ch.data_checkin.mes,&ch.data_checkin.ano);
+		/*e atribui um valor 0 na data de checkout, afirmando que o hospede ainda nao fez o checkout*/
+		ch.data_checkout.dia = 0;
+		ch.data_checkout.mes = 0;
+		ch.data_checkout.ano = 0;
+		/*verifica se o hospede vai pagar no momento do checkin*/
+		printf("O hospede realizará o pagamento agora(1 para sim, 0 para não): ");
+		scanf("%i",&verifica);
+		/*se for, verifica a forma de pagamento*/
+		if(verifica == 1){
+			printf("Digite a quantidade de dias da permenência do hospede: ");
+			scanf("%i",&dias);
+			/*pega o valor da acomodação*/
+			valor = retorna_valoracomodacao(verificasave(),urlacomodacao,urlcategoria,modoabertura,ch.codigo_acomodacao);
+			/*e multiplica pela quantidade de dias da permanencia*/
+			ch.valor_total = dias * valor;
+			/*assim encontra o valor que o hospede deve pagar*/
+			printf("\nValor a pagar pelo quarto: R$%.2f\n",ch.valor_total);
+			/*pago recebe 1, afirmando que o usuário vai pagar*/
+			ch.pago = 1;
+			/*verifica a forma de pagamento*/
+			printf("Digite a forma de pagamento(1 - Cartão,2 - Dinheiro,3 - Depósito,4 - Cheque): ");
+			scanf("%i",&f_pagamento);
+			if(f_pagamento == 1){
+				strcpy(ch.status,"PAGO COM CARTÃO");	
+			}
+			else if(f_pagamento == 2){
+				strcpy(ch.status,"PAGO COM DINHEIRO");
+			}
+			else if(f_pagamento == 3){
+				strcpy(ch.status,"PAGO COM DEPÓSITO");
+			}
+			else if(f_pagamento == 4){
+				strcpy(ch.status,"PAGO COM CHEQUE");
+			}	
+		}
+		/*se não for, salva no sistema o debito*/
+		else{
+			/*atribui 0 a valor para dizer que ele ainda não deve nada, pois ainda não foi calculado seus debitos e 0 para pago, afirmando que 
+			o hospede nao pagou ainda*/
+			ch.valor_total = 0;
+			ch.pago = 0;
+			strcpy(ch.status,"EM DÉBITO");
+		}
+	}
+	else if(ch.tipo == 1){
+		ciano("\nCheck Out\n");
+		/*recebe o código do checkin*/
+		printf("Digite o código de check in: ");
+		scanf("%i",&ch.codigo);
+		/*pega o dia de check in e se pagou ou não*/
+		dados = retorna_dia_checkin_pago(verificasave(),urlchecks,modoabertura,ch.codigo);
+		/*recebe o cpf para assim retornar o codigo dele*/
+		setbuf(stdin,NULL);
+		printf("Digite o CPF do hospede: ");
+		scanf("%[^\n]s",cpf);
+		ch.codigo_hospede = codigo_hospede_cpf(verificasave(),urlhospede,modoabertura,cpf);
+		/*recebe o codigo da reserva*/
+		setbuf(stdin,NULL);
+		printf("Digite o código da reserva: ");
+		scanf("%i",&codigo_reserva);
+		/*e assim lista as informações da reserva do hospede*/
+		consulta_reserva(verificasave(),urlreserva,modoabertura,codigo_reserva);
+		setbuf(stdin,NULL);
+		/*e assim ele digita o codigo da acomodação com a informação cedida anteriormente*/
+		printf("Digite o código da Acomodação: ");
+		scanf("%i",&ch.codigo_acomodacao);
+		setbuf(stdin,NULL);
+
+		/*vai ser pego a data de checkin na lida do arquivo*/
+		printf("Digite a data de check out(ex 03 04 2012): ");
+		scanf("%i %i %i",&ch.data_checkout.dia,&ch.data_checkout.mes,&ch.data_checkout.ano);
+		ch.pago = dados[1];
+		if(ch.pago == 0){
+			/*recebe o valor da acomodação do hospede*/
+			valor = retorna_valoracomodacao(verificasave(),urlacomodacao,urlcategoria,modoabertura,ch.codigo_acomodacao);
+			/*calcula quanto ele deve pagar pelo quarto*/
+			dias = ch.data_checkout.dia - dados[0];
+			ch.valor_total = dias * valor;
+			/*recebe o valor a pagar pelo quarto*/
+			printf("\nValor a pagar pelo quarto: R$%.2f\n",ch.valor_total);
+			/*recebe a forma de pagamento*/
+			printf("Digite a forma de pagamento(1 - Cartão,2 - Dinheiro,3 - Depósito,4 - Cheque): ");
+			scanf("%i",&f_pagamento);
+			if(f_pagamento == 1){
+				strcpy(ch.status,"PAGO COM CARTÃO");	
+			}
+			else if(f_pagamento == 2){
+				strcpy(ch.status,"PAGO COM DINHEIRO");
+			}
+			else if(f_pagamento == 3){
+				strcpy(ch.status,"PAGO COM DEPÓSITO");
+			}
+			else if(f_pagamento == 4){
+				strcpy(ch.status,"PAGO COM CHEQUE");
+			}
+		}
+		/*verificar quanto o hospede gastou em produtos no hotel*/
+		/*antes de finalizar o checkout*/
+	}	
+	return ch;
 }
 #endif 

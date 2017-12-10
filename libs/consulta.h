@@ -1249,22 +1249,28 @@ int codigo_saidaprodutos(int tipo){
 				while(!feof(arquivo)){
 					/*comando de leitura*/
 					fscanf(arquivo,"%u\n %i\n",&sp.codigo,&sp.produtos_distintos);
+					codigo = sp.codigo;
+					/*verifica antes, se já está no final do arquivo para evitar erros*/
+					if(feof(arquivo)){
+						break;
+					}
 					/*depois de lido a quantidade de produtos distintos*/
 					/*le os outros dados que estão em forma de vetores*/
 					for(int i = 0; i < sp.produtos_distintos; i++){
 						/*le o resto dos dados*/
 						fscanf(arquivo,"%u,%i,%f,%s\n",&sp.codigoproduto[i],&sp.quantidade[i],&sp.precovenda[i],sp.status[i]);
+						/*verifica antes, se já está no final do arquivo para evitar erros*/
+						if(feof(arquivo)){
+							break;
+						}
 					}
 					fscanf(arquivo,"%f\n\n",&sp.totalpagar);
+					if(feof(arquivo)){
+							break;
+					}
 					/*depois de lido todos os dados*/
 					/*retornar o codigo incrementado */
-
-					/*verifica antes, se já está no final do arquivo para evitar erros*/
-					if(feof(arquivo)){
-						break;
-					}
 				}
-				codigo = sp.codigo;
 				/*incrementa ele*/
 				codigo++;
 				/*fecha o arquivo*/
@@ -1284,12 +1290,12 @@ int codigo_saidaprodutos(int tipo){
 				while(!feof(arquivo)){
 					/*comando de leitura*/
 					fread(&sp,sizeof(struct saidaprodutos),1,arquivo);
+					codigo = sp.codigo;
 					/*verifica se já está no final do arquivo, da um break se tiver*/
 					if(feof(arquivo)){
 						break;
 					}
 				}
-				codigo = sp.codigo;
 				/*recebe e incrementa o código lido*/
 				codigo++;
 				/*fecha o arquivo*/
@@ -1448,7 +1454,7 @@ int codigo_checks(int tipo){
 int codigo_conta(int tipo){
 	/*chama a struct de contas para acessar suas variaveis*/
 	struct contas ct;
-	int codigo;
+	int codigo = 0;
 	/*cria um ponteiro de arquivo, para acessar o arquivo de contas*/
 	FILE *arquivo;
 	/*verifica o tipo de salvamento*/
@@ -1470,12 +1476,13 @@ int codigo_conta(int tipo){
 					/*comando de leitura*/
 					fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %s\n\n",&ct.codigo,&ct.codigo_hospede,&ct.codigo_acomodacao,
 						&ct.valor,&ct.valor_total,&ct.pago,ct.status);
+					codigo = ct.codigo;
+					
 				}
 				/*recebe o codigo*/
 				/*fecha o arquivo e retorna incrementado*/
-				codigo = ct.codigo;
+				codigo++;
 				fclose(arquivo);
-				return codigo++;
 			}
 		break;
 		case 2:
@@ -1494,12 +1501,12 @@ int codigo_conta(int tipo){
 					}
 					/*comando de leitura*/
 					fread(&ct,sizeof(struct contas),1,arquivo);
+					codigo = ct.codigo;
 				}
 				/*recebe o codigo*/
 				/*fecha o arquivo e retorna incrementado*/
-				codigo = ct.codigo;
+				codigo++;
 				fclose(arquivo);
-				return codigo++;
 			}
 		break;
 		/*opção de salvamento invalida*/
@@ -1508,6 +1515,7 @@ int codigo_conta(int tipo){
 			vermelho("\nOpção de salvamento ainda não implementada!\n");
 		break;	
 	}
+	return codigo;
 }
 
 /*função para validar o codigo do hospede*/
@@ -2128,4 +2136,53 @@ int codigo_hospede_cpf(int tipo,char urlhospede[50],char modoabertura[5],char cp
 		}
 	}
 }
+
+/*função para verificar a existencia do arquivo*/
+/*recebe o url e o tipo de salvamento*/
+int verifica_existencia_arquivo(int tipo,char urlarquivo[50]){
+	/*verifica o tipo de salvamento e reage conforme isso*/
+	FILE *arq;
+	if(tipo == 1){
+		arq = fopen(urlarquivo,"r");
+	}
+	else if(tipo == 2){
+		arq = fopen(urlarquivo,"rb");
+	}
+	/*verifica se o arquivo existe*/
+	if (!arq){
+		/*senao existir retorna 0*/
+		fclose(arq);
+	   return 0;
+	}
+	else{
+		/*se existir retorna 1*/
+		fclose(arq);
+		return 1;
+	}
+}
+/*função para verificar se o arquivo está vazio*/
+/*recebe por parametro o tipo de salvamento e o url do arquivo*/
+int verifica_vazio(int tipo, char urlarquivo[50]){
+	/*cria um ponteiro de aruqivo*/
+	FILE *arq;
+	/*verifica o tipo de salvamento*/
+	if(tipo == 1){
+		arq = fopen(urlarquivo,"r");
+	}
+    else{
+    	arq = fopen(urlarquivo,"rb");
+    }
+    /*abre o arquivo de acordo com o salvamento*/
+    /*verifica o tamanho do arquivo, se for igual a 0*/
+    /*quer dizer que está vazio*/
+    if(arq == NULL){
+        return 0;
+    }
+    fseek(arq, 0, SEEK_END);
+    int size = ftell(arq);
+    fclose(arq);
+    return size;
+}
+
+
 #endif 

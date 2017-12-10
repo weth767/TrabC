@@ -2,6 +2,7 @@
 #define FUNCOES_H
 /*a biblioteca structs foi importada para ser usado as structs dentro das funções*/
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <locale.h>
 #include <math.h>
@@ -12,6 +13,7 @@
 #include "produto.h"
 #include "reserva.h"
 #include "contas.h"
+#include "importacao_exportacao.h"
 
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 /*recebe os dados do hospede e salva na struct*/
@@ -484,16 +486,9 @@ struct saidaprodutos cadastra_saidaprodutos(char urlproduto[50],char modoabertur
 	int tamanho;
 	int resposta;
 	/*seta a linguagem local, como português, para evitar alguns erros que possam aparecer*/
-	setlocale(LC_ALL,"Portuguese");
 	ciano("\nVenda de Produtos\n");
 	/*receber o código da saida de produtos auto incrementada*/
 	sp.codigo = codigo_saidaprodutos(verificasave());
-	/*recebe o ponteiro da função que retorna os valores dos produtos*/
-	float *valores = retorna_valoresprodutos(verificasave(),urlproduto,modoabertura);
-	/*pega o tamanho do vetor, que está na posição 1*/
-	tamanho = (int)valores[0];
-	/*inicia a quantidade de produtos distintos com 0*/
-	/*e inicia a nota com 0 também*/
 	sp.totalpagar = 0;
 	sp.produtos_distintos = 0;
 	while(verifica == 0){
@@ -507,15 +502,8 @@ struct saidaprodutos cadastra_saidaprodutos(char urlproduto[50],char modoabertur
 		printf("Digite a quantidade do %iº produto: ",sp.produtos_distintos + 1);
 		scanf("%i",&sp.quantidade[sp.produtos_distintos]);
 		/*recebe o valor de cada produto para somar ao total da nota*/
-		for (int i = 1; i < tamanho; i++){
-			for(int j = 0; j < sp.produtos_distintos; j++){
-				if(sp.codigoproduto[j] == i){
-					sp.precovenda[sp.produtos_distintos] = valores[i];
-					break;
-				}
-			}
-		}
-		sp.totalpagar += sp.precovenda[sp.produtos_distintos];
+		sp.precovenda[sp.produtos_distintos] = retorna_valoresprodutos(verificasave(), urlproduto, modoabertura, sp.codigoproduto[sp.produtos_distintos]);
+		sp.totalpagar += (sp.precovenda[sp.produtos_distintos] * sp.quantidade[sp.produtos_distintos]);
 		/*atualiza a quantidade de produtos distintos a cada produto novo acrescentado*/
 		sp.produtos_distintos++;
 		/*verifica se o cliente deseja mais alguma coisa*/
@@ -660,6 +648,7 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 		printf("Digite o CPF do hospede: ");
 		scanf("%[^\n]s",cpf);
 		ch.codigo_hospede = codigo_hospede_cpf(verificasave(),urlhospede,modoabertura,cpf);
+		printf("%i\n",ch.codigo_hospede);
 		setbuf(stdin,NULL);
 		/*o hospede fornece ao usuário o seu número da reserva*/
 		printf("Digite o código da reserva: ");
@@ -696,25 +685,25 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 			printf("Digite a forma de pagamento(1 - Cartão,2 - Dinheiro,3 - Depósito,4 - Cheque): ");
 			scanf("%i",&f_pagamento);
 			if(f_pagamento == 1){
-				strcpy(ch.status,"PAGO COM CARTÃO");	
+				strcpy(ch.status,"PAGO_COM_CARTÃO");	
 			}
 			else if(f_pagamento == 2){
-				strcpy(ch.status,"PAGO COM DINHEIRO");
+				strcpy(ch.status,"PAGO_COM_DINHEIRO");
 			}
 			else if(f_pagamento == 3){
-				strcpy(ch.status,"PAGO COM DEPÓSITO");
+				strcpy(ch.status,"PAGO_COM_DEPÓSITO");
 			}
 			else if(f_pagamento == 4){
-				strcpy(ch.status,"PAGO COM CHEQUE");
+				strcpy(ch.status,"PAGO_COM_CHEQUE");
 			}	
 		}
 		/*se não for, salva no sistema o debito*/
-		else{
+		else if(verifica == 0){
 			/*atribui 0 a valor para dizer que ele ainda não deve nada, pois ainda não foi calculado seus debitos e 0 para pago, afirmando que 
 			o hospede nao pagou ainda*/
 			ch.valor_total = 0;
 			ch.pago = 0;
-			strcpy(ch.status,"EM DÉBITO");
+			strcpy(ch.status,"EM_DÉBITO");
 		}
 	}
 	else if(ch.tipo == 1){
@@ -756,6 +745,7 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 			/*recebe a forma de pagamento*/
 			printf("Digite a forma de pagamento(1 - Cartão,2 - Dinheiro,3 - Depósito,4 - Cheque): ");
 			scanf("%i",&f_pagamento);
+			/*para qual forma de pagamento selecionada, muda o status de acordo*/
 			if(f_pagamento == 1){
 				strcpy(ch.status,"PAGO COM CARTÃO");	
 			}
@@ -773,19 +763,50 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 		ct.codigo_hospede = ch.codigo_hospede;
 		/*verifica o codigo da conta dele*/
 		conta_hospede(verificasave(),urlcontas,urltempcontas,modoabertura,ct,-1);
-		printf("Hospede possui conta(1 - para Sim, 2 - para Não): ");
+		printf("Hospede possui conta(1 - para Sim, 0 - para Não): ");
 		scanf("%i",&verifica);
 		if(verifica == 1){
-			/*o usuário digita o código da conta dele*/
+			/*o usuário digita o código da conta do usuário*/
 			printf("Digite o código da conta: ");
 			scanf("%i",&ct.codigo);
 			conta_hospede(verificasave(),urlcontas,urltempcontas,modoabertura,ct,10);
+			verde("Fechamento de conta feito com sucesso!\n");
 		}
 	}	
 	return ch;
 }
-
-struct contas ct cadastra_conta(){
-	/*CONTINUAR A PARTIR DAQUI, DO CADASTRO DE CONTAS*/
+/*função para cadastrar conta*/
+/*recebe url de conta, o temporario, o de hospede o de reserva e o modo de abertura*/
+struct contas cadastra_conta(char urlconta[50],char urltempconta[50],char urlhospede[50],char urlreserva[50],char modoabertura[5]){
+	/*variaveis utilizaveis a função*/
+	char cpf[14];
+	int codigo;
+	struct contas ct;
+	int resposta;
+	/*recebe os dados necessários para criação da conta*/
+	ciano("\nCadastro de Contas\n");
+	ct.codigo = codigo_conta(verificasave());
+	printf("Digite o CPF do hospede: ");
+	scanf("%[^\n]s",cpf);
+	/*com o cpf pega o codigo do hospede*/
+	ct.codigo_hospede = codigo_hospede_cpf(verificasave(),urlhospede,modoabertura,cpf);
+	/*e mostra se o usuário tem conta ou não*/
+	/*cabe ao usuário do sistema verificar e caso precisar criar conta*/
+	conta_hospede(verificasave(),urlconta,urltempconta,modoabertura,ct,-1);
+	printf("O hospede já possui conta(1 para sim, 0 para não): ");
+	scanf("%i",&resposta);
+	if(resposta == 0){
+		/*recebe os restantes dos dados*/
+		printf("Digite o código da acomodação: ");
+		scanf("%i",&ct.codigo_acomodacao);
+		ct.valor = 0;
+		ct.valor_total = 0;
+		ct.pago = 1;
+		strcpy(ct.status,"Fechada");
+		conta_hospede(verificasave(),urlconta,urltempconta,modoabertura,ct,0);
+		verde("\nConta criada com sucesso!\n");
+	}
+	return ct;
 }
+/*função para selecionar a exportação*/
 #endif 

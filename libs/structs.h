@@ -147,6 +147,7 @@ struct entradaprodutos{
 	float frete;
 	float imposto;
 	float totalnota;
+	struct data data_entrada;
 	
 };
 /*struct para saida de produtos industrializados*/
@@ -158,6 +159,7 @@ struct saidaprodutos{
 	int quantidade[999];
 	float precovenda[999];
 	float totalpagar;
+	struct data data_saida;
 };
 
 /*struct para a realização de reservas no hotel*/
@@ -195,6 +197,12 @@ struct contas{
 	float valor;
 	float valor_total;
 	int pago;
+	char status[20];
+};
+/*struct de caixa*/
+struct caixa{
+	unsigned codigo;
+	float valor;
 	char status[20];
 };
 

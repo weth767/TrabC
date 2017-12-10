@@ -14,8 +14,8 @@ void check(int tipo,char url[50],char urltemp[50],char modoabertura[5],struct ch
 	FILE *arquivo;
 	FILE *arquivo2;
 	arquivo = fopen(url,modoabertura);
-	arquivo2 = fopen(urltemp,modoabertura);
-	if(arquivo == NULL || arquivo2 == NULL){
+	arquivo2;
+	if(arquivo == NULL){
 		vermelho("\nErro na abertura do arquivo de checks!\n");
 	}
 	else{
@@ -36,22 +36,26 @@ void check(int tipo,char url[50],char urltemp[50],char modoabertura[5],struct ch
 					fprintf(arquivo,"%s\n\n",ch.status);
 					/*mostra mensagem de sucesso para o usuario*/
 					printf("\nO número de check do hospede é: %i(Guarde-o Bem)\n",ch.codigo);
+					fclose(arquivo);
 					verde("\nCheck in Realizado com Sucesso!\n");
+
 				}
 				/*nesse caso é necessário o hospede saber seu número de checkin, por isso vai ser informado a ele*/
 				/*verifica o caso de checkout agora*/
 				else if(ch.tipo == 1){
+					/*abre o arquivo temporario*/
+					arquivo2 = fopen(urltemp,modoabertura);
 					/*ao inves de salvar simplesmente, agora vai buscar o checkin referente a esse codigo e substituir agora pelo checkout*/
 					/*então primeiro vem a leitura*/
 					while(!feof(arquivo)){
+						/*comando de leitura*/
+						fscanf(arquivo,"%u\n %u\n %u\n %i\n %i/%i/%i\n %i/%i/%i\n %f\n %i\n %s\n\n",&ch2.codigo,&ch2.codigo_hospede,&ch.codigo_acomodacao,&ch.tipo,
+						&ch2.data_checkin.dia,&ch2.data_checkin.mes,&ch2.data_checkin.ano,&ch2.data_checkout.dia,&ch2.data_checkout.mes,&ch2.data_checkin.ano,
+						&ch2.valor_total,&ch2.pago,ch2.status);
 						/*verifica o final do arquivo para evitar repetições*/
 						if(feof(arquivo)){
 							break;
 						}
-
-						fscanf(arquivo,"%u\n %u\n %u\n %i\n %i/%i/%i\n %i/%i/%i\n %f\n %i\n %s\n\n",&ch2.codigo,&ch2.codigo_hospede,&ch.codigo_acomodacao,&ch.tipo,
-						&ch2.data_checkin.dia,&ch2.data_checkin.mes,&ch2.data_checkin.ano,&ch2.data_checkout.dia,&ch2.data_checkout.mes,&ch2.data_checkin.ano,
-						&ch2.valor_total,&ch2.pago,ch2.status);
 						/*depois de lido,vai verificar o arquivo até encontrar o valor que corresponde ao código que foi passado no checkout*/
 						if(ch2.codigo != ch.codigo){
 							/*se o código for diferente, que dizer que são outros checks e devem ser preservados em um arquivo temporario*/
@@ -97,13 +101,15 @@ void check(int tipo,char url[50],char urltemp[50],char modoabertura[5],struct ch
 							
 						}
 					}
+					fclose(arquivo);
+					fclose(arquivo2);
+					remove(url);
+					rename(urltemp,url);
 					/*mostra o sucesso na tela*/
 					verde("\nCheck Out Realizado com Sucesso!\n");	
 				}
-				remove(url);
-				rename(urltemp,url);
-				fclose(arquivo);
-				fclose(arquivo2);
+				
+				
 			break;
 			/*caso 2, arquivo binário*/
 			case 2:
@@ -114,20 +120,23 @@ void check(int tipo,char url[50],char urltemp[50],char modoabertura[5],struct ch
 					fwrite(&ch,sizeof(struct checks),1,arquivo);
 					/*mostra mensagem de sucesso para o usuario*/
 					printf("\nO número de check do hospede é: %i(Guarde-o Bem)\n",ch.codigo);
+					fclose(arquivo);
 					verde("\nCheck in Realizado com Sucesso!\n");
 				}
 				/*nesse caso é necessário o hospede saber seu número de checkin, por isso vai ser informado a ele*/
 				/*verifica o caso de checkout agora*/
 				else if(ch.tipo == 1){
+					/*abre o arquivo temporario*/
+					arquivo2 = fopen(urltemp,modoabertura);
 					/*ao inves de salvar simplesmente, agora vai buscar o checkin referente a esse codigo e substituir agora pelo checkout*/
 					/*então primeiro vem a leitura*/
 					while(!feof(arquivo)){
+						/*comando de leitura*/
+						fread(&ch2,sizeof(struct checks),1,arquivo);
 						/*verifica o final do arquivo para evitar repetições*/
 						if(feof(arquivo)){
 							break;
 						}
-
-						fread(&ch2,sizeof(struct checks),1,arquivo);
 						/*depois de lido,vai verificar o arquivo até encontrar o valor que corresponde ao código que foi passado no checkout*/
 						if(ch2.codigo != ch.codigo){
 							/*se o código for diferente, que dizer que são outros checks e devem ser preservados em um arquivo temporario*/
@@ -163,12 +172,13 @@ void check(int tipo,char url[50],char urltemp[50],char modoabertura[5],struct ch
 						}
 					}
 					/*mostra o sucesso na tela*/
+					fclose(arquivo);
+					fclose(arquivo2);
+					remove(url);
+					rename(urltemp,url);
 					verde("\nCheck Out Realizado com Sucesso!\n");	
 				}
-				remove(url);
-				rename(urltemp,url);
-				fclose(arquivo);
-				fclose(arquivo2);
+				
 			break;
 			/*erro para opções de salvamento não implementadas*/
 			default:

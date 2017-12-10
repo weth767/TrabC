@@ -82,7 +82,8 @@ void defineconstantes(){
 		strcpy(urltemp_saidaprodutos,"saves/tempsaidaprodutos.txt");
 		strcpy(urltemp_reserva,"saves/tempreservas.txt");
 		strcpy(urltempcheck,"saves/tempchecks.txt");
-		strcpy(urlconta,"saves/contas.bin");
+		strcpy(urltempconta,"saves/tempcontas.txt");
+		
 	}
 	else if(verificasave() == 2){
 		/*caminhos originais do binario*/
@@ -97,7 +98,7 @@ void defineconstantes(){
 		strcpy(url_saidaprodutos,"saves/saidaprodutos.bin");
 		strcpy(url_reserva,"saves/reservas.bin");
 		strcpy(urlcheck,"saves/checks.bin");
-		strcpy(urlconta,"saves/tempconta.txt");
+		strcpy(urlconta,"saves/contas.bin");
 		/*caminhos temporarios do binario*/
 		strcpy(urltemphospede,"saves/temphospedes.bin");
 		strcpy(urltemphotel,"saves/temphoteis.bin");
@@ -373,6 +374,25 @@ void menu(char com[50],int tiposave){
 		branco("Digite o código da Checagem: ");
 		scanf("%i",&c);
 		consulta_checks_codigo(verificasave(),urlcheck,modoabertura,c);
+	}
+	/*comandos para criação de contas*/
+	/*comando para cria conta*/
+	else if(strcmp(com,"cadct") == 0){
+		cadastra_conta(urlconta,urltempconta,urlhospede,url_reserva,modoabertura);
+	}
+	/*comando de consulta de contas, pelo cpf*/
+	else if(strcmp(com,"csct") == 0){
+		char cpf[14];
+		struct contas ct;
+		ciano("\nConsulta de contas!\n");
+		printf("Digite o CPF do hospede: ");
+		scanf("%[^\n]s",cpf);
+		ct.codigo_hospede = codigo_hospede_cpf(tiposave,urlhospede,modoabertura,cpf);
+		conta_hospede(tiposave,urlconta,urltempconta,modoabertura,ct,-1);
+	}
+	/*comando de exportação*/
+	else if(strcmp(com,"exparq") == 0){
+		exporta_tabelas(tiposave,modoabertura);
 	}
 
 	/*Outros comandos*/

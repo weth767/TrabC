@@ -20,8 +20,8 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 	arquivo = fopen(url,modoabertura);
 	arquivo2 = fopen(urltemp,modoabertura);
 	/*verifica se os arquivos foram abertos corretamente*/
-	if(arquivo == NULL || arquivo2 == NULL){
-		vermelho("\nErro em realizar o arquivo de contas!\n");
+	if(arquivo == NULL && arquivo2 == NULL){
+		vermelho("\nErro em realizar a abertura do arquivo de contas!\n");
 	}
 	else{
 		/*se estiver tudo ok, verifica o tipo de salvamento*/
@@ -32,17 +32,17 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 					/*pesquisa de contas*/
 					/*primeiro le o arquivo de contas*/
 					while(!feof(arquivo)){
+						/*comando de leitura*/
+						fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %s\n\n",&cts.codigo,&cts.codigo_hospede,&cts.codigo_acomodacao,
+						&cts.valor,&cts.valor_total,&cts.pago,cts.status);
 						/*verifica o final do arquivo para evitar repetições*/
 						if(feof(arquivo)){
 							break;
 						}
-						/*comando de leitura*/
-						fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %s\n\n",&cts.codigo,&cts.codigo_hospede,&cts.codigo_acomodacao,
-						&cts.valor,&cts.valor_total,&cts.pago,cts.status);
 						/*verifica o código do hospede*/
 						if(cts.codigo_hospede == ct.codigo_hospede){
 							/*mostra na tela os dados relacionados ao hospede*/
-							printf("Código da Conta: %u\n",cts.codigo);
+							printf("\nCódigo da Conta: %u\n",cts.codigo);
 							printf("Código do Hospede: %u\n",cts.codigo_hospede);
 							printf("Código da Acomodação: %u\n",cts.codigo_acomodacao);
 							printf("Valor da Dívida Atual: R$%.2f\n",cts.valor);
@@ -66,13 +66,14 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 					fclose(arquivo);
 				}
 				else if(funcao == 0){
+					printf("\n%s\n",url);
 					/*função 0, cria conta*/
 					/*salva os dados no arquivo*/
 					fprintf(arquivo,"%u\n",ct.codigo);
 					fprintf(arquivo,"%u\n",ct.codigo_hospede);
 					fprintf(arquivo,"%u\n",ct.codigo_acomodacao);
-					fprintf(arquivo,"%f\n",ct.valor);
-					fprintf(arquivo,"%f\n",ct.valor_total);
+					fprintf(arquivo,"%.2f\n",ct.valor);
+					fprintf(arquivo,"%.2f\n",ct.valor_total);
 					fprintf(arquivo,"%i\n",ct.pago);
 					fprintf(arquivo,"%s\n\n",ct.status);
 					/*conta criada*/
@@ -84,21 +85,20 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 					/*função igual a 1, o hospede compra itens e os valores são adicionados na conta*/
 					/*primeiro le o arquivo de contas*/
 					while(!feof(arquivo)){
-					/*verifica o final do arquivo para evitar repetições*/
-						if(feof(arquivo)){
-							break;
-						}
-
 						/*comando de leitura*/
 						fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %s\n\n",&cts.codigo,&cts.codigo_hospede,&cts.codigo_acomodacao,
 						&cts.valor,&cts.valor_total,&cts.pago,cts.status);
+						/*verifica o final do arquivo para evitar repetições*/
+						if(feof(arquivo)){
+							break;
+						}
 						/*verifica a conta que o códigos são diferentes do código digitado e salvo no arquivo temporario*/
 						if(cts.codigo != ct.codigo){
 							fprintf(arquivo2,"%u\n",cts.codigo);
 							fprintf(arquivo2,"%u\n",cts.codigo_hospede);
 							fprintf(arquivo2,"%u\n",cts.codigo_acomodacao);
-							fprintf(arquivo2,"%f\n",cts.valor);
-							fprintf(arquivo2,"%f\n",cts.valor_total);
+							fprintf(arquivo2,"%.2f\n",cts.valor);
+							fprintf(arquivo2,"%.2f\n",cts.valor_total);
 							fprintf(arquivo2,"%i\n",cts.pago);
 							fprintf(arquivo2,"%s\n\n",cts.status);
 						}
@@ -113,8 +113,8 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 							fprintf(arquivo2,"%u\n",cts.codigo);
 							fprintf(arquivo2,"%u\n",cts.codigo_hospede);
 							fprintf(arquivo2,"%u\n",cts.codigo_acomodacao);
-							fprintf(arquivo2,"%f\n",cts.valor);
-							fprintf(arquivo2,"%f\n",cts.valor_total);
+							fprintf(arquivo2,"%.2f\n",cts.valor);
+							fprintf(arquivo2,"%.2f\n",cts.valor_total);
 							fprintf(arquivo2,"%i\n",cts.pago);
 							fprintf(arquivo2,"%s\n\n",cts.status);
 						}
@@ -129,14 +129,14 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 					/*função 10, fecha a conta e devolve o valor a pagar*/
 					/*primeiro le o arquivo de contas*/
 					while(!feof(arquivo)){
-					/*verifica o final do arquivo para evitar repetições*/
+						/*comando de leitura*/
+						fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %s\n\n",&cts.codigo,&cts.codigo_hospede,&cts.codigo_acomodacao,
+						&cts.valor,&cts.valor_total,&cts.pago,cts.status);
+						/*verifica o final do arquivo para evitar repetições*/
 						if(feof(arquivo)){
 							break;
 						}
 
-						/*comando de leitura*/
-						fscanf(arquivo,"%u\n %u\n %u\n %f\n %f\n %i\n %s\n\n",&cts.codigo,&cts.codigo_hospede,&cts.codigo_acomodacao,
-						&cts.valor,&cts.valor_total,&cts.pago,cts.status);
 						/*verifica a conta que o códigos são diferentes do código digitado e salvo no arquivo temporario*/
 						if(cts.codigo != ct.codigo){
 							fprintf(arquivo2,"%u\n",cts.codigo);
@@ -208,20 +208,20 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 					/*pesquisa de contas*/
 					/*primeiro le o arquivo de contas*/
 					while(!feof(arquivo)){
-					/*verifica o final do arquivo para evitar repetições*/
-					if(feof(arquivo)){
-						break;
-					}
 						/*comando de leitura*/
 						fread(&cts,sizeof(struct contas),1,arquivo);
+						/*verifica o final do arquivo para evitar repetições*/
+						if(feof(arquivo)){
+							break;
+						}
 						/*verifica o código do hospede*/
 						if(cts.codigo_hospede == ct.codigo_hospede){
 							/*mostra na tela os dados relacionados ao hospede*/
-							printf("Código da Conta: %u\n",cts.codigo);
+							printf("\nCódigo da Conta: %u\n",cts.codigo);
 							printf("Código do Hospede: %u\n",cts.codigo_hospede);
 							printf("Código da Acomodação: %u\n",cts.codigo_acomodacao);
-							printf("Valor da Dívida Atual: R$%.2f\n",cts.valor);
-							printf("Valor Total Gasto: R$%.2f\n",cts.valor_total);
+							printf("Valor da Dívida Atual: R$ %.2f\n",cts.valor);
+							printf("Valor Total Gasto: R$ %.2f\n",cts.valor_total);
 							if(cts.pago == 0){
 								printf("Status da Fatura da Conta: ");
 								amarelo("Ainda não Paga\n");
@@ -253,13 +253,12 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 					/*função igual a 1, o hospede compra itens e os valores são adicionados na conta*/
 					/*primeiro le o arquivo de contas*/
 					while(!feof(arquivo)){
-					/*verifica o final do arquivo para evitar repetições*/
+						/*comando de leitura*/
+						fread(&cts,sizeof(struct contas),1,arquivo);
+						/*verifica o final do arquivo para evitar repetições*/
 						if(feof(arquivo)){
 							break;
 						}
-
-						/*comando de leitura*/
-						fread(&cts,sizeof(struct contas),1,arquivo);
 						/*verifica a conta que o códigos são diferentes do código digitado e salvo no arquivo temporario*/
 						if(cts.codigo != ct.codigo){
 							fwrite(&cts,sizeof(struct contas),1,arquivo2);
@@ -285,13 +284,12 @@ void conta_hospede(int tipo,char url[50],char urltemp[50],char modoabertura[5],s
 					/*função 10, fecha a conta e devolve o valor a pagar*/
 					/*primeiro le o arquivo de contas*/
 					while(!feof(arquivo)){
-					/*verifica o final do arquivo para evitar repetições*/
+						/*comando de leitura*/
+						fread(&cts,sizeof(struct contas),1,arquivo);
+						/*verifica o final do arquivo para evitar repetições*/
 						if(feof(arquivo)){
 							break;
 						}
-
-						/*comando de leitura*/
-						fread(&cts,sizeof(struct contas),1,arquivo);
 						/*verifica a conta que o códigos são diferentes do código digitado e salvo no arquivo temporario*/
 						if(cts.codigo != ct.codigo){
 							fwrite(&cts,sizeof(struct contas),1,arquivo2);

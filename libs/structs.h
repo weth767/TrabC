@@ -5,7 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 /*structs diretamente importantes ao sistema, possuem status*/
-/*struct de cidade e estado*/
+
+struct time{
+	int hora;
+	int minuto;
+};
 
 /*struct para cpara as datas*/
 struct data{
@@ -202,6 +206,15 @@ struct contas{
 /*struct de caixa*/
 struct caixa{
 	unsigned codigo;
+	unsigned codigo_hotel;
+	struct time t_ab;
+	struct time t_fc;
+	float valor;
+	char status[20];
+};
+/*struct de contas a pagar*/
+struct contaspagar{
+	unsigned int codigo;
 	float valor;
 	char status[20];
 };

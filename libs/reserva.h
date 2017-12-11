@@ -92,8 +92,9 @@ void consulta_reserva(int tipo,char url[50],char modoabertura[5],int codigo){
 						printf("Data de Saída: %i/%i/%i\n",r.data_saida.dia,r.data_saida.mes,r.data_saida.ano);
 						printf("Status da Reserva: %s\n",r.status);
 					}
+					printf("\n---------------------------------------------------------------------\n");
 				}
-				printf("\n---------------------------------------------------------------------\n");
+				
 				/*fecha o arquivo*/
 				fclose(arquivo);
 			break;

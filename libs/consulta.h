@@ -1178,7 +1178,8 @@ int codigo_entradaprodutos(int tipo){
 						fscanf(arquivo,"%u;%u;%i;%f;%s\n",&ep.codigoproduto[i],&ep.codigofornecedor[i],&ep.quantidade[i],&ep.precocusto[i],ep.status[i]);
 					}
 					/*pega o restante dos valores*/
-					fscanf(arquivo,"%f\n %f\n %f\n\n",&ep.frete,&ep.imposto,&ep.totalnota);
+					fscanf(arquivo,"%i/%i/%i\n %f\n %f\n %f\n\n",&ep.data_entrada.dia,&ep.data_entrada.mes,&ep.data_entrada.ano,
+						&ep.frete,&ep.imposto,&ep.totalnota);
 					/*pega o ultimo codigo cadastrado*/
 					codigo = ep.codigo;
 				}
@@ -1264,7 +1265,7 @@ int codigo_saidaprodutos(int tipo){
 							break;
 						}
 					}
-					fscanf(arquivo,"%f\n\n",&sp.totalpagar);
+					fscanf(arquivo,"%i/%i/%i\n %f\n\n",&sp.data_saida.dia,&sp.data_saida.mes,&sp.data_saida.ano,&sp.totalpagar);
 					if(feof(arquivo)){
 							break;
 					}
@@ -1516,6 +1517,132 @@ int codigo_conta(int tipo){
 		break;	
 	}
 	return codigo;
+}
+/*função para gerar o auto incremento do codigo de caixa*/
+/*recebe por parametro o tipo de salvamento*/
+int codigo_caixa(int tipo){
+	/*ponteiro para abrir o arquivo*/
+	FILE *arquivo;
+	int codigo;
+	/*struct de caixa para acessar as variaveis*/
+	struct caixa cx;
+	/*verifica o tipo de salvamento*/
+	switch(tipo){
+		case 1:/*arquivo texto*/
+			/*abre o arquivo*/
+			arquivo = fopen("saves/caixa.txt","a+");
+			/*verifica a nulidade do arquivo*/
+			if(arquivo == NULL){
+				codigo = 0;
+			}
+			else{
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %u\n %i:%i\n %i:%i\n %f\n %s\n\n",&cx.codigo,&cx.codigo_hotel,&cx.t_ab.hora,&cx.t_ab.minuto,
+						&cx.t_fc.hora,&cx.t_fc.minuto,&cx.valor,cx.status);
+					/*verifica o final do arquivo para evitar repetições*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*recebe o codigo*/
+					codigo = cx.codigo;
+				}
+				/*o incrementa*/
+				codigo++;
+			}
+			/*e o retorna*/
+			return codigo;
+		break;
+		case 2:/*arquivo texto*/
+			/*abre o arquivo*/
+			arquivo = fopen("saves/caixa.bin","ab+");
+			/*verifica a nulidade do arquivo*/
+			if(arquivo == NULL){
+				codigo = 0;
+			}
+			else{
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fread(&cx,sizeof(struct caixa),1,arquivo);
+					/*verifica o final do arquivo para evitar repetições*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*recebe o codigo*/
+					codigo = cx.codigo;
+				}
+				/*o incrementa*/
+				codigo++;
+			}
+			/*e o retorna*/
+			return codigo;
+		break;
+		/*opção de salvamento invalida*/
+		default:
+			/*mensagem de erro para opções de salvamento não implementadas*/
+			vermelho("\nOpção de salvamento ainda não implementada!\n");
+		break;	
+	}
+}
+
+/*função para autoincrementar o codigo da contapagar*/
+/*recebe por parametro o tipo de salvamento*/
+int codigo_contapagar(int tipo){
+	/*ponteiro do arquivo*/
+	FILE *arquivo;
+	int codigo;
+	/*struct de contaspagar*/
+	struct contaspagar cp;
+	/*verifica o tipo de salvamento*/
+	switch(tipo){
+		case 1:/*arquivo texto*/
+			/*abre o arquivo*/
+			arquivo = fopen("saves/contaspagar.txt","a+");
+			/*codigo recebe 0*/
+			if(arquivo == NULL){
+				codigo = 0;
+			}
+			else{
+				/*le o arquivo até final*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %f\n %s\n\n",&cp.codigo,&cp.valor,cp.status);
+					/*recebe o codigo*/
+					codigo = cp.codigo;
+				}
+				/*soma 1 ao codigo*/
+				codigo++;
+			}
+			/*retorna o codigo ja somado*/
+			return codigo;
+		break;
+		case 2:/*arquivo binario*/
+			/*abre o arquivo*/
+			arquivo = fopen("saves/contaspagar.bin","ab+");
+			if(arquivo == NULL){
+				/*codigo recebe 0*/
+				codigo = 0;
+			}
+			else{
+				/*le o arquivo até final*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fread(&cp,sizeof(struct contaspagar),1,arquivo);
+					/*recebe o codigo*/
+					codigo = cp.codigo;
+				}
+				/*soma 1 ao codigo*/
+				codigo++;
+			}
+			/*retorna o codigo ja somado*/
+			return codigo;
+		break;
+		/*opção de salvamento invalida*/
+		default:
+			/*mensagem de erro para opções de salvamento não implementadas*/
+			vermelho("\nOpção de salvamento ainda não implementada!\n");
+		break;	
+	}
 }
 
 /*função para validar o codigo do hospede*/
@@ -2036,6 +2163,9 @@ int* retorna_dia_checkin_pago(int tipo,char url[50],char modoabertura[5],int cod
 					fscanf(arquivo,"%u\n %u\n %u\n %i\n %i/%i/%i\n %i/%i/%i\n %f\n %i\n %s\n\n",&ck.codigo,&ck.codigo_hospede,&ck.codigo_acomodacao,&ck.tipo,
 						&ck.data_checkin.dia,&ck.data_checkin.mes,&ck.data_checkin.ano,&ck.data_checkout.dia,&ck.data_checkout.mes,&ck.data_checkout.ano,
 						&ck.valor_total,&ck.pago,ck.status);
+					if(feof(arquivo)){
+						break;
+					}
 					/*verifica o que for igual ao código digitado*/
 					if(ck.codigo == codigo){
 						/*se achar retorna o dia de checkin e se o hospede pagou ou não*/
@@ -2054,6 +2184,9 @@ int* retorna_dia_checkin_pago(int tipo,char url[50],char modoabertura[5],int cod
 				while(!feof(arquivo)){
 					/*comando de leitura*/
 					fread(&ck,sizeof(struct checks),1,arquivo);
+					if(feof(arquivo)){
+						break;
+					}
 					/*verifica o que for igual ao código digitado*/
 					if(ck.codigo == codigo){
 					/*se achar retorna o dia de checkin e se o hospede pagou ou não*/
@@ -2069,7 +2202,6 @@ int* retorna_dia_checkin_pago(int tipo,char url[50],char modoabertura[5],int cod
 			break;
 			default:/*erro para opções de salvamento invalidas*/
 				vermelho("\nOpção de salvamento ainda não implementada!\n");
-				return 0;
 			break;
 		}
 	}
@@ -2136,6 +2268,77 @@ int codigo_hospede_cpf(int tipo,char urlhospede[50],char modoabertura[5],char cp
 		}
 	}
 }
+
+/*função para retornar o codigo do hotel, pelo seu cnpj*/
+/*recebe por parametro o tipo de salvamento, o url do hotel, o modo de abertura e o cnpj*/
+int codigo_hotel_cnpj(int tipo, char url[50], char modoabertura[5], char cnpj[20]){
+	/*struct de hotel para armazenar os hoteis*/
+	struct hotel ht;
+	/*ponteiro de arquivo para acessar o arquivo de hoteis*/
+	FILE *arquivo;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	/*verifica a nulidade do arquivo*/
+	if(arquivo == NULL){
+		/*mensagem de erro*/
+		vermelho("\nErro na abertura do arquivo de hoteis!\n");
+	}
+	/*se estiver tudo ok, verifica o tipo de salvamento*/
+	else{
+		switch(tipo){
+			case 1:/*arquivo texto*/
+				/*le o arquivo até seu final*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,
+						ht.nomefantasia,ht.cnpj,ht.insc,ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,
+						ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status);
+					/*verifica se encontra um cnpj igual*/
+					if(strcmp(ht.cnpj,cnpj) == 0){
+						return ht.codigo;
+					}
+					/*verifica o final do arquivo*/
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				return 0;
+			break;
+			case 2:
+				/*le o arquivo até seu final*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fread(&ht,sizeof(struct hotel),1,arquivo);
+					/*verifica se encontra um cnpj igual*/
+					if(strcmp(ht.cnpj,cnpj) == 0){
+						return ht.codigo;
+					}
+					/*verifica o final do arquivo*/
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				return 0;
+			break;/*le o arquivo até seu final*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n",&ht.codigo,ht.razaosocial,
+						ht.nomefantasia,ht.cnpj,ht.insc,ht.rua,ht.numero,ht.bairro,ht.cidadeestado.cidade,ht.cidadeestado.estado,ht.cep,ht.complemento,
+						ht.telefone,ht.email,ht.nomeresponsavel,ht.telefoneresponsavel,ht.status);
+					/*verifica se encontra um cnpj igual*/
+					if(strcmp(ht.cnpj,cnpj) == 0){
+						return ht.codigo;
+					}
+					/*verifica o final do arquivo*/
+					if(feof(arquivo)){
+						break;
+					}
+				}
+				return 0;
+		}
+	}
+}
+
 
 /*função para verificar a existencia do arquivo*/
 /*recebe o url e o tipo de salvamento*/

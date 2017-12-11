@@ -26,6 +26,8 @@ void exporta_tabelas(int tipo,char modoabertura[5]){
 	struct reserva r;
 	struct checks ch;
 	struct contas ct;
+	struct caixa cx;
+	struct contaspagar cp;
 
 	FILE *arquivo;
 	FILE *arquivo_abertura;
@@ -147,6 +149,14 @@ void exporta_tabelas(int tipo,char modoabertura[5]){
 	scanf("%i",&selecionados[12]);
 	/*verifica se as contas vao ser exportados*/
 	if(selecionados[12] == 1){
+		/*soma o contador*/
+		contador++;
+	}
+	/*pergunta se vai exportar o caixa*/
+	printf("Exportar caixa(1 - para sim, 0 - para não): ");
+	scanf("%i",&selecionados[13]);
+	/*verifica se as contas vao ser exportados*/
+	if(selecionados[13] == 1){
 		/*soma o contador*/
 		contador++;
 	}
@@ -535,12 +545,14 @@ void exporta_tabelas(int tipo,char modoabertura[5]){
 										fprintf(arquivo,"\t\t\t\t<status>%s</status>\n",ep.status[i]);
 									}
 									/*pega o restante dos valores*/
-									fscanf(arquivo_abertura,"%f\n %f\n %f\n\n",&ep.frete,&ep.imposto,&ep.totalnota);
+									fscanf(arquivo_abertura,"%i/%i/%i\n %f\n %f\n %f\n\n",&ep.data_entrada.dia,&ep.data_entrada.mes,&ep.data_entrada.ano,
+									&ep.frete,&ep.imposto,&ep.totalnota);
 									/*verifica o final do arquivo para evitar erros, e sai do laço caso esteja*/
 									if(feof(arquivo_abertura)){
 											break;
 									}
 									/*depois de lido, salva os dados no arquivo de exportação*/
+									fprintf(arquivo,"\t\t\t<data>%i/%i/%i</data>\n",ep.data_entrada.dia,ep.data_entrada.mes,ep.data_entrada.ano);
 									fprintf(arquivo,"\t\t\t<frete>%.2f</frete>\n",ep.frete);
 									fprintf(arquivo,"\t\t\t<imposto>%.2f</imposto>\n",ep.imposto);
 									fprintf(arquivo,"\t\t\t<total_nota>%.2f</total_nota>\n",ep.totalnota);
@@ -592,11 +604,12 @@ void exporta_tabelas(int tipo,char modoabertura[5]){
 										fprintf(arquivo,"\t\t\t\t<preco_custo>%.2f</preco_custo>\n",sp.precovenda[i]);
 										fprintf(arquivo,"\t\t\t\t<status>%s</status>\n",sp.status[i]);
 									}
-									fscanf(arquivo_abertura,"%f\n\n",&sp.totalpagar);
+									fscanf(arquivo_abertura,"%i/%i/%i %f\n\n",&sp.data_saida.dia,&sp.data_saida.mes,&sp.data_saida.ano,&sp.totalpagar);
 									/*verifica o final do arquivo para evitar erros, e sai do laço caso esteja*/
 									if(feof(arquivo)){
 										break;
 									}
+									fprintf(arquivo,"\t\t\t<data>%i/%i/%i</data>\n",sp.data_saida.dia,sp.data_saida.mes,sp.data_saida.ano);
 									fprintf(arquivo,"\t\t\t<total_pagar>%.2f</total_pagar>\n",sp.totalpagar);
 									fprintf(arquivo,"\t\t%s\n","</registro>");
 									/*depois de lido todos os dados*/
@@ -735,6 +748,81 @@ void exporta_tabelas(int tipo,char modoabertura[5]){
 						/*mostra mensagem de erro caso o arquivo não existe ou esteja vazio*/
 						}else{
 							vermelho("\nErro, arquivo de checks não existe ou está vazio!\n");
+						}
+						fclose(arquivo_abertura);
+					}
+					if(selecionados[13] == 1){
+						/*se ele foi selecionado, salva seus dados no arquivo*/
+						if(verifica_existencia_arquivo(1,"saves/caixa.txt") == 1 && verifica_vazio(1,"saves/caixa.txt") > 0){
+							arquivo_abertura = fopen("saves/caixa.txt","r");
+							/*verifica erros na abertura*/
+							if(arquivo_abertura == NULL){
+								/*mostra mensagem*/
+								vermelho("\nErro na abertura do arquivo de caixa!\n");
+							}
+							/*se estiver tudo ok, continua a execução*/
+							else{
+								/*le o arquivo todo*/
+								fprintf(arquivo,"\t%s\n","<tabela-caixa>");
+								while(!feof(arquivo_abertura)){
+									/*comando para leitura*/
+									fscanf(arquivo_abertura,"%u\n %u\n %i:%i\n %i:%i\n %f\n %s\n\n",&cx.codigo,&cx.codigo_hotel,&cx.t_ab.hora,&cx.t_ab.minuto,
+									&cx.t_fc.hora,&cx.t_fc.minuto,&cx.valor,cx.status);
+									/*verifica o final do arquivo para evitar erros, e sai do laço caso esteja*/
+									if(feof(arquivo_abertura)){
+										break;
+									}
+									/*depois de lido, salva os dados no arquivo de exportação*/
+									fprintf(arquivo,"\t\t%s\n","<registro>");
+									fprintf(arquivo,"\t\t\t<codigo>%u</codigo>\n",cx.codigo);
+									fprintf(arquivo,"\t\t\t<codigo_hotel>%u</codigo_hotel>\n",cx.codigo_hotel);
+									fprintf(arquivo,"\t\t\t<hora_abertura>%i:%i</hora_abertura>\n",cx.t_ab.hora,cx.t_ab.minuto);
+									fprintf(arquivo,"\t\t\t<hora_fechamento>%i:%i</hora_fechamento>\n",cx.t_fc.hora,cx.t_fc.minuto);
+									fprintf(arquivo,"\t\t\t<valor>%.2f</valor>\n",cx.valor);
+									fprintf(arquivo,"\t\t\t<status>%s</status>\n",cx.status);
+									fprintf(arquivo,"\t\t%s\n","</registro>");
+									
+								}
+								fprintf(arquivo,"\t%s\n","</tabela-caixa>");
+							}
+						}else{
+							vermelho("\nErro, arquivo de rcaixa não existe ou está vazio!\n");
+						}
+						fclose(arquivo_abertura);
+					}
+					/**/
+					if(selecionados[14] == 1){
+						/*se ele foi selecionado, salva seus dados no arquivo*/
+						if(verifica_existencia_arquivo(1,"saves/contaspagar.txt") == 1 && verifica_vazio(1,"saves/contaspagar.txt") > 0){
+							arquivo_abertura = fopen("saves/contaspagar.txt","r");
+							/*verifica erros na abertura*/
+							if(arquivo_abertura == NULL){
+								/*mostra mensagem*/
+								vermelho("\nErro na abertura do arquivo de contas pagar!\n");
+							}
+							/*se estiver tudo ok, continua a execução*/
+							else{
+								/*le o arquivo todo*/
+								fprintf(arquivo,"\t%s\n","<tabela-contaspagar>");
+								while(!feof(arquivo_abertura)){
+									/*comando para leitura*/
+									fscanf(arquivo_abertura,"%u\n %f\n %s\n\n",&cp.codigo,&cp.valor,cp.status);
+									/*verifica o final do arquivo para evitar erros, e sai do laço caso esteja*/
+									if(feof(arquivo_abertura)){
+										break;
+									}
+									/*depois de lido, salva os dados no arquivo de exportação*/
+									fprintf(arquivo,"\t\t%s\n","<registro>");
+									fprintf(arquivo,"\t\t\t<codigo>%u</codigo>\n",cp.codigo);
+									fprintf(arquivo,"\t\t\t<valor>%.2f</valor>\n",cp.valor);
+									fprintf(arquivo,"\t\t\t<status>%s</status>\n",cp.status);
+									fprintf(arquivo,"\t\t%s\n","</registro>");
+									
+								}
+								fprintf(arquivo,"\t%s\n","</tabela-contaspagar>");
+							}
+						}else{
+							vermelho("\nErro, arquivo de rcaixa não existe ou está vazio!\n");
 						}
 						fclose(arquivo_abertura);
 					}
@@ -1139,7 +1227,7 @@ void exporta_tabelas(int tipo,char modoabertura[5]){
 										break;
 									}
 									/*salva os dados no xml*/
-									fprintf(arquivo,"\t\t%s\n","<registro>\n");
+									fprintf(arquivo,"\t\t%s\n","<registro>");
 									fprintf(arquivo,"\t\t\t<codigo>%u</codigo>\n",sp.codigo);
 									fprintf(arquivo,"\t\t\t<produtos_distintos>%i</produtos_distintos>\n",sp.produtos_distintos);
 									/*salva os produtos comprados em cada linha*/
@@ -1288,6 +1376,82 @@ void exporta_tabelas(int tipo,char modoabertura[5]){
 						/*mensagem de ero para arquivo nao existente ou vazio*/
 						}else{
 							vermelho("\nErro, arquivo de checks não existe ou está vazio!\n");
+						}
+						fclose(arquivo_abertura);
+					}
+					if(selecionados[13] == 1){
+						/*se ele foi selecionado, salva seus dados no arquivo*/
+						if(verifica_existencia_arquivo(2,"saves/caixa.bin") == 1 && verifica_vazio(2,"saves/caixa.bin") > 0){
+							arquivo_abertura = fopen("saves/caixa.bin","rb");
+							/*verifica erros na abertura*/
+							if(arquivo_abertura == NULL){
+								/*mostra mensagem*/
+								vermelho("\nErro na abertura do arquivo de caixa!\n");
+							}
+							/*se estiver tudo ok, continua a execução*/
+							else{
+								/*le o arquivo todo*/
+								fprintf(arquivo,"\t%s\n","<tabela-caixa>");
+								while(!feof(arquivo_abertura)){
+									/*comando para leitura*/
+									fread(&cx,sizeof(struct caixa),1,arquivo_abertura);
+									/*verifica o final do arquivo para evitar erros, e sai do laço caso esteja*/
+									if(feof(arquivo_abertura)){
+										break;
+									}
+									/*depois de lido, salva os dados no arquivo de exportação*/
+									fprintf(arquivo,"\t\t%s\n","<registro>");
+									fprintf(arquivo,"\t\t\t<codigo>%u</codigo>\n",cx.codigo);
+									fprintf(arquivo,"\t\t\t<codigo_hotel>%u</codigo_hotel>\n",cx.codigo_hotel);
+									fprintf(arquivo,"\t\t\t<hora_abertura>%i:%i</hora_abertura>\n",cx.t_ab.hora,cx.t_ab.minuto);
+									fprintf(arquivo,"\t\t\t<hora_fechamento>%i:%i</hora_fechamento>\n",cx.t_fc.hora,cx.t_fc.minuto);
+									fprintf(arquivo,"\t\t\t<valor>%.2f</valor>\n",cx.valor);
+									fprintf(arquivo,"\t\t\t<status>%s</status>\n",cx.status);
+									fprintf(arquivo,"\t\t%s\n","</registro>");
+									
+								}
+								/*final da tabela caixa*/
+								fprintf(arquivo,"\t%s\n","</tabela-caixa>");
+							}
+						}else{
+							vermelho("\nErro, arquivo de rcaixa não existe ou está vazio!\n");
+						}
+						fclose(arquivo_abertura);
+					}
+					/**/
+					if(selecionados[14] == 1){
+						/*se ele foi selecionado, salva seus dados no arquivo*/
+						if(verifica_existencia_arquivo(1,"saves/contaspagar.bin") == 1 && verifica_vazio(1,"saves/contaspagar.bin") > 0){
+							arquivo_abertura = fopen("saves/contaspagar.bin","rb");
+							/*verifica erros na abertura*/
+							if(arquivo_abertura == NULL){
+								/*mostra mensagem*/
+								vermelho("\nErro na abertura do arquivo de contas pagar!\n");
+							}
+							/*se estiver tudo ok, continua a execução*/
+							else{
+								/*le o arquivo todo*/
+								fprintf(arquivo,"\t%s\n","<tabela-contaspagar>");
+								while(!feof(arquivo_abertura)){
+									/*comando para leitura*/
+									fread(&cp,sizeof(struct contaspagar),1,arquivo_abertura);
+									/*verifica o final do arquivo para evitar erros, e sai do laço caso esteja*/
+									if(feof(arquivo_abertura)){
+										break;
+									}
+									/*depois de lido, salva os dados no arquivo de exportação*/
+									fprintf(arquivo,"\t\t%s\n","<registro>");
+									fprintf(arquivo,"\t\t\t<codigo>%u</codigo>\n",cp.codigo);
+									fprintf(arquivo,"\t\t\t<valor>%.2f</valor>\n",cp.valor);
+									fprintf(arquivo,"\t\t\t<status>%s</status>\n",cp.status);
+									fprintf(arquivo,"\t\t%s\n","</registro>");
+									
+								}
+								/*salva o final da tabela*/
+								fprintf(arquivo,"\t%s\n","</tabela-contaspagar>");
+							}
+						}else{
+							vermelho("\nErro, arquivo de rcaixa não existe ou está vazio!\n");
 						}
 						fclose(arquivo_abertura);
 					}

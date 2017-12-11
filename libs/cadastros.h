@@ -14,6 +14,8 @@
 #include "reserva.h"
 #include "contas.h"
 #include "importacao_exportacao.h"
+#include "caixa.h"
+#include "checks.h"
 
 /*funcao para cadastrar o hóspede, que sera executada no arquivo main*/
 /*recebe os dados do hospede e salva na struct*/
@@ -379,7 +381,8 @@ struct fornecedores cadastrafornecedor(){
 }
 /*função para armazenar os dados na entrada de produtos*/
 /*recebe por parametro o url do produto e o modo de abertura*/
-struct entradaprodutos cadastra_entradaprodutos(char urlproduto[50],char urlfornecedor[50],char modoabertura[5]){
+struct entradaprodutos cadastra_entradaprodutos(char urlproduto[50],char urlfornecedor[50],char urlcaixa[50],char urltempcaixa[50],
+	char urlctp[50],char modoabertura[5]){
 	/*chama a struct de entrada de produtos para acessar suas variaveis*/
 	struct entradaprodutos ep;
 	int verifica = 0;
@@ -464,6 +467,9 @@ struct entradaprodutos cadastra_entradaprodutos(char urlproduto[50],char urlforn
 	/*recebe o restante dos dados fora do for*/
 	/*seta o buffer com vazio para evitar erros*/
 	setbuf(stdin,NULL);
+	printf("Digite a data da compra(ex:06 03 2017): ");
+	scanf("%i %i %i",&ep.data_entrada.dia,&ep.data_entrada.mes,&ep.data_entrada.ano);
+	setbuf(stdin,NULL);
 	/*recebe o valor do frete e do imposto*/
 	printf("Digite o valor do Frete: ");
 	scanf("%f",&ep.frete);
@@ -473,18 +479,23 @@ struct entradaprodutos cadastra_entradaprodutos(char urlproduto[50],char urlforn
 	/*soma os valores com o frete e o imposto e atribui ao total da nota*/
 	soma = soma + ep.frete + ep.imposto;
 	ep.totalnota = soma;
+	/*atualiza o valor do caixa*/
+	atualiza_valor_caixa(verificasave(),urlcaixa,urltempcaixa,urlctp,modoabertura,ep.totalnota,1);
 	/*retorna a struct de entrada de produtos*/
 	return ep;
 }
 
 /*função para cadastrar a saida de produtos*/
 /*recebe por parametro, o url do produto...*/
-struct saidaprodutos cadastra_saidaprodutos(char urlproduto[50],char modoabertura[5]){
+struct saidaprodutos cadastra_saidaprodutos(char urlproduto[50],char urlcontas[50],char urltempcontas[50],char urlcaixa[50],char urltempcaixa[50],
+	char urlhospede[50],char urlctp[50],char modoabertura[5]){
 	/*chama a struct de saida de produtos para ter acesso a suas variaveis*/
 	struct saidaprodutos sp;
+	struct contas ct;
 	int verifica = 0;
 	int tamanho;
 	int resposta;
+	char cpf[14];
 	/*seta a linguagem local, como português, para evitar alguns erros que possam aparecer*/
 	ciano("\nVenda de Produtos\n");
 	/*receber o código da saida de produtos auto incrementada*/
@@ -514,8 +525,37 @@ struct saidaprodutos cadastra_saidaprodutos(char urlproduto[50],char modoabertur
 			verifica = 1;
 		}
 	}
+	/*pega a data da venda*/
+	setbuf(stdin,NULL);
+	printf("Digite a data da venda(ex:06 03 2017): ");
+	scanf("%i %i %i",&sp.data_saida.dia,&sp.data_saida.mes,&sp.data_saida.ano);
 	/*mostra o total a pagar*/
 	printf("\nTotal a pagar: R$%.2f\n",sp.totalpagar);
+	/*verifica se vai salvar na conta ou pagar a vista*/
+	verifica = 0;
+	printf("Pagamento a vista ou será marcado na conta(1 - para a conta, 0 - para a vista): ");
+	scanf("%i",&verifica);
+	if(verifica == 1){
+		printf("Digite o cpf do hospede: ");
+		scanf("%s",cpf);
+		ct.codigo_hospede = codigo_hospede_cpf(verificasave(),urlhospede,modoabertura,cpf);
+		/*mostra a conta do usuário*/
+		conta_hospede(verificasave(),urlcontas,urltempcontas,modoabertura,ct,-1);
+		/*o usuário digita o código da conta do usuário*/
+		float val;
+		printf("Digite o valor da divida: ");
+		scanf("%f",&val);
+		/*atualiza o valor do caixa*/
+		printf("Digite o código da conta: ");
+		scanf("%i",&ct.codigo);
+		conta_hospede(verificasave(),urlcontas,urltempcontas,modoabertura,ct,1);
+		atualiza_valor_caixa(verificasave(),urlcaixa,urltempcaixa,urlctp,modoabertura,val,0);
+		verde("Atualização de conta feito com sucesso!\n");
+	}
+	else{
+		/*atualiza o valor do caixa*/
+		atualiza_valor_caixa(verificasave(),urlcaixa,urltempcaixa,urlctp,modoabertura,sp.totalpagar,0);
+	}
 	/*retorna a struct de saida de produtos*/
 	return sp;
 }
@@ -623,7 +663,7 @@ void pesquisa_acomodacao(char urlacomodacoes[50],char urlcategoria[50],char urlr
 /*função para checkin e checkout*/
 /*recebe por parametro o url da acomdação, das categorias e da reserva*/
 struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhospede[50],char urlreserva[50],char urlchecks[50],char urlcontas[50],
-	char urltempcontas[50],char modoabertura[5]){
+	char urltempcontas[50],char urlcaixa[50],char urltempcaixa[50], char urlctp[50], char modoabertura[5]){
 	/*chama a struct de checks para acessar suas variaveis*/
 	struct checks ch;
 	struct contas ct;
@@ -633,7 +673,6 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 	int dias;
 	float valor;
 	int f_pagamento;
-	int *dados;
 	ciano("\nChecks\n");
 	/*recebe os dados do usuário*/
 	setbuf(stdin,NULL);
@@ -695,7 +734,9 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 			}
 			else if(f_pagamento == 4){
 				strcpy(ch.status,"PAGO_COM_CHEQUE");
-			}	
+			}
+			/*atualiza o valor do caixa*/
+			atualiza_valor_caixa(verificasave(),urlcaixa,urltempcaixa,urlctp,modoabertura,ch.valor_total,0);
 		}
 		/*se não for, salva no sistema o debito*/
 		else if(verifica == 0){
@@ -711,8 +752,8 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 		/*recebe o código do checkin*/
 		printf("Digite o código de check in: ");
 		scanf("%i",&ch.codigo);
+		consulta_checks_codigo(verificasave(),urlchecks,modoabertura,ch.codigo);
 		/*pega o dia de check in e se pagou ou não*/
-		dados = retorna_dia_checkin_pago(verificasave(),urlchecks,modoabertura,ch.codigo);
 		/*recebe o cpf para assim retornar o codigo dele*/
 		setbuf(stdin,NULL);
 		printf("Digite o CPF do hospede: ");
@@ -730,15 +771,16 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 		scanf("%i",&ch.codigo_acomodacao);
 		setbuf(stdin,NULL);
 
+		printf("Digite a data de check in(ex 03 04 2012): ");
+		scanf("%i %i %i",&ch.data_checkin.dia,&ch.data_checkin.mes,&ch.data_checkin.ano);
 		/*vai ser pego a data de checkin na lida do arquivo*/
 		printf("Digite a data de check out(ex 03 04 2012): ");
 		scanf("%i %i %i",&ch.data_checkout.dia,&ch.data_checkout.mes,&ch.data_checkout.ano);
-		ch.pago = dados[1];
 		if(ch.pago == 0){
 			/*recebe o valor da acomodação do hospede*/
 			valor = retorna_valoracomodacao(verificasave(),urlacomodacao,urlcategoria,modoabertura,ch.codigo_acomodacao);
 			/*calcula quanto ele deve pagar pelo quarto*/
-			dias = ch.data_checkout.dia - dados[0];
+			dias = ch.data_checkout.dia - ch.data_checkin.dia;
 			ch.valor_total = dias * valor;
 			/*recebe o valor a pagar pelo quarto*/
 			printf("\nValor a pagar pelo quarto: R$%.2f\n",ch.valor_total);
@@ -758,6 +800,8 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 			else if(f_pagamento == 4){
 				strcpy(ch.status,"PAGO COM CHEQUE");
 			}
+			/*atualiza o valor do caixa*/
+			atualiza_valor_caixa(verificasave(),urlcaixa,urltempcaixa,urlctp,modoabertura,ch.valor_total,0);
 		}
 		/*recebe o codigo do hospede*/
 		ct.codigo_hospede = ch.codigo_hospede;
@@ -767,6 +811,11 @@ struct checks checagens(char urlacomodacao[50],char urlcategoria[50],char urlhos
 		scanf("%i",&verifica);
 		if(verifica == 1){
 			/*o usuário digita o código da conta do usuário*/
+			float val;
+			printf("Digite o valor da divida: ");
+			scanf("%f",&val);
+			/*atualiza o valor do caixa*/
+			atualiza_valor_caixa(verificasave(),urlcaixa,urltempcaixa,urlctp,modoabertura,valor,0);
 			printf("Digite o código da conta: ");
 			scanf("%i",&ct.codigo);
 			conta_hospede(verificasave(),urlcontas,urltempcontas,modoabertura,ct,10);
@@ -808,5 +857,57 @@ struct contas cadastra_conta(char urlconta[50],char urltempconta[50],char urlhos
 	}
 	return ct;
 }
-/*função para selecionar a exportação*/
+/*função para cadastro de caixa*/
+struct caixa cadastra_caixa(char urlhotel[50], char modoabertura[5]){
+	/*struct de caixa para acessar as variaveis*/
+	struct caixa cx;
+	char cnpj[20];
+	/*codigo do caixa, será gerado pela função*/
+	cx.codigo = codigo_caixa(verificasave());
+	printf("Digite o cnpj do hotel: ");
+	scanf("%[^\n]s",cnpj);
+	cx.codigo_hotel = codigo_hotel_cnpj(verificasave(), urlhotel, modoabertura, cnpj);
+	printf("Digite a hora atual(será a hora de abertura inicial, ex: 10 20): ");
+	scanf("%i %i",&cx.t_ab.hora,&cx.t_ab.minuto);
+	cx.t_fc.hora = 0;
+	cx.t_fc.minuto = 0;
+	printf("Digite o valor inicial do caixa: ");
+	scanf("%f",&cx.valor);
+	strcpy(cx.status,"Aberto");
+	return cx;
+}
+
+struct caixa abertura_fechamento_caixa(char urlhotel[50],char urlcaixa[50], char modoabertura[5],int tipo){
+	/*struct de caixa para acessar as variaveis*/
+	struct caixa cx;
+	char cnpj[20];
+	/*a consulta de de caixa, vai mostrar todos os dados até o momento, e o usuário vai no ultimo*/
+	/*e digita os dados necessários com base no ultimo dado da pesquisa*/
+	consulta_caixa(verificasave(), urlcaixa, modoabertura);
+	printf("Digite o código do caixa: ");
+	scanf("%u",&cx.codigo);
+	printf("Digite o código do hotel: ");
+	scanf("%u",&cx.codigo_hotel);
+	printf("Digite o ultimo valor: ");
+	scanf("%f",&cx.valor);
+	/*verifica se é abertura ou fechamento de caixa*/
+	/*1 abertura*/
+	if(tipo == 1){
+		printf("Digite a hora de abertura(ex: 10 20): ");
+		scanf("%i %i",&cx.t_ab.hora,&cx.t_ab.minuto);
+		cx.t_fc.hora = 0;
+		cx.t_fc.minuto = 0;
+		strcpy(cx.status,"Aberto");
+	}
+	/*0 fechamento*/
+	else if(tipo == 0){
+		printf("Digite a hora de abertura(ex: 10 20): ");
+		scanf("%i %i",&cx.t_ab.hora,&cx.t_ab.minuto);
+		printf("Digite a hora de fechamento(ex: 10 20): ");
+		scanf("%i %i",&cx.t_fc.hora,&cx.t_fc.minuto);
+		strcpy(cx.status,"Fechado");
+	}
+	/*e retorna a struct de caixa*/
+	return cx;
+}
 #endif 

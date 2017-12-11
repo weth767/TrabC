@@ -22,6 +22,7 @@
 #include "libs/reserva.h"
 #include "libs/produto.h"
 #include "libs/checks.h"
+#include "libs/caixa.h"
 /***/
 /*variaveis que serão utilizadas como constantes*/
 char modoabertura[5];
@@ -37,6 +38,8 @@ char url_saidaprodutos[50];
 char url_reserva[50];
 char urlcheck[50];
 char urlconta[50];
+char urlcaixa[50];
+char urlcontapagar[50];
 char urltemphospede[50];
 char urltemphotel[50];
 char urltempproduto[50];
@@ -49,6 +52,8 @@ char urltemp_saidaprodutos[50];
 char urltemp_reserva[50];
 char urltempcheck[50];
 char urltempconta[50];
+char urltempcaixa[50];
+char urltempcontapagar[50];
 /**/
 
 /*função para definição dos urls e modo de abertura dos arquivos*/
@@ -71,6 +76,8 @@ void defineconstantes(){
 		strcpy(url_reserva,"saves/reservas.txt");
 		strcpy(urlcheck,"saves/checks.txt");
 		strcpy(urlconta,"saves/contas.txt");
+		strcpy(urlcaixa,"saves/caixa.txt");
+		strcpy(urlcontapagar,"saves/contaspagar.txt");
 		/*caminhos temporarios*/
 		strcpy(urltemphospede,"saves/temphospedes.txt");
 		strcpy(urltemphotel,"saves/temphoteis.txt");
@@ -83,6 +90,8 @@ void defineconstantes(){
 		strcpy(urltemp_reserva,"saves/tempreservas.txt");
 		strcpy(urltempcheck,"saves/tempchecks.txt");
 		strcpy(urltempconta,"saves/tempcontas.txt");
+		strcpy(urltempcaixa,"saves/tempcaixa.txt");
+		strcpy(urltempcontapagar,"saves/tempcontaspagar.txt");
 		
 	}
 	else if(verificasave() == 2){
@@ -99,6 +108,8 @@ void defineconstantes(){
 		strcpy(url_reserva,"saves/reservas.bin");
 		strcpy(urlcheck,"saves/checks.bin");
 		strcpy(urlconta,"saves/contas.bin");
+		strcpy(urlcaixa,"saves/caixa.bin");
+		strcpy(urlcontapagar,"saves/contaspagar.bin");
 		/*caminhos temporarios do binario*/
 		strcpy(urltemphospede,"saves/temphospedes.bin");
 		strcpy(urltemphotel,"saves/temphoteis.bin");
@@ -111,6 +122,8 @@ void defineconstantes(){
 		strcpy(urltemp_reserva,"saves/tempreservas.bin");
 		strcpy(urltempcheck,"saves/tempchecks.bin");
 		strcpy(urltempconta,"saves/tempcontas.bin");
+		strcpy(urltempcaixa,"saves/tempcaixa.bin");
+		strcpy(urltempcontapagar,"saves/tempcontaspagar.bin");
 	}
 	/*opção de salvamento ainda nao implementada*/
 	else{
@@ -210,6 +223,10 @@ void menu(char com[50],int tiposave){
 		editahospede(tiposave,urlhospede,modoabertura,urltemphospede);
 	}
 
+
+
+
+
 	/*comandos para cadastro de hotel*/
 	else if(strcmp(com,"cadht") == 0){
 		salvarhotel(tiposave,urlhotel,modoabertura,cadastrahotel());
@@ -226,6 +243,12 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"edht") == 0){
 		editahotel(tiposave,urlhotel,modoabertura,urltemphotel);
 	}
+
+
+
+
+
+
 
 	/*comando para o fornecedor*/
 	else if(strcmp(com,"cadf") == 0){
@@ -244,6 +267,9 @@ void menu(char com[50],int tiposave){
 		editafornecedor(tiposave,urlfornecedor,modoabertura,urltempfornecedor);
 	}
 
+
+
+
 	/*comando para cadastro de usuario*/
 	else if(strcmp(com,"cadus") == 0){
 		salvarusuarios(urlusuario,modoabertura,cadastrausuario());
@@ -260,6 +286,10 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"edus") == 0){
 		editausuario(urlusuario,modoabertura,urltempusuario);
 	}
+
+
+
+
 
 	/*comando para cadastro de categoria*/
 	else if(strcmp(com,"cadc") == 0){	
@@ -279,6 +309,9 @@ void menu(char com[50],int tiposave){
 	}
 
 
+
+
+
 	/*comandos de cadastrar produto*/
 	else if(strcmp(com,"cadp") == 0){
 		salvarproduto(tiposave,urlproduto,modoabertura,cadastraproduto());
@@ -295,6 +328,9 @@ void menu(char com[50],int tiposave){
 	else if(strcmp(com,"edp") == 0){
 
 	}
+
+
+
 
 	/*comando para cadastrar acomodação*/
 	else if(strcmp(com,"cadac") == 0){
@@ -313,18 +349,31 @@ void menu(char com[50],int tiposave){
 		editaacomodacao(tiposave,urlacomodacao,modoabertura,urltempacomodacao,urlcategoria);
 	}
 
+
+
+
+
+
 	/*comando para compra e venda de produtos no hotel*/
 	/*compra de produtos*/
 	else if(strcmp(com,"cpp") == 0){
-		struct entradaprodutos ep = cadastra_entradaprodutos(urlproduto,urlfornecedor,modoabertura);
+		struct entradaprodutos ep = cadastra_entradaprodutos(urlproduto,urlfornecedor,urlcaixa,urltempcaixa,urlcontapagar,modoabertura);
 		valores = entrada_produtos(tiposave,url_entradaprodutos,modoabertura,ep);
 		atualiza_valorprodutos(tiposave,urlproduto,modoabertura,urltempproduto,valores,ep);
 	}
 	/*Venda de produtos*/
 	else if(strcmp(com,"vdp") == 0){
-		saida_produtos(tiposave,url_saidaprodutos,modoabertura,cadastra_saidaprodutos(urlproduto, modoabertura));
+		struct saidaprodutos sp = cadastra_saidaprodutos(urlproduto,urlconta,urltempconta,urlcaixa,urltempcaixa,urlhospede,urlcontapagar,modoabertura);
+		saida_produtos(tiposave,url_saidaprodutos,modoabertura,sp);
+		atualiza_quantidadeprodutos(tiposave,urlproduto,urltempproduto,modoabertura,sp);
 	}
 	/*Comandos de reserva*/
+
+
+
+
+
+
 
 	/*comando para realizar a reserva*/
 	else if(strcmp(com,"rsv") == 0){
@@ -358,11 +407,15 @@ void menu(char com[50],int tiposave){
 		pesquisa_acomodacao(urlacomodacao,urlcategoria,url_reserva,modoabertura);
 	}
 
+
+
+
+
 	/*Comandos para checks*/
 	/*comando para realizar checagem, tanto check in quanto check out*/
 	else if(strcmp(com,"chk") == 0){
 		check(tiposave,urlcheck,urltempcheck,modoabertura,checagens(urlacomodacao,urlcategoria,urlhospede,url_reserva,urlcheck,urlconta,
-		urltempconta,modoabertura));
+		urltempconta,urlcaixa,urltempcaixa,urlcontapagar,modoabertura));
 	}
 	/*comando para consulta de todos os checks*/
 	else if(strcmp(com,"cschk") == 0){
@@ -375,6 +428,10 @@ void menu(char com[50],int tiposave){
 		scanf("%i",&c);
 		consulta_checks_codigo(verificasave(),urlcheck,modoabertura,c);
 	}
+
+
+
+
 	/*comandos para criação de contas*/
 	/*comando para cria conta*/
 	else if(strcmp(com,"cadct") == 0){
@@ -390,10 +447,35 @@ void menu(char com[50],int tiposave){
 		ct.codigo_hospede = codigo_hospede_cpf(tiposave,urlhospede,modoabertura,cpf);
 		conta_hospede(tiposave,urlconta,urltempconta,modoabertura,ct,-1);
 	}
+
+
+
+
 	/*comando de exportação*/
 	else if(strcmp(com,"exparq") == 0){
 		exporta_tabelas(tiposave,modoabertura);
 	}
+	
+
+
+	/*comandos de caixa*/
+	/*comando para cadastrar caixa*/
+	else if(strcmp(com,"cadcx") == 0){
+		salva_caixa(tiposave, urlcaixa, modoabertura, cadastra_caixa(urlhotel, modoabertura));
+	}
+	/*comando para abertura ou fechamento de caixa*/
+	else if(strcmp(com,"caixa") == 0){
+		int op;
+		printf("Digite 1 para abertura, 0 para fechamento: ");
+		scanf("%i",&op);
+		salva_caixa(tiposave, urlcaixa, modoabertura, abertura_fechamento_caixa(urlhotel,urlcaixa, modoabertura, op));
+	}
+	/*comando para pagar contas*/
+	else if(strcmp(com,"ctp") == 0){
+		paga_contaspagar(tiposave,urlcontapagar,urltempcontapagar,urlcaixa,urltempcaixa,modoabertura);
+	}
+
+
 
 	/*Outros comandos*/
 	/*comando para limpar a tela*/

@@ -41,6 +41,7 @@ float* entrada_produtos(int tipo,char url[50],char modoabertura[5],struct entrad
 					fprintf(arquivo,"%f,",ep.precocusto[i]);
 					fprintf(arquivo,"%s\n",ep.status[i]);
 				}
+				fprintf(arquivo,"%i/%i/%i\n",ep.data_entrada.dia,ep.data_entrada.mes,ep.data_entrada.ano);
 				/*agora cadastra o restante dos produtos*/
 				fprintf(arquivo,"%f\n",ep.frete);
 				fprintf(arquivo,"%f\n",ep.imposto);
@@ -119,13 +120,12 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					/*e verifica no for até achar o codigo igual ao primeiro produto lido, senão tiver, continuará lendo até o final do arquivo*/
 					/*se achar, atualiza o valor de venda dele*/
 					/*sai do laço for */
-					printf("\n%i\n",ep.quantidade[0]);
 					for(int i = 0; i < ep.produtos_distintos; i++){
+						/*atualiza o preço e o estoque apos a compra*/
 						if(p.codigo == ep.codigoproduto[i]){
 							p.precovenda = p.precovenda + valores[0] + valores[1];
 							p.precovenda = p.precovenda + (p.precovenda * p.lucro);
 							p.estoque += ep.quantidade[i];
-							break;
 						}
 					}
 					/*mostra a informação atualizada*/
@@ -174,6 +174,7 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					}
 					/*mostra a informação antiga*/
 					printf("\n----------------------------------------------------------------------------\n");
+					ciano("Informações Antigas do Produto: \n\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição: %s",p.descricao);
 					printf("\nEstoque: %i",p.estoque);
@@ -183,14 +184,15 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 					printf("\nStatus: %s",p.status);
 					printf("\n----------------------------------------------------------------------------\n");
 					for(int i = 0; i < ep.produtos_distintos; i++){
+						/*atualiza o preço e o estoque após a compra*/
 						if(p.codigo == ep.codigoproduto[i]){
 							p.precovenda = ep.precocusto[i] + valores[0] + valores[1];
 							p.estoque += ep.quantidade[i];
-							break;
 						}
 					}
 					/*mostra a informação atualizada*/
 					printf("\n----------------------------------------------------------------------------\n");
+					ciano("Informações Novas do Produto: \n\n");
 					printf("Código: %u",p.codigo);
 					printf("\nDescrição:%s",p.descricao);
 					printf("\nEstoque: %i",p.estoque);
@@ -219,9 +221,99 @@ void atualiza_valorprodutos(int tipo,char url[50],char modoabertura[5],char urlt
 		}
 	}
 }
-/**********************************************************************************/
-/*FAZER UMA FUNÇÃO PARA ATUALIZAR AS QUANTIDADES DE PRODUTOS NA SAIDA DE PRODUTOS*/
-/**********************************************************************************/
+/*função que atualiza a quantidade de produtos a cada compra*/
+/*recebe como parametro o tipo de salvamento, a url do produto, o modo de abertura e a struct de saida de produtos*/
+void atualiza_quantidadeprodutos(int tipo,char url[50],char urltemp[50],char modoabertura[5],struct saidaprodutos sp){
+	/*struct de produtos para fazer uso de suas variaveis*/
+	struct produtos p;
+	/*cria o ponteiro, para acessar o arquivo*/
+	FILE *arquivo;
+	FILE *arquivo2;
+	/*abre o arquivo*/
+	arquivo = fopen(url,modoabertura);
+	arquivo2 = fopen(urltemp,modoabertura);
+	/*verifica a nulidade do arquivo*/
+	if(arquivo == NULL){
+		/*mostra mensagem de erro*/
+		vermelho("\nErro em realizar a abertura do arquivo de produtos!\n");
+	}
+	else{
+		/*se estiver tudo ok, verifica o tipo de salvamento*/
+		switch(tipo){
+			case 1:/*ARQUIVO TEXTO*/
+				/*um while para ler o arquivo todo até seu final*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fscanf(arquivo,"%u\n %s\n %i\n %i\n %f\n %f\n %s\n",&p.codigo,
+						p.descricao,&p.estoque,&p.estoqueminimo,&p.lucro,&p.precovenda,p.status);
+					/*verifica o final do arquivo para evitar repetições*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*um for que vai de 0 até a quantidade de produtos distintos - 1*/
+					for(int i = 0; i < sp.produtos_distintos; i++){
+						/*verifica o codigo do produto lido, se está em um dos produtos comprados*/
+						if(p.codigo == sp.codigoproduto[i]){
+							/*se estiver, atualiza sua quantidade*/
+							p.estoque = p.estoque - sp.quantidade[i];
+						}
+					}
+					/*salva os dados no arquivo temporario*/
+					fprintf(arquivo2,"%u",p.codigo);
+					fprintf(arquivo2,"\n%s",p.descricao);
+					fprintf(arquivo2,"\n%i",p.estoque);
+					fprintf(arquivo2,"\n%i",p.estoqueminimo);
+					fprintf(arquivo2,"\n%.2f",p.lucro);
+					fprintf(arquivo2,"\n%.2f",p.precovenda);
+					fprintf(arquivo2,"\n%s\n\n",p.status);
+				}
+				/*fecha os dois arquivos*/
+				fclose(arquivo);
+				fclose(arquivo2);
+				/*assim que acabar de ler o arquivo*/
+				/*deve-se renomear o arquivo temporario e excluir o antigo*/
+				remove(url);
+				rename(urltemp,url);
+				/*mostra ao usuário, mensagem de sucesso na operação*/
+				verde("\nQuantidade de produtos atulizada com sucesso!\n");
+			break;
+			case 2:/*ARQUIVO BINÀRIO*/
+				/*um while para ler o arquivo todo até seu final*/
+				while(!feof(arquivo)){
+					/*comando de leitura*/
+					fread(&p,sizeof(struct produtos),1,arquivo);
+					/*verifica o final do arquivo para evitar repetições*/
+					if(feof(arquivo)){
+						break;
+					}
+					/*um for que vai de 0 até a quantidade de produtos distintos - 1*/
+					for(int i = 0; i < sp.produtos_distintos; i++){
+						/*verifica o codigo do produto lido, se está em um dos produtos comprados*/
+						if(p.codigo == sp.codigoproduto[i]){
+							/*se estiver, atualiza sua quantidade*/
+							p.estoque = p.estoque - sp.quantidade[i];
+						}
+					}
+					/*salva os dados no arquivo temporario*/
+					fwrite(&p,sizeof(struct produtos),1,arquivo2);
+				}
+				/*fecha os dois arquivos*/
+				fclose(arquivo);
+				fclose(arquivo2);
+				/*assim que acabar de ler o arquivo*/
+				/*deve-se renomear o arquivo temporario e excluir o antigo*/
+				remove(url);
+				rename(urltemp,url);
+				/*mostra ao usuário, mensagem de sucesso na operação*/
+				verde("\nQuantidade de produtos atulizada com sucesso!\n");
+			break;
+			/*erro para opções de salvamento não implementadas*/
+			default:
+				vermelho("\nOpção de salvamento ainda não implementada!\n");
+			break;
+		}
+	}
+}
 
 /*função para a saída de produtos, ou seja, para a venda dos produtos no hotel*/
 void saida_produtos(int tipo,char url[50],char modoabertura[5],struct saidaprodutos sp){
@@ -246,6 +338,7 @@ void saida_produtos(int tipo,char url[50],char modoabertura[5],struct saidaprodu
 				for(int i = 0; i < sp.produtos_distintos; i++){
 					fprintf(arquivo,"%u %i %f %s\n",sp.codigoproduto[i],sp.quantidade[i],sp.precovenda[i],sp.status[i]);
 				}
+				fprintf(arquivo,"%i/%i/%i\n",sp.data_saida.dia,sp.data_saida.mes,sp.data_saida.ano);
 				fprintf(arquivo,"%f\n\n",sp.totalpagar);
 				/*fecha o arquivo e mostra mensagem de sucesso*/
 				fclose(arquivo);

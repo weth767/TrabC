@@ -209,15 +209,14 @@ void consulta_checks(int tipo,char url[50],char modoabertura[5]){
 				/*le o arquivo, com um while até seu final*/
 				printf("\n-------------------------------------------------------------------------\n");
 				while(!feof(arquivo)){
-					/*verifica o final do arquivo para evitar repetições*/
-					if(feof(arquivo)){
-						break;
-					}
-
 					/*comando de leitura*/
 					fscanf(arquivo,"%u\n %u\n %u\n %i\n %i/%i/%i\n %i/%i/%i\n %f\n %i\n %s\n\n",&ck.codigo,&ck.codigo_hospede,&ck.codigo_acomodacao,&ck.tipo,
 						&ck.data_checkin.dia,&ck.data_checkin.mes,&ck.data_checkin.ano,&ck.data_checkout.dia,&ck.data_checkout.mes,&ck.data_checkout.ano,
 						&ck.valor_total,&ck.pago,ck.status);
+					/*verifica o final do arquivo para evitar repetições*/
+					if(feof(arquivo)){
+						break;
+					}
 					/*mostra na tela aquilo que foi lido*/
 					printf("Código: %u\n",ck.codigo);
 					printf("Código do Hospede: %u\n",ck.codigo_hospede);
@@ -235,7 +234,7 @@ void consulta_checks(int tipo,char url[50],char modoabertura[5]){
 					else{
 						printf("Data de Check In: %i/%i/%i\n",ck.data_checkout.dia,ck.data_checkout.mes,ck.data_checkout.ano);
 					}
-					printf("Valor Total das Diárias: %f\n",ck.valor_total);
+					printf("Valor Total das Diárias: R$%.2f\n",ck.valor_total);
 					if(ck.pago == 0){
 						printf("Status da Fatura: ");
 						amarelo("Ainda não Paga\n");
@@ -256,13 +255,12 @@ void consulta_checks(int tipo,char url[50],char modoabertura[5]){
 				/*le o arquivo, com um while até seu final*/
 				printf("\n-------------------------------------------------------------------------\n");
 				while(!feof(arquivo)){
-					/*verifica o final do arquivo para evitar repetições*/
+					/*comando de leitura*/
+					fread(&ck,sizeof(struct checks),1,arquivo);
+						/*verifica o final do arquivo para evitar repetições*/
 					if(feof(arquivo)){
 						break;
 					}
-
-					/*comando de leitura*/
-					fread(&ck,sizeof(struct checks),1,arquivo);
 					/*mostra na tela aquilo que foi lido*/
 					printf("Código: %u\n",ck.codigo);
 					printf("Código do Hospede: %u\n",ck.codigo_hospede);
@@ -275,12 +273,12 @@ void consulta_checks(int tipo,char url[50],char modoabertura[5]){
 					}
 					printf("Data de Check In: %i/%i/%i\n",ck.data_checkin.dia,ck.data_checkin.mes,ck.data_checkin.ano);
 					if(ck.data_checkout.dia == 0 && ck.data_checkout.mes == 0 && ck.data_checkout.ano == 0){
-						printf("Data de Check Out: Check Out ainda não realizado");
+						printf("Data de Check Out: Check Out ainda não realizado\n");
 					}
 					else{
 						printf("Data de Check In: %i/%i/%i\n",ck.data_checkout.dia,ck.data_checkout.mes,ck.data_checkout.ano);
 					}
-					printf("Valor Total das Diárias: %f\n",ck.valor_total);
+					printf("Valor Total das Diárias: %.2f\n",ck.valor_total);
 					if(ck.pago == 0){
 						printf("Status da Fatura: ");
 						amarelo("Ainda não Paga\n");
@@ -345,7 +343,7 @@ void consulta_checks_codigo(int tipo,char url[50],char modoabertura[5],int codig
 						}
 						printf("Data de Check In: %i/%i/%i\n",ck.data_checkin.dia,ck.data_checkin.mes,ck.data_checkin.ano);
 						if(ck.data_checkout.dia == 0 && ck.data_checkout.mes == 0 && ck.data_checkout.ano == 0){
-							printf("Data de Check Out: Check Out ainda não realizado");
+							printf("Data de Check Out: Check Out ainda não realizado\n");
 						}
 						else{
 							printf("Data de Check In: %i/%i/%i\n",ck.data_checkout.dia,ck.data_checkout.mes,ck.data_checkout.ano);

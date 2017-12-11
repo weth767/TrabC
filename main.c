@@ -496,9 +496,6 @@ void menu(char com[50],int tiposave){
 			amarelo("\nProcesso abortado!\n");
 		}
 	}
-	/*comando easter-egg*/
-	else if(strcmp(com,"32683") == 0){
-	}
 	/*comando help do sistema*/
 	else if(strcmp(com,"help") == 0){
 		printf("\n------------------------------------------------------------------------------------------\n");

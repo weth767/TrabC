@@ -543,9 +543,38 @@ void menu(char com[50],int tiposave){
 		printf("Digite edac para editar uma acomodação.\n");
 		printf("Digite exac para excluir uma acomodação.\n");
 		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("VENDA/COMPRA DE PRODUTOS\n");
+		printf("Digite cpp para comprar produtos.\n");
+		printf("Digite vdp para vender produtos.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("RESERVA\n");
+		printf("Digite rsv para cadastrar uma reserva.\n");
+		printf("Digite csrsv consultar todas as reservas.\n");
+		printf("Digite csrsvc consultar uma reserva pelo código.\n");
+		printf("Digite canrsv para cancelar uma reserva.\n");
+		printf("Digite psrsv para pesquisar uma acomodação pelo código.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("CHECKS\n");
+		printf("Digite chk para realizar um check in ou check out.\n");
+		printf("Digite cschk consultar todos os checks.\n");
+		printf("Digite cschkc consultar um check pelo código.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("CONTA\n");
+		printf("Digite cadct cadastrar uma conta.\n");
+		printf("Digite csct uma conta pelo cpf.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("CAIXA\n");
+		printf("Digite cadcx cadastrar um caixa.\n");
+		printf("Digite caixa para abrir ou fechar o caixa.\n");
+		printf("Digite ctp para inserir ou pagar uma conta a pagar.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
+		printf("IMPORTAÇÃO/EXPORTAÇÃO\n");
+		printf("Digite exparq para exportar arquivos.\n");
+		printf("\n------------------------------------------------------------------------------------------\n");
 		printf("OUTROS COMANDOS\n");
 		printf("Digite lt para limpar a tela.\n");
 		printf("Digite rconfig para refazer as configurações iniciais do Sistema.\n");
+		printf("Digite sair para sair do sistema do Sistema.\n");
 		printf("\n------------------------------------------------------------------------------------------\n");
 	}
 	/*comando inválido*/
